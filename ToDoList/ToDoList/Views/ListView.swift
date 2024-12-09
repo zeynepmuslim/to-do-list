@@ -9,12 +9,8 @@ import SwiftUI
 import ConfettiSwiftUI
 
 struct ListView: View {
-    
+    @State private var editMode: EditMode = .inactive
     @EnvironmentObject var listViewModel: ListViewModel
-    
-    @State private var counterForConfetti = 0
-    @State private var tapPosition: CGPoint = .zero
-    @State private var selectedItemStatus = false
     
     var body: some View {
         ZStack {
@@ -24,52 +20,40 @@ struct ListView: View {
             } else {
                 List {
                     ForEach(listViewModel.items) { item in
-                        ZStack {
-                            ListRowView(item: item)
-                                .onTapGesture { location in
-                                    selectedItemStatus = item.isCompleted
-                                    let globalX = location.x
-                                    let globalY = location.y
-                                    tapPosition = CGPoint(x: globalX, y: globalY)
-                                    if !selectedItemStatus {
-                                        counterForConfetti += 1
-                                    }
-//                                    counterForConfetti += 1
-                                    withAnimation(.linear) {
-                                        listViewModel.updateItem(item: item)
-                                    }
+                        ListRowView(item: item)
+                            .onTapGesture {
+                                withAnimation(.linear) {
+                                    listViewModel.updateItem(item: item)
                                 }
-                            ConfettiCannon(counter: $counterForConfetti,
-                                           num: 15,
-                                           colors: [.red, .blue, .green, .yellow, .purple],
-                                           rainHeight: 400,
-                                           radius: 150)
-                                .position(tapPosition)
-                        }
-                        
-                        
+                            }
                     }
+                    .onMove(perform: listViewModel.moveItem)
+                    .onDelete(perform: listViewModel.deleteItem)
                 }
                 .listStyle(PlainListStyle())
             }
         }
-        
-        .navigationTitle("To Do List 📝")
-        .navigationBarItems(
-            leading: EditButton(),
-            trailing:
+        .navigationTitle("Todo List 📝")
+        .environment(\.editMode, $editMode) // Bind the EditMode state to the environment
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    withAnimation {
+                        editMode = editMode == .active ? .inactive : .active
+                    }
+                }) {
+                    Text(editMode == .active ? "Done" : "Edit")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink("Add", destination: AddView())
-        )
+            }
+        }
+        .onAppear {
+            editMode = .inactive
+        }
     }
-    
-    func createConfetti() -> some View {
-        ConfettiCannon(counter: $counterForConfetti,
-                       num: 15,
-                       colors: [.red, .blue, .green, .yellow, .purple],
-                       rainHeight: 400,
-                       radius: 150)
-            .position(tapPosition)
-    }
+
 }
 
 #Preview {
