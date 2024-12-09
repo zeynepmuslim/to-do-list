@@ -18,7 +18,7 @@ struct NoItemsView: View {
                     Text("There are no items in your list yet 😔")
                         .font(.title)
                         .bold()
-                        .padding(.top, 100)
+                        .padding(.top, 50)
                     Text("To start your list, create a new task!")
                         .foregroundStyle(.secondary)
                         .padding(.bottom, 20)
@@ -35,7 +35,7 @@ struct NoItemsView: View {
                 }
                 .padding(.horizontal, animate ? 30 : 50)
                 .shadow(
-                    color: animate ? secondaryAccentColor.opacity(0.7): Color.accentColor.opacity(0.5),
+                    color: animate ? secondaryAccentColor.opacity(0.7): Color.accentColor.opacity(0.7),
                     radius: animate ? 30 : 10,
                     x: 0,
                     y: animate ? 50 : 30)
@@ -44,6 +44,7 @@ struct NoItemsView: View {
 
                 
             }
+            .frame(maxWidth: 400)
             .padding(50)
             .multilineTextAlignment(.center)
             .onAppear(perform: addAnimation)
@@ -69,6 +70,5 @@ struct NoItemsView: View {
 #Preview {
     NavigationView {
         NoItemsView()
-            .navigationTitle("Atttti")
     }
 }

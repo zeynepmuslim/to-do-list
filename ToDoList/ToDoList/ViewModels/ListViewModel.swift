@@ -60,4 +60,8 @@ class ListViewModel: ObservableObject {
             UserDefaults.standard.set(encodedData, forKey: itemsKey)
         }
     }
+    
+    func isCompleted() -> Bool {
+        return items.allSatisfy({ $0.isCompleted })
+    }
 }

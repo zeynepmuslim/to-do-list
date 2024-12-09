@@ -59,6 +59,15 @@ struct ListView: View {
                 NavigationLink("Add", destination: AddView())
         )
     }
+    
+    func createConfetti() -> some View {
+        ConfettiCannon(counter: $counterForConfetti,
+                       num: 15,
+                       colors: [.red, .blue, .green, .yellow, .purple],
+                       rainHeight: 400,
+                       radius: 150)
+            .position(tapPosition)
+    }
 }
 
 #Preview {
