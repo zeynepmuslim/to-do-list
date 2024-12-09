@@ -11,14 +11,14 @@ struct ListView: View {
     
     @State var items: [ItemModel] = [
         ItemModel(title: "First Task", isCompleted: false),
-        ItemModel(title: "Second Task", isCompleted: false),
+        ItemModel(title: "Second Task", isCompleted: true),
         ItemModel(title: "Third Task", isCompleted: false)
     ]
     
     var body: some View {
         List {
-            ForEach(items, id: \.self) { item in
-                ListRowView(title: item)
+            ForEach(items) { item in
+                ListRowView(item: item)
             }
         }
         .listStyle(PlainListStyle())
