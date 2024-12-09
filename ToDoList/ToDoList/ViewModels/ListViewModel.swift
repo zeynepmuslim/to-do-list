@@ -28,12 +28,6 @@ class ListViewModel: ObservableObject {
         else { return }
         
         self.items = savedItems
-//        let newItems = [
-//            ItemModel(title: "First Task", isCompleted: false),
-//            ItemModel(title: "Second Task", isCompleted: true),
-//            ItemModel(title: "Third Task", isCompleted: false)
-//        ]
-//        items.append(contentsOf: newItems)
     }
     
     func deleteItem(indexSet: IndexSet) {
@@ -59,9 +53,5 @@ class ListViewModel: ObservableObject {
         if let encodedData = try? JSONEncoder().encode(items) {
             UserDefaults.standard.set(encodedData, forKey: itemsKey)
         }
-    }
-    
-    func isCompleted() -> Bool {
-        return items.allSatisfy({ $0.isCompleted })
     }
 }

@@ -14,6 +14,7 @@ struct ListView: View {
     
     @State private var counterForConfetti = 0
     @State private var tapPosition: CGPoint = .zero
+    @State private var selectedItemStatus = false
     
     var body: some View {
         ZStack {
@@ -26,10 +27,14 @@ struct ListView: View {
                         ZStack {
                             ListRowView(item: item)
                                 .onTapGesture { location in
+                                    selectedItemStatus = item.isCompleted
                                     let globalX = location.x
                                     let globalY = location.y
                                     tapPosition = CGPoint(x: globalX, y: globalY)
-                                    counterForConfetti += 1
+                                    if !selectedItemStatus {
+                                        counterForConfetti += 1
+                                    }
+//                                    counterForConfetti += 1
                                     withAnimation(.linear) {
                                         listViewModel.updateItem(item: item)
                                     }
@@ -44,9 +49,6 @@ struct ListView: View {
                         
                         
                     }
-                    .onDelete(perform: listViewModel.deleteItem)
-                    .onMove(perform: listViewModel.moveItem)
-                    
                 }
                 .listStyle(PlainListStyle())
             }

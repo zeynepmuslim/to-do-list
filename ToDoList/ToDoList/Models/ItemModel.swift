@@ -12,7 +12,7 @@ import Foundation
 struct ItemModel: Identifiable, Codable {
     let id: String
     let title: String
-    let isCompleted: Bool
+    var isCompleted: Bool
     
     init (id: String = UUID().uuidString, title: String, isCompleted: Bool) {
         self.id = id
