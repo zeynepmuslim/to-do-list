@@ -6,20 +6,43 @@
 //
 
 import SwiftUI
+import ConfettiSwiftUI
 
 struct ListView: View {
     
-    @State var items: [ItemModel] = [
-        ItemModel(title: "First Task", isCompleted: false),
-        ItemModel(title: "Second Task", isCompleted: true),
-        ItemModel(title: "Third Task", isCompleted: false)
-    ]
+    @EnvironmentObject var listViewModel: ListViewModel
+    
+    @State private var counterForConfetti = 0
+    @State private var tapPosition: CGPoint = .zero
     
     var body: some View {
         List {
-            ForEach(items) { item in
-                ListRowView(item: item)
+            ForEach(listViewModel.items) { item in
+                ZStack {
+                    ListRowView(item: item)
+                        .onTapGesture { location in
+                            let globalX = location.x
+                            let globalY = location.y
+                            tapPosition = CGPoint(x: globalX, y: globalY)
+                            counterForConfetti += 1
+                            withAnimation(.linear) {
+                                listViewModel.updateItem(item: item)
+                                
+                            }
+                        }
+                    ConfettiCannon(counter: $counterForConfetti,
+                                   num: 15,
+                                   colors: [.red, .blue, .green, .yellow, .purple],
+                                   rainHeight: 400,
+                                   radius: 150)
+                        .position(tapPosition)
+                }
+                
+                
             }
+            .onDelete(perform: listViewModel.deleteItem)
+            .onMove(perform: listViewModel.moveItem)
+            
         }
         .listStyle(PlainListStyle())
         .navigationTitle("To Do List 📝")
@@ -28,7 +51,6 @@ struct ListView: View {
             trailing:
                 NavigationLink("Add", destination: AddView())
         )
-        
     }
 }
 
@@ -36,4 +58,5 @@ struct ListView: View {
     NavigationView {
         ListView()
     }
+    .environmentObject(ListViewModel())
 }
