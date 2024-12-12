@@ -17,6 +17,7 @@ struct CustomCategoryButton: View {
     var textColor: Color = .white
     var theHeight: CGFloat
     var iconFont: Font
+    var fontColor: Color
     
     var body: some View {
         Button(action: action) {
@@ -29,7 +30,7 @@ struct CustomCategoryButton: View {
             .frame(height: theHeight)
             .frame(maxWidth: .infinity)
             .padding()
-            .foregroundColor(.white)
+            .foregroundColor(fontColor)
             .background(theColor)
             .cornerRadius(10)
           //  .frame(height: 55)
@@ -38,8 +39,8 @@ struct CustomCategoryButton: View {
 }
 
 #Preview {
-    CustomCategoryButton( title: "School", action: {}, iconName: "book.fill", theColor: .red, theHeight: 55, iconFont: .title)
-    CustomCategoryButton( title: "School", action: {}, iconName: "gear", theColor: .yellow, theHeight: 55, iconFont: .caption)
-    CustomCategoryButton( title: "School", action: {}, iconName: "figure.walk", theColor: .pink, theHeight: 55, iconFont: .callout)
-    CustomCategoryButton( title: "School", action: {}, iconName: "pencil", theColor: .red, theHeight: 55, iconFont: .title)
+    CustomCategoryButton( title: "School", action: {}, iconName: "book.fill", theColor: .red, theHeight: 55, iconFont: .title, fontColor: .white)
+    CustomCategoryButton( title: "School", action: {}, iconName: "gear", theColor: .yellow, theHeight: 55, iconFont: .caption, fontColor: .white)
+    CustomCategoryButton( title: "School", action: {}, iconName: "figure.walk", theColor: .pink, theHeight: 55, iconFont: .callout, fontColor: .white)
+    CustomCategoryButton( title: "School", action: {}, iconName: "pencil", theColor: .red, theHeight: 55, iconFont: .title, fontColor: .white)
 }

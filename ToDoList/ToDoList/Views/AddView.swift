@@ -13,22 +13,26 @@ struct AddView: View {
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
     @State var customCategories: Array = ["other", "home", "school", "job"]
+    @State var taskPriority: Array = ["Low", "Medium", "High"]
     @State var thereIsDate: Bool = false
     @State var selectedDate: Date? = nil
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
+    var darkerSecond = Color("DarkerSecond")
     
     @State var animate: Bool = false
     
     @State var showDateSheet: Bool = false // Sheet kontrolü için
-
+    
+    
+    
     struct Category: Identifiable {
         let id = UUID()
         var name: String
         var color: Color
         var icon: String
     }
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -38,10 +42,43 @@ struct AddView: View {
                 CustomTextField(placeholder: "Type something here...", text: $textFieldText, isSecure: false)
                 
                 // Task Priority
-                Text("Task Priority")
-                    .font(.headline)
+                HStack {
+                    Text("Task Priority")
+                        .font(.headline)
+                    Spacer()
+                    if selectedPriority == "Low" {
+                        Group {
+                            Image(systemName: "star.fill")
+                                .transition(.scale)
+                        }
+                        .foregroundColor(.green)
+                        .transition(.scale)
+                        Text("😌")
+                            .transition(.opacity)
+                    } else if selectedPriority == "Medium" {
+                        Group {
+                            Image(systemName: "star.fill")
+                            Image(systemName: "star.fill")
+                        }
+                        .foregroundColor(.yellow)
+                        .transition(.scale)
+                        Text("😬")
+                            .transition(.opacity)
+                    } else {
+                        Group {
+                            Image(systemName: "star.fill")
+                            Image(systemName: "star.fill")
+                            Image(systemName: "star.fill")
+                        }
+                        .foregroundColor(.red)
+                        .transition(.scale)
+                        Text("🤯")
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.easeInOut, value: selectedPriority)
                 Picker("Priority", selection: $selectedPriority) {
-                    ForEach(["Low", "Medium", "High"], id: \.self) { priority in
+                    ForEach(taskPriority, id: \.self) { priority in
                         Text(priority)
                             .tag(priority)
                     }
@@ -58,13 +95,13 @@ struct AddView: View {
                         
                         print("Other button tapped")
                     }, iconName: "diamond.fill",
-                                         theColor: selectedCategory == "other" ? .gray : .gray.opacity(0.5),
+                                         theColor: selectedCategory == "other" ? Color("AccentColor") : .darkerSecond,
                                          theHeight: selectedCategory == "other" ? 55 : 40,
-                                         iconFont: selectedCategory == "other" ? .title : .callout
-                    
+                                         iconFont: selectedCategory == "other" ? .title : .callout,
+                                         fontColor: selectedCategory == "other" ? .white : .gray
                     )
                     .shadow(
-                        color: selectedCategory == "other" ? .gray.opacity(0.7) : .gray.opacity(0.0),
+                        color: selectedCategory == "other" ? Color("AccentColor").opacity(0.7) : .gray.opacity(0.0),
                         radius: selectedCategory == "other" ? 0 : 30)
                     
                     CustomCategoryButton(title: "Home", action: {
@@ -73,9 +110,10 @@ struct AddView: View {
                         }
                         print("home button tapped")
                     }, iconName: "house.fill",
-                                         theColor: selectedCategory == "home" ? .orange : .orange.opacity(0.5),
+                                         theColor: selectedCategory == "home" ? .orange : .darkerSecond,
                                          theHeight: selectedCategory == "home" ? 55 : 40,
-                                         iconFont: selectedCategory == "home" ? .title : .callout
+                                         iconFont: selectedCategory == "home" ? .title : .callout,
+                                         fontColor: selectedCategory == "home" ? .white : .gray
                     )
                     .shadow(
                         color: selectedCategory == "home" ? .orange.opacity(0.7) : .orange.opacity(0.0),
@@ -87,9 +125,10 @@ struct AddView: View {
                         }
                         print("school button tapped")
                     }, iconName: "book.fill",
-                                         theColor: selectedCategory == "school" ? .green : .green.opacity(0.5),
+                                         theColor: selectedCategory == "school" ? .green : .darkerSecond,
                                          theHeight: selectedCategory == "school" ? 55 : 40,
-                                         iconFont: selectedCategory == "school" ? .title : .callout
+                                         iconFont: selectedCategory == "school" ? .title : .callout,
+                                         fontColor: selectedCategory == "school" ? .white : .gray
                     )
                     .shadow(
                         color: selectedCategory == "school" ? .green.opacity(0.7) : .green.opacity(0.0),
@@ -101,31 +140,73 @@ struct AddView: View {
                         }
                         print("job button tapped")
                     }, iconName: "briefcase.fill",
-                                         theColor: selectedCategory == "job" ? .blue : .blue.opacity(0.5),
+                                         theColor: selectedCategory == "job" ? .blue : .darkerSecond,
                                          theHeight: selectedCategory == "job" ? 55 : 40,
-                                         iconFont: selectedCategory == "job" ? .title : .callout
+                                         iconFont: selectedCategory == "job" ? .title : .callout,
+                                         fontColor: selectedCategory == "job" ? .white : .gray
                     )
                     .shadow(
                         color: selectedCategory == "job" ? .blue.opacity(0.7) : .blue.opacity(0.0),
                         radius: selectedCategory == "job" ? 0 : 30)
                 }
-//
+                //
                 
                 // Due Date Toggle
-                Toggle(isOn: Binding(
-                    get: { thereIsDate },
-                    set: { newValue in
-                        thereIsDate = newValue
-                        if newValue {
-                            showDateSheet = true // Toggle açık olduğunda sheet göster
+                if let selectedDate = selectedDate {
+                    // Eğer seçilmiş bir tarih varsa, tarihi ve işlemleri gösteren bir HStack
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Selected Due Date")
+                                .font(.headline)
+                            Text(selectedDate, style: .date) // Seçili tarihi gösterir
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        // Tarihi değiştir düğmesi
+                        Button {
+                            showDateSheet = true
+                        } label: {
+                            Text("Change")
+                                .padding(.horizontal, 15)
+                                .frame(height: 40)
+                                .background(.darkerSecond)
+                                .cornerRadius(10)
+                                .foregroundColor(Color("AccentColor"))
+                        }
+                        // Tarihi kaldır düğmesi
+                        Button {
+                            withAnimation {
+                                self.selectedDate = nil // Seçili tarihi kaldırır
+                            }
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.headline)
+                                .foregroundColor(.red)
                         }
                     }
-                )) {
-                    Text("Would you like to set a due date?")
-                        .font(.headline)
+                    .padding(.vertical)
+                } else {
+                    // Eğer seçili bir tarih yoksa, kullanıcıdan tarih seçmesini isteyen HStack
+                    HStack {
+                        Text("Do you have a deadline?")
+                            .font(.headline)
+                        Spacer()
+                        Button {
+                            showDateSheet = true
+                        } label: {
+                            Text("Set a Due Date")
+                                .padding(.horizontal, 15)
+                                .frame(height: 40)
+                                .background(.darkerSecond)
+                                .cornerRadius(10)
+                                .foregroundColor(Color("AccentColor"))
+                            //
+                        }
+                    }
+                    .padding(.vertical)
                 }
-                .padding(.vertical)
-                
+                //
                 Spacer()
                 
                 // Save Button
@@ -158,12 +239,37 @@ struct AddView: View {
         }
     }
     
+    func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
+    
     func textIsAppropriate() -> Bool {
-        if textFieldText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        let trimmedText = textFieldText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if trimmedText.isEmpty {
             alertTitle = "Task title cannot be empty!"
             showAlert.toggle()
+            triggerHapticFeedback(type: .error)
             return false
         }
+        
+        if trimmedText.count < 3 {
+            alertTitle = "Task title must be at least 3 characters long!"
+            showAlert.toggle()
+            triggerHapticFeedback(type: .error)
+            return false
+        }
+        
+        if trimmedText.count > 50 {
+            alertTitle = "Task title cannot exceed 50 characters!"
+            showAlert.toggle()
+            triggerHapticFeedback(type: .error)
+            return false
+        }
+        
+        // Başarılı doğrulama
+        triggerHapticFeedback(type: .success)
         return true
     }
 }
