@@ -26,7 +26,7 @@ struct ListRowView: View {
 
 #Preview {
     Group {
-        ListRowView(item: ItemModel(title: "First Task!", isCompleted: false))
+        
         ListRowView(item: ItemModel(title: "Second Task!", isCompleted: true))
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Zeynep Müslim on 9.12.2024.
 //
 
+import FirebaseCore
 import SwiftUI
 
 /*
@@ -19,12 +20,17 @@ import SwiftUI
 @main
 struct ToDoListApp: App {
     
+    init() {
+        FirebaseApp.configure()
+    }
+    
     @StateObject var listViewModel: ListViewModel = ListViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ListView()
+                LoginView()
+              //  ListView()
             }
             .navigationViewStyle(.stack)
             .environmentObject(listViewModel)
