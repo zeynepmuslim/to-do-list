@@ -23,11 +23,8 @@ struct LoginView: View {
             VStack(spacing: 10) {
 //                TextFieldCustom(placeholderr: "Email", textFieldContent: email)
                
-                TextField("Email", text: $loginViewModel.email)
-                    .padding(.horizontal)
-                    .frame(height: 55)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(10)
+                CustomTextField(placeholder: "Email", text: $loginViewModel.email)
+                    .autocapitalization(.none)
                 
                 CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: true)
                 CustomButton(title: "Login") {

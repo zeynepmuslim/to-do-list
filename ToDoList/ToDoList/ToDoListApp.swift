@@ -24,12 +24,18 @@ struct ToDoListApp: App {
         FirebaseApp.configure()
     }
     
+    @StateObject var mainViewModel: MainViewModel = MainViewModel()
     @StateObject var listViewModel: ListViewModel = ListViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                LoginView()
+                
+                if mainViewModel.isSignedIn, !mainViewModel.currentUserId.isEmpty {
+                    ListView()
+                } else {
+                    LoginView()
+                }
               //  ListView()
             }
             .navigationViewStyle(.stack)

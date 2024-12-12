@@ -9,9 +9,7 @@ import SwiftUI
 
 struct RegisterView: View {
     
-    @State var name: String = ""
-    @State var email: String = ""
-    @State var password: String = ""
+    @StateObject var registerViewModel = RegisterViewModel()
     
     let theWidth = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
@@ -35,17 +33,29 @@ struct RegisterView: View {
             }
             
             VStack(spacing: 10) {
-                CustomTextField(placeholder: "Full Name", text: $name)
+                CustomTextField(placeholder: "Full Name", text: $registerViewModel.name)
                 
-                CustomTextField(placeholder: "Email", text: $email)
+                CustomTextField(placeholder: "Email", text: $registerViewModel.email)
+                    .autocapitalization(.none)
                 
-                CustomTextField(placeholder: "Password", text: $password, isSecure: true)
+                CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: true)
                 
                 CustomButton(title: "Save") {
-                    print(name)
-                    print(email)
-                    print(password)
+                    registerViewModel.register()
+                    print(registerViewModel.name)
+                    print(registerViewModel.email)
+                    print(registerViewModel.password)
                 }
+//                error message
+                VStack{
+                    if !registerViewModel.errorMessage.isEmpty {
+                        Text(registerViewModel.errorMessage)
+                            .frame(height: 80)
+                            .foregroundColor(.red)
+                            .italic()
+                    }
+                }
+                .frame(height: 80)
                 
             }
             .padding(.horizontal, 40)

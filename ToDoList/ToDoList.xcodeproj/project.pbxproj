@@ -13,6 +13,9 @@
 		D771E8202D0A60240063C687 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D771E81F2D0A60240063C687 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		D771E8222D0A60240063C687 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = D771E8212D0A60240063C687 /* FirebaseAppCheck */; };
 		D771E8242D0A60240063C687 /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = D771E8232D0A60240063C687 /* FirebaseAppDistribution-Beta */; };
+		D797926E2D0B1AAF00480495 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D797926D2D0B1AAF00480495 /* FirebaseAuth */; };
+		D79792702D0B1AC500480495 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D797926F2D0B1AC500480495 /* FirebaseCore */; };
+		D79792782D0B1D0600480495 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D79792772D0B1D0600480495 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,9 @@
 				D763C9162D06793A00372F79 /* ConfettiSwiftUI in Frameworks */,
 				D771E8222D0A60240063C687 /* FirebaseAppCheck in Frameworks */,
 				D771E8202D0A60240063C687 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				D79792782D0B1D0600480495 /* FirebaseFirestore in Frameworks */,
+				D797926E2D0B1AAF00480495 /* FirebaseAuth in Frameworks */,
+				D79792702D0B1AC500480495 /* FirebaseCore in Frameworks */,
 				D771E8242D0A60240063C687 /* FirebaseAppDistribution-Beta in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +99,7 @@
 				D763C8D62D0656D700372F79 /* ToDoList */,
 				D763C8E72D0656D800372F79 /* ToDoListTests */,
 				D763C8F12D0656D800372F79 /* ToDoListUITests */,
+				D797926C2D0B1AAF00480495 /* Frameworks */,
 				D763C8D52D0656D700372F79 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,6 +112,13 @@
 				D763C8EE2D0656D800372F79 /* ToDoListUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D797926C2D0B1AAF00480495 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,6 +147,9 @@
 				D771E81F2D0A60240063C687 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				D771E8212D0A60240063C687 /* FirebaseAppCheck */,
 				D771E8232D0A60240063C687 /* FirebaseAppDistribution-Beta */,
+				D797926D2D0B1AAF00480495 /* FirebaseAuth */,
+				D797926F2D0B1AC500480495 /* FirebaseCore */,
+				D79792772D0B1D0600480495 /* FirebaseFirestore */,
 			);
 			productName = ToDoList;
 			productReference = D763C8D42D0656D700372F79 /* ToDoList.app */;
@@ -639,6 +656,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D771E81A2D0A60240063C687 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseAppDistribution-Beta";
+		};
+		D797926D2D0B1AAF00480495 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D771E81A2D0A60240063C687 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D797926F2D0B1AC500480495 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D771E81A2D0A60240063C687 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		D79792772D0B1D0600480495 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D771E81A2D0A60240063C687 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
