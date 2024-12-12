@@ -9,29 +9,49 @@ import SwiftUI
 import ConfettiSwiftUI
 
 struct ListView: View {
+    
+    private let userId: String
+    
     @State private var editMode: EditMode = .inactive
     @EnvironmentObject var listViewModel: ListViewModel
+    
+    init(userId: String) {
+        self.userId = userId
+    }
     
     var body: some View {
         ZStack {
             if listViewModel.items.isEmpty {
                 NoItemsView()
-                    .transition(AnyTransition.opacity.animation(.easeIn))
+                    .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
             } else {
                 List {
-                    ForEach(listViewModel.items) { item in
-                        ListRowView(item: item)
-                            .onTapGesture {
-                                withAnimation(.linear) {
-                                    listViewModel.updateItem(item: item)
+                    Section{
+                        ForEach(listViewModel.items) { item in
+                            ListRowView(item: item)
+                                .onTapGesture {
+                                    withAnimation(.linear) {
+                                        listViewModel.updateItem(item: item)
+                                    }
                                 }
-                            }
+                                //.listRowBackground(Color.pink)
+                        }
+                        .onMove(perform: listViewModel.moveItem)
+                        .onDelete(perform: listViewModel.deleteItem)
                     }
-                    .onMove(perform: listViewModel.moveItem)
-                    .onDelete(perform: listViewModel.deleteItem)
+                   // .foregroundColor(.yellow)
                 }
-                .listStyle(PlainListStyle())
+                .listStyle(InsetGroupedListStyle())
+                .scrollContentBackground(.hidden)
+//                .background(.white)
+                
+//                BUNA DÖN
+//                .background(editMode == .active ? Color.gray.opacity(0.1) : Color.clear)
             }
+        }
+        
+        .tabItem {
+            Label("Tasks", systemImage: "checklist")
         }
         .navigationTitle("Todo List 📝")
         .environment(\.editMode, $editMode) // Bind the EditMode state to the environment
@@ -58,7 +78,7 @@ struct ListView: View {
 
 #Preview {
     NavigationView {
-        ListView()
+        ListView(userId: "dknwdnjkewjk")
     }
     .environmentObject(ListViewModel())
 }

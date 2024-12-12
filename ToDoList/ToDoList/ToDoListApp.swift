@@ -30,9 +30,25 @@ struct ToDoListApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                
                 if mainViewModel.isSignedIn, !mainViewModel.currentUserId.isEmpty {
-                    ListView()
+                    TabView {
+                                // Tasks Tab
+                                NavigationView {
+                                    ListView(userId: mainViewModel.currentUserId)
+                                }
+                                .tabItem {
+                                    Label("Tasks", systemImage: "checklist")
+                                }
+
+                                // Settings Tab
+                                NavigationView {
+                                    SettingsView()
+                                }
+                                .tabItem {
+                                    Label("Settings", systemImage: "gearshape")
+                                }
+                            }
+                            .accentColor(Color("AccentColor"))
                 } else {
                     LoginView()
                 }

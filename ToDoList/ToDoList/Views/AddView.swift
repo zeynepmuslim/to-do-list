@@ -12,6 +12,8 @@ struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var listViewModel: ListViewModel
     
+    @StateObject var itemModelV2 = ItemModelV2()
+    
     @State var textFieldText: String = ""
     
     @State var alertTitle: String = ""
@@ -20,22 +22,11 @@ struct AddView: View {
     var body: some View {
         ScrollView {
             VStack {
-                TextField("Type something here...", text: $textFieldText)
-                    .padding(.horizontal)
-                    .frame(height: 55)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(10)
+                CustomTextField(placeholder: "Type something here...", text: $textFieldText, isSecure: false)
                 
-                Button {
+                
+                CustomButton(title: "Save") {
                     saveButtonPressed()
-                } label: {
-                    Text("Save".uppercased())
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accentColor)
-                        .cornerRadius(10)
                 }
 
             }

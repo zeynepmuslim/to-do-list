@@ -18,6 +18,7 @@ struct ListRowView: View {
             Text(item.title)
             Spacer()
         }
+        .listRowBackground(Color(UIColor.secondarySystemBackground))
         .font(.title2)
         .padding(.vertical, 8)
     }

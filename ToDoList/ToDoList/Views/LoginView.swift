@@ -51,7 +51,7 @@ struct LoginView: View {
                 Text("Don't have an account?")
                 NavigationLink {
                     RegisterView()
-                      //  .animation(.scalingEffect)
+                        .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
                 } label: {
                     Text("Create An Account 👀")
                         .fontWeight(.bold)
