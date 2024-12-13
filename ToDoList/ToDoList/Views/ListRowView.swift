@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListRowView: View {
     
-    let item: ItemModel
+    let item: TaskModel
     
     var body: some View {
         HStack {
@@ -27,7 +27,15 @@ struct ListRowView: View {
 
 #Preview {
     Group {
-        
-        ListRowView(item: ItemModel(title: "Second Task!", isCompleted: true))
+        ListRowView(item: .init(
+            id: "123",
+            title: "Test Title",
+            priority: "High",
+            category: "High",
+            dueDate: Date().timeIntervalSince1970,
+            thereIsDate: true,
+            createdAt: Date().timeIntervalSince1970,
+            isCompleted: true
+        ))
     }
 }

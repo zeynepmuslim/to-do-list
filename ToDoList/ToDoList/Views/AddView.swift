@@ -9,12 +9,14 @@ import SwiftUI
 
 
 struct AddView: View {
-    @State var textFieldText: String = ""
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    @StateObject var ItemModel = ItemModelV2()
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
     @State var customCategories: Array = ["other", "home", "school", "job"]
     @State var taskPriority: Array = ["Low", "Medium", "High"]
-    @State var thereIsDate: Bool = false
     @State var selectedDate: Date? = nil
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
@@ -39,7 +41,7 @@ struct AddView: View {
                 // Task Title
                 Text("Task Title")
                     .font(.headline)
-                CustomTextField(placeholder: "Type something here...", text: $textFieldText, isSecure: false)
+                CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
                 
                 // Task Priority
                 HStack {
@@ -227,15 +229,15 @@ struct AddView: View {
     
     func saveButtonPressed() {
         if textIsAppropriate() {
-            let newTask = [
-                "title": textFieldText,
-                "priority": selectedPriority,
-                "category": selectedCategory,
-                "dueDate": selectedDate,
-                "thereIsDate": thereIsDate
-            ] as [String: Any]
+            ItemModel.priority = selectedPriority
+            ItemModel.category = selectedCategory
+            if let selectedDate = selectedDate {
+                ItemModel.dueDate = selectedDate
+                ItemModel.thereIsDate = true
+            }
             
-            print(newTask) // Firebase işlemleri buraya eklenebilir
+            ItemModel.save()
+            presentationMode.wrappedValue.dismiss()
         }
     }
     
@@ -245,7 +247,7 @@ struct AddView: View {
     }
     
     func textIsAppropriate() -> Bool {
-        let trimmedText = textFieldText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedText = ItemModel.title.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if trimmedText.isEmpty {
             alertTitle = "Task title cannot be empty!"
@@ -278,5 +280,5 @@ struct AddView: View {
             AddView()
         }
         .preferredColorScheme(.light)
-        .environmentObject(ListViewModel())
+//        .environmentObject(ListViewModel())
 }

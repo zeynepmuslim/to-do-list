@@ -25,7 +25,7 @@ struct ToDoListApp: App {
     }
     
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
-    @StateObject var listViewModel: ListViewModel = ListViewModel()
+//    @StateObject var listViewModel: ListViewModel = ListViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -55,7 +55,6 @@ struct ToDoListApp: App {
               //  ListView()
             }
             .navigationViewStyle(.stack)
-            .environmentObject(listViewModel)
         }
     }
 }
