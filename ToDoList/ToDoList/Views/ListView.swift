@@ -9,9 +9,12 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ListView: View {
-    
+    @State var selectedTab: String = "School"
+    @State var tabs = ["All","Other", "Home", "School", "Job"]
     @State private var editMode: EditMode = .inactive
-//    @EnvironmentObject var listViewModel: ListViewModel
+    @State var selectedTabIcon: String = "plus"
+    @State var selectedTabColor: Color = Color.blue
+    //    @EnvironmentObject var listViewModel: ListViewModel
     
     @FirestoreQuery var items : [TaskModel]
     
@@ -25,36 +28,27 @@ struct ListView: View {
                 NoItemsView()
                     .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
             } else {
-                List(items) { item in
-                    Text(item.title)
+                VStack {
+                    CategoryTabs(
+                        selectedTab: $selectedTab,
+                        tabsWithIconsAndColors: [
+                            ("All", "tray.full", .black),
+                            ("Other", "diamond.fill", Color("AccentColor")),
+                            ("Home", "house.fill", .orange),
+                            ("School", "book.fill", .green),
+                            ("Job", "briefcase.fill", .blue)
+                        ]
+                    )
+                    .padding(.vertical, 10)
+                    
+                    //                    CategoryTabs(selectedTab: $selectedTab, tabs: tabs)
+                    List(items) { item in
+                        Text(item.title)
+                    }
+                    .listStyle(InsetGroupedListStyle())
+                    .scrollContentBackground(.hidden)
                 }
-//                List {
-//                    Section{
-//                        ForEach(listViewModel.items) { item in
-//                            ListRowView(item: item)
-//                                .onTapGesture {
-//                                    withAnimation(.linear) {
-//                                        listViewModel.updateItem(item: item)
-//                                    }
-//                                }
-//                                //.listRowBackground(Color.pink)
-//                        }
-//                        .onMove(perform: listViewModel.moveItem)
-//                        .onDelete(perform: listViewModel.deleteItem)
-//                    }
-//                   // .foregroundColor(.yellow)
-//                }
-                .listStyle(InsetGroupedListStyle())
-                .scrollContentBackground(.hidden)
-//                .background(.white)
-                
-//                BUNA DÖN
-//                .background(editMode == .active ? Color.gray.opacity(0.1) : Color.clear)
             }
-        }
-        
-        .tabItem {
-            Label("Tasks", systemImage: "checklist")
         }
         .navigationTitle("Todo List 📝")
         .environment(\.editMode, $editMode) // Bind the EditMode state to the environment
@@ -76,12 +70,13 @@ struct ListView: View {
             editMode = .inactive
         }
     }
-
+    
 }
+
 
 #Preview {
     NavigationView {
         ListView(userId: "2ncgtp9HgEgA8mWl0iduG8mfke43")
     }
-//    .environmentObject(ListViewModel())
+    //    .environmentObject(ListViewModel())
 }
