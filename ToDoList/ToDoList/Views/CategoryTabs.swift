@@ -21,11 +21,11 @@ struct CategoryTabs: View {
                         }
                     } label: {
                         Image(systemName: icon)
-                                .foregroundColor(selectedTab == tab ? .white : color)
-                                .padding()
-                                .frame(maxWidth: .infinity, minHeight: 50)
-                        .font(.headline)
-                        .frame(height: 50)
+                        .foregroundColor(selectedTab == tab ? .white : color)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: selectedTab == tab ? 50 : 40)
+                        .font(selectedTab == tab ? .headline : .callout)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(selectedTab == tab ? color : Color.gray.opacity(0.2))
@@ -44,17 +44,17 @@ struct CategoryTabs: View {
 }
 
 //
-#Preview {
-    @State var previewSelectedTab = "School" // Geçici bir State değişkeni
-
-    return CategoryTabs(
-        selectedTab: $previewSelectedTab, // Binding olarak gönderilir
-        tabsWithIconsAndColors: [
-            ("All", "tray.full", .black),
-            ("Other", "diamond.fill", Color("AccentColor")),
-            ("Home", "house.fill", .orange),
-            ("School", "book.fill", .green),
-            ("Job", "briefcase.fill", .blue)
-        ]
-    )
-}
+//#Preview {
+//    @State var previewSelectedTab = "School" // Geçici bir State değişkeni
+//
+//    return CategoryTabs(
+//        selectedTab: $previewSelectedTab, // Binding olarak gönderilir
+//        tabsWithIconsAndColors: [
+//            ("All", "tray.full", .black),
+//            ("Other", "diamond.fill", Color("AccentColor")),
+//            ("Home", "house.fill", .orange),
+//            ("School", "book.fill", .green),
+//            ("Job", "briefcase.fill", .blue)
+//        ]
+//    )
+//}

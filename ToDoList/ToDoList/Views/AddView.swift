@@ -21,6 +21,7 @@ struct AddView: View {
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
     var darkerSecond = Color("DarkerSecond")
+    let myIcon = Image(systemName: "star.fill")
     
     @State var animate: Bool = false
     
@@ -50,7 +51,7 @@ struct AddView: View {
                     Spacer()
                     if selectedPriority == "Low" {
                         Group {
-                            Image(systemName: "star.fill")
+                            myIcon
                                 .transition(.scale)
                         }
                         .foregroundColor(.green)
@@ -59,8 +60,8 @@ struct AddView: View {
                             .transition(.opacity)
                     } else if selectedPriority == "Medium" {
                         Group {
-                            Image(systemName: "star.fill")
-                            Image(systemName: "star.fill")
+                            myIcon
+                            myIcon
                         }
                         .foregroundColor(.yellow)
                         .transition(.scale)
@@ -68,9 +69,9 @@ struct AddView: View {
                             .transition(.opacity)
                     } else {
                         Group {
-                            Image(systemName: "star.fill")
-                            Image(systemName: "star.fill")
-                            Image(systemName: "star.fill")
+                            myIcon
+                            myIcon
+                            myIcon
                         }
                         .foregroundColor(.red)
                         .transition(.scale)
@@ -97,13 +98,13 @@ struct AddView: View {
                         
                         print("Other button tapped")
                     }, iconName: "diamond.fill",
-                                         theColor: selectedCategory == "other" ? Color("AccentColor") : .darkerSecond,
+                                         theColor: selectedCategory == "other" ? .red : .darkerSecond,
                                          theHeight: selectedCategory == "other" ? 55 : 40,
                                          iconFont: selectedCategory == "other" ? .title : .callout,
                                          fontColor: selectedCategory == "other" ? .white : .gray
                     )
                     .shadow(
-                        color: selectedCategory == "other" ? Color("AccentColor").opacity(0.7) : .gray.opacity(0.0),
+                        color: selectedCategory == "other" ? .red.opacity(0.7) : .gray.opacity(0.0),
                         radius: selectedCategory == "other" ? 0 : 30)
                     
                     CustomCategoryButton(title: "Home", action: {

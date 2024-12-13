@@ -14,12 +14,13 @@ struct ListView: View {
     @State private var editMode: EditMode = .inactive
     @State var selectedTabIcon: String = "plus"
     @State var selectedTabColor: Color = Color.blue
-    //    @EnvironmentObject var listViewModel: ListViewModel
     
+    @StateObject var viewModel : ListViewModel
     @FirestoreQuery var items : [TaskModel]
     
     init(userId: String) {
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/tasks")
+        self._viewModel = StateObject(wrappedValue: ListViewModel(userId: userId))
     }
     
     var body: some View {
@@ -32,8 +33,8 @@ struct ListView: View {
                     CategoryTabs(
                         selectedTab: $selectedTab,
                         tabsWithIconsAndColors: [
-                            ("All", "tray.full", .black),
-                            ("Other", "diamond.fill", Color("AccentColor")),
+                            ("All", "tray.full", Color("AccentColor")),
+                            ("Other", "diamond.fill", .red),
                             ("Home", "house.fill", .orange),
                             ("School", "book.fill", .green),
                             ("Job", "briefcase.fill", .blue)
@@ -43,7 +44,11 @@ struct ListView: View {
                     
                     //                    CategoryTabs(selectedTab: $selectedTab, tabs: tabs)
                     List(items) { item in
-                        Text(item.title)
+                        ListRowView(item: item, hideCategoryIcon: false)
+                            .swipeActions {
+                                Button("Delete", role: .destructive) {
+                                    viewModel.delete(id: item.id)
+                                }                            }
                     }
                     .listStyle(InsetGroupedListStyle())
                     .scrollContentBackground(.hidden)
@@ -76,7 +81,7 @@ struct ListView: View {
 
 #Preview {
     NavigationView {
-        ListView(userId: "2ncgtp9HgEgA8mWl0iduG8mfke43")
+        ListView(userId: "2aOR21qVrORzA82MORSOAtLgyx13")
     }
     //    .environmentObject(ListViewModel())
 }
