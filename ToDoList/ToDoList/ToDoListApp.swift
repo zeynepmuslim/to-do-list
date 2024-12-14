@@ -25,36 +25,40 @@ struct ToDoListApp: App {
     }
     
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
-//    @StateObject var listViewModel: ListViewModel = ListViewModel()
+    //    @StateObject var listViewModel: ListViewModel = ListViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 if mainViewModel.isSignedIn, !mainViewModel.currentUserId.isEmpty {
                     TabView {
-                                // Tasks Tab
-                                NavigationView {
-                                    ListView(userId: mainViewModel.currentUserId)
-                                }
-                                .tabItem {
-                                    Label("Tasks", systemImage: "checklist")
-                                }
-
-                                // Settings Tab
-                                NavigationView {
-                                    SettingsView()
-                                }
-                                .tabItem {
-                                    Label("Settings", systemImage: "gearshape")
-                                }
-                            }
-                            .accentColor(Color("AccentColor"))
+                        NavigationView {
+                            ListView(userId: mainViewModel.currentUserId)
+                        }
+                        .tabItem {
+                            Label("Tasks", systemImage: "checklist")
+                        }
+                        .navigationViewStyle(.stack)
+                        .toolbar(.hidden)
+                        
+                        // Settings Tab
+                        NavigationView {
+                            SettingsView()
+                        }
+                        .tabItem {
+                            Label("Profile", systemImage: "person.fill")
+                        }
+                        .navigationViewStyle(.stack)
+                        .toolbar(.hidden)
+                    }
+                    .accentColor(Color("AccentColor"))
+//                    .transition(.scale)
                 } else {
                     LoginView()
                 }
-              //  ListView()
             }
             .navigationViewStyle(.stack)
+            .toolbar(.hidden)
         }
     }
 }

@@ -34,13 +34,14 @@ struct LoginView: View {
                 }
             }
             .padding(.horizontal, 40)
-            //eror message field
             VStack{
                 if !loginViewModel.errorMessage.isEmpty {
                     Text(loginViewModel.errorMessage)
                         .frame(height: 80)
                         .foregroundColor(.red)
                         .italic()
+                        .multilineTextAlignment(.center)
+                        .padding()
                 }
             }
             .frame(height: 80)
@@ -57,6 +58,7 @@ struct LoginView: View {
                         .fontWeight(.bold)
                         .foregroundColor(Color("AccentColor"))
                 }
+                .disabled(false)
             }
             
             Spacer()

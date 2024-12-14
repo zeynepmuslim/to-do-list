@@ -28,7 +28,7 @@ struct CategoryTabs: View {
                         .font(selectedTab == tab ? .headline : .callout)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                                .fill(selectedTab == tab ? color : Color.gray.opacity(0.2))
+                                .fill(selectedTab == tab ? color : Color.darkerSecond)
                                 .shadow(color: selectedTab == tab ? color.opacity(0.5) : .clear, radius: 5, x: 0, y: 5)
                         )
                         .overlay(

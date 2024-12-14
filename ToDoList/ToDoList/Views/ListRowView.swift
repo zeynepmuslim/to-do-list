@@ -29,7 +29,7 @@ struct ListRowView: View {
                     Text(item.title)
                         .font(item.isCompleted ? .subheadline : .headline) // Smaller font when completed
                         .foregroundColor(item.isCompleted ? .secondary : .primary) // Lightened color when completed
-                        .strikethrough(item.isCompleted, color: .black) // Add strikethrough when completed
+                        .strikethrough(item.isCompleted, color: .secondary) // Add strikethrough when completed
                          // Animate changes
                         .animation(.smooth(duration: 0.5), value: item.isCompleted)
                         .lineLimit(1)
@@ -121,6 +121,30 @@ struct ListRowView: View {
         case "Low": return .gray
         default: return .gray
         }
+    }
+}
+
+struct TaskDetailSheet: View {
+    let item: TaskModel
+    
+    var body: some View {
+        VStack {
+            Text("Is this task Completed?")
+                .font(.headline)
+                .padding()
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
+            
+            Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 100))
+                .foregroundColor(item.isCompleted ? .green : .gray)
+                .scaleEffect(item.isCompleted ? 1.2 : 1.0) // Hafif bir büyüme efekti
+                .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.ultraThinMaterial) // Arkaya blur efekt
+        .cornerRadius(20)
+        .padding()
     }
 }
 

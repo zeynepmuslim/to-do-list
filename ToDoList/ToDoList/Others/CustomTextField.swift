@@ -20,12 +20,14 @@ struct CustomTextField: View {
                     .frame(height: 55)
                     .background(Color(UIColor.secondarySystemBackground))
                     .cornerRadius(10)
+                    .tint(Color("AccentColor"))
             } else {
                 TextField(placeholder, text: $text)
                     .padding(.horizontal)
                     .frame(height: 55)
                     .background(Color(UIColor.secondarySystemBackground))
                     .cornerRadius(10)
+                    .tint(Color("AccentColor"))
             }
         }
     }

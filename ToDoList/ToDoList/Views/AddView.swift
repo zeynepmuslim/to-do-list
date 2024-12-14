@@ -213,13 +213,13 @@ struct AddView: View {
                 Spacer()
                 
                 // Save Button
-                CustomButton(title: "Save") {
+                CustomButton(title: "Create Task") {
                     saveButtonPressed()
                 }
             }
             .padding()
         }
-        .navigationTitle("Add an Item ✏️")
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDateSheet) {
             DueDateSheet(selectedDate: $selectedDate)
         }

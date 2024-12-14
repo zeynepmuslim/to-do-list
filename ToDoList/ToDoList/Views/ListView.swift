@@ -9,72 +9,135 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ListView: View {
-    @State var selectedTab: String = "School"
-    @State var tabs = ["All","Other", "Home", "School", "Job"]
+    @State var selectedTab: String = "all"
+    @State var tabs = ["all","other", "home", "school", "job"]
     @State private var editMode: EditMode = .inactive
     @State var selectedTabIcon: String = "plus"
     @State var selectedTabColor: Color = Color.blue
     
+    let theWidth = UIScreen.main.bounds.width
     @StateObject var viewModel : ListViewModel
     @FirestoreQuery var items : [TaskModel]
+    @State private var isVisible: Bool = false
     
     init(userId: String) {
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/tasks")
         self._viewModel = StateObject(wrappedValue: ListViewModel(userId: userId))
     }
     
+    var filteredItems: [TaskModel] {
+        if selectedTab == "all" {
+            return items
+        }
+        return items.filter { $0.category == selectedTab }
+    }
+    
     var body: some View {
         ZStack {
+            
+            HStack{
+                
+                Spacer()
+                VStack{
+                    
+                    RoundedRectangle(cornerRadius: 0)
+                        .foregroundColor(Color("AccentColor"))
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 0,
+                                bottomLeadingRadius: theWidth,
+                                bottomTrailingRadius: 0,
+                                topTrailingRadius: 0
+                            )
+                        )
+                        .ignoresSafeArea()
+                        .frame(width: theWidth / 2.5, height: theWidth / 2.5 )
+                        .offset(y: -40)
+                    
+                    Spacer()
+                    
+                }
+                
+            }
             if items.isEmpty {
-                NoItemsView()
-                    .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
+                VStack{
+                    HStack {
+                        Text("Todo List 📝")
+                            .font(.largeTitle)
+                            .fontWeight(.heavy)
+                        Spacer()
+                    }
+                    .padding(.horizontal,20)
+                    .padding(.top, 15)
+                    NoItemsView()
+                        .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
+                    
+                }
             } else {
                 VStack {
+                    HStack {
+                        Text("Todo List 📝")
+                            .font(.largeTitle)
+                            .fontWeight(.heavy)
+                        Spacer()
+                    }
+                    .padding(.horizontal,20)
+                    .padding(.top, 15)
                     CategoryTabs(
                         selectedTab: $selectedTab,
                         tabsWithIconsAndColors: [
-                            ("All", "tray.full", Color("AccentColor")),
-                            ("Other", "diamond.fill", .red),
-                            ("Home", "house.fill", .orange),
-                            ("School", "book.fill", .green),
-                            ("Job", "briefcase.fill", .blue)
+                            ("all", "tray.full", Color("AccentColor")),
+                            ("other", "diamond.fill", .red),
+                            ("home", "house.fill", .orange),
+                            ("school", "book.fill", .green),
+                            ("job", "briefcase.fill", .blue)
                         ]
                     )
                     .padding(.vertical, 10)
                     
                     //                    CategoryTabs(selectedTab: $selectedTab, tabs: tabs)
-                    List(items) { item in
+                    List(filteredItems) { item in
                         ListRowView(item: item, hideCategoryIcon: false)
+                        //                            .background(item.categoryColor.opacity(0.1)) // Arka plan renk kodlaması
                             .swipeActions {
                                 Button("Delete", role: .destructive) {
                                     viewModel.delete(id: item.id)
-                                }                            }
+                                }
+                            }
+                        
+                        
                     }
                     .listStyle(InsetGroupedListStyle())
                     .scrollContentBackground(.hidden)
                 }
             }
-        }
-        .navigationTitle("Todo List 📝")
-        .environment(\.editMode, $editMode) // Bind the EditMode state to the environment
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    withAnimation {
-                        editMode = editMode == .active ? .inactive : .active
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    NavigationLink(destination: AddView()) {
+                        
+                        Image(systemName: "plus")
+                            .frame(width: 60, height: 60)
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .background(Circle().fill(Color("AccentColor")))
+                            .shadow(
+                                color: Color("AccentColor").opacity(0.5),
+                                radius: 20,
+                                x: 0,
+                                y: 10)
                     }
-                }) {
-                    Text(editMode == .active ? "Done" : "Edit")
+                    
                 }
+                .padding(30)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink("Add", destination: AddView())
-            }
+//            .ignoresSafeArea()
         }
-        .onAppear {
-            editMode = .inactive
-        }
+        .toolbar(.hidden, for: .navigationBar)
+        //        .transition(.opacity.combined(with: .scale))
     }
+    
     
 }
 
