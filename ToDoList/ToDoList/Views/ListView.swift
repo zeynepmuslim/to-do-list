@@ -34,12 +34,9 @@ struct ListView: View {
     
     var body: some View {
         ZStack {
-            
             HStack{
-                
                 Spacer()
                 VStack{
-                    
                     RoundedRectangle(cornerRadius: 0)
                         .foregroundColor(Color("AccentColor"))
                         .clipShape(
@@ -98,7 +95,6 @@ struct ListView: View {
                     //                    CategoryTabs(selectedTab: $selectedTab, tabs: tabs)
                     List(filteredItems) { item in
                         ListRowView(item: item, hideCategoryIcon: false)
-                        //                            .background(item.categoryColor.opacity(0.1)) // Arka plan renk kodlaması
                             .swipeActions {
                                 Button("Delete", role: .destructive) {
                                     viewModel.delete(id: item.id)
@@ -116,7 +112,6 @@ struct ListView: View {
                 HStack {
                     Spacer()
                     NavigationLink(destination: AddView()) {
-                        
                         Image(systemName: "plus")
                             .frame(width: 60, height: 60)
                             .font(.title)

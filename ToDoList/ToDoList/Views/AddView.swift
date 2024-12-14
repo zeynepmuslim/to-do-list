@@ -264,7 +264,7 @@ struct AddView: View {
             return false
         }
         
-        if trimmedText.count > 50 {
+        if trimmedText.count > 100 {
             alertTitle = "Task title cannot exceed 50 characters!"
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
