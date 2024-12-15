@@ -95,7 +95,7 @@ struct DueDateSheet: View {
             Spacer()
         }
         .padding()
-        .presentationDetents([.medium]) // Alttan çıkan, sayfayı kaplamayan bir Sheet
+        .presentationDetents([.fraction(0.8)]) // Alttan çıkan, sayfayı kaplamayan bir Sheet
     }
 }
 

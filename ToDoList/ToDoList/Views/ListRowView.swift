@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ListRowView: View {
-    @Environment(\.colorScheme) var colorScheme
     
     @StateObject var viewModel = ListRowViewModel()
     @State private var showDetailsSheet = false
@@ -19,7 +18,6 @@ struct ListRowView: View {
     let hideCategoryIcon: Bool
     
     var body: some View {
-        VStack {
             HStack {
                 HStack {
                     Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
@@ -38,7 +36,7 @@ struct ListRowView: View {
 //                color change rectangele device thema
                     Rectangle()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .foregroundColor(colorScheme == .dark ? Color.darkerSecond : Color.white)
+                        .foregroundColor(Color("darkerSecond"))
                     
                     VStack {
                         if item.thereIsDate {
@@ -49,7 +47,6 @@ struct ListRowView: View {
                                 .font(.caption)
                         }
                     }
-                    
                     if !hideCategoryIcon {
                         Image(systemName: viewModel.categorySymbol(for: item.category))
                             .foregroundColor(viewModel.categoryColor(for: item.category))
@@ -73,67 +70,10 @@ struct ListRowView: View {
                     }
             }
             
-            }
         }
     }
 
 
-struct DetailView: View {
-    let item: TaskModel
-    var onDismiss: () -> Void
-    @State private var viewOpacity: Double = 0.0
-    @State private var viewScale: CGFloat = 0.9
-    @State private var backgroundOpacity: Double = 0.0
-    
-    var body: some View {
-        ZStack {
-            Color.white
-                .opacity(backgroundOpacity)
-                .ignoresSafeArea()
-                .onAppear {
-                    withAnimation(.easeOut(duration: 0.4)) {
-                        backgroundOpacity = 1.0
-                    }
-                }
-            
-            VStack {
-                Text("Detay Sayfası")
-                    .font(.largeTitle)
-                    .padding()
-                
-                Text("Görev: \(item.title)")
-                    .font(.headline)
-                    .padding()
-                
-                if let dueDate = item.dueDate {
-                    Text("Tarih: \(Date(timeIntervalSince1970: dueDate).formatted())")
-                        .font(.subheadline)
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    onDismiss()
-                }) {
-                    Text("Geri Dön")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                }
-                .padding()
-            }
-            .scaleEffect(viewScale)
-            .opacity(viewOpacity)
-            .onAppear {
-                withAnimation(.easeOut(duration: 0.4)) {
-                    viewOpacity = 1.0
-                    viewScale = 1.0
-                }
-            }
-        }
-    }
-}
 
 //#Preview {
 //    NavigationStack {

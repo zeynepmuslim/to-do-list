@@ -24,16 +24,39 @@ struct ListView: View {
     @StateObject var viewModel : ListViewModel
     @FirestoreQuery var items : [TaskModel]
     @State private var isVisible: Bool = false
+    @State private var showDeleteAllAlert = false // Alert kontrolü
     
     @State private var sortOption: SortOption = .createdAt// Replace with your data source
     
     enum SortOption: String, CaseIterable {
             case title, createdAt, dueDate, priority, category
+        var title: String {
+            switch self {
+            case .title: return "Title"
+            case .createdAt: return "Created Date"
+            case .dueDate: return "Due Date"
+            case .priority: return "Priority"
+            case .category: return "Category"
+            }
         }
+        
+        // Özel icon
+        var icon: String {
+            switch self {
+            case .title: return "textformat"
+            case .createdAt: return "calendar"
+            case .dueDate: return "clock"
+            case .priority: return "exclamationmark.triangle"
+            case .category: return "folder"
+            }
+        }
+        }
+    
     init(userId: String) {
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/tasks")
         self._viewModel = StateObject(wrappedValue: ListViewModel(userId: userId))
     }
+    
     var sortedTasks: [TaskModel] {
            let tab = selectedTab
            let filtered = tab == "all" ? viewModel.items : viewModel.items.filter { $0.category == tab }
@@ -122,53 +145,117 @@ struct ListView: View {
                     )
                     .padding(.vertical, 10)
                     
-                    Picker("Sort By", selection: $sortOption) {
-                        ForEach(SortOption.allCases, id: \.self) { option in
-                            Text(option.rawValue.capitalized)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding()
-                    List {
-                        // To-Do Listesi
-                        if !sortedTasks.filter({ !$0.isCompleted }).isEmpty {
-                            Section(header: Text("To-Do")) {
-                                ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
-                                    ListRowView(
-                                        onInfoButtonTap: {},
-                                        item: item,
-                                        hideCategoryIcon: false
-                                    )
-                                    .swipeActions {
-                                        Button("Delete", role: .destructive) {
-                                            viewModel.delete(id: item.id)
+                    if sortedTasks.isEmpty {
+                                       VStack(spacing: 20) {
+                                           Image(systemName: "tray")
+                                               .font(.system(size: 50))
+                                               .foregroundColor(.gray)
+                                           Text("No items in this category")
+                                               .font(.headline)
+                                               .foregroundColor(.gray)
+                                       }
+                                       .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                       .padding(.top, 50)
+                    } else {
+                        List {
+                            if !sortedTasks.filter({ !$0.isCompleted }).isEmpty {
+                                Section(header: HStack{
+                                    Text("To-Do")
+                                    Spacer()
+                                    Menu {
+                                        ForEach(SortOption.allCases, id: \.self) { option in
+                                            Button(action: {
+                                                withAnimation {
+                                                    sortOption = option
+                                                }
+                                            }) {
+                                                Label(option.title, systemImage: option.icon)
+                                                    .textCase(nil)
+                                            }
+                                        }
+                                    } label: {
+                                        // Menü butonu sadece bir ikon
+                                        HStack(spacing: 5) {
+                                            Text("Sort")
+                                                .font(.caption)
+                                                .foregroundColor(Color("AccentColor"))
+                                            Image(systemName: "line.3.horizontal.decrease")
+                                                .foregroundColor(Color("AccentColor"))
+                                        }
+                                    }
+                                }) {
+                                    ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
+                                        ListRowView(
+                                            onInfoButtonTap: {
+                                                selectedItem = item
+                                                navigateToDetail = true
+                                            },
+                                            item: item,
+                                            hideCategoryIcon: false
+                                        )
+                                        .listRowBackground(Color("darkerSecond"))
+                                        .swipeActions {
+                                            Button("Delete", role: .destructive) {
+                                                viewModel.delete(id: item.id)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        
-                        // Completed Listesi
-                        if !sortedTasks.filter({ $0.isCompleted }).isEmpty {
-                            Section(header: Text("Completed")) {
-                                ForEach(sortedTasks.filter { $0.isCompleted }) { item in
-                                    ListRowView(
-                                        onInfoButtonTap: {},
-                                        item: item,
-                                        hideCategoryIcon: false
-                                    )
-                                    .swipeActions {
-                                        Button("Delete", role: .destructive) {
-                                            viewModel.delete(id: item.id)
+                            
+                            // Completed Listesi
+                            // Completed Listesi
+                            if !sortedTasks.filter({ $0.isCompleted }).isEmpty {
+                                Section(header: HStack {
+                                    Text("Completed")
+                                    Spacer()
+                                    Button(action: {
+                                        // Tamamlanan tüm görevleri sil
+                                        showDeleteAllAlert = true
+                                    }) {
+                                        Text("Delete All")
+                                            .font(.caption)
+                                            .foregroundColor(.red)
+                                    }
+                                }) {
+                                    ForEach(sortedTasks.filter { $0.isCompleted }) { item in
+                                        ListRowView(
+                                            onInfoButtonTap: {
+                                                selectedItem = item
+                                                navigateToDetail = true
+                                            },
+                                            item: item,
+                                            hideCategoryIcon: false
+                                        )
+                                        .listRowBackground(Color("darkerSecond"))
+                                        .swipeActions {
+                                            Button("Delete", role: .destructive) {
+                                                viewModel.delete(id: item.id)
+                                            }
                                         }
                                     }
                                 }
+                                .alert("Delete All Completed Tasks?", isPresented: $showDeleteAllAlert) {
+                                    Button("Cancel", role: .cancel) { }
+                                    Button("Delete", role: .destructive) {
+                                        withAnimation {
+                                            for item in sortedTasks.filter({ $0.isCompleted }) {
+                                                viewModel.delete(id: item.id)
+                                            }
+                                        }
+                                    }
+                                } message: {
+                                    Text("This action cannot be undone. Are you sure you want to delete all completed tasks?")
+                                }
                             }
                         }
+                        .background(Color(.systemBackground))
+                        .scrollContentBackground(.hidden)
+                        .listStyle(InsetGroupedListStyle())
                     }
-                                .listStyle(InsetGroupedListStyle())
                 } .animation(.easeInOut(duration: 0.3), value: items)
             }
+                
             VStack {
                 Spacer()
                 HStack {

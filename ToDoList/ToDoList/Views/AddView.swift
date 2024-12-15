@@ -41,15 +41,17 @@ struct AddView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Task Title
-                HStack {
-                    Button{
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.accentColor)
-                    }
-                    Text("Task Title")
-                        .font(.headline)
+                VStack(alignment: .leading, spacing: 10) {
+                        Button{
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left.2")
+                                .foregroundColor(.accentColor)
+                                .font(.headline)
+                        }
+                            Text("Task Title")
+                                .font(.headline)
+                       
                 }
                 
                 CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
@@ -61,9 +63,7 @@ struct AddView: View {
                     Spacer()
                     if selectedPriority == "Low" {
                         Group {
-                            myIcon
-                                .transition(.scale)
-                        }
+                            myIcon                        }
                         .foregroundColor(.green)
                         .transition(.scale)
                         Text("😌")

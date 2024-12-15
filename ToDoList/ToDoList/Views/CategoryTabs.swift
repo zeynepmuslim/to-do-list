@@ -29,12 +29,12 @@ struct CategoryTabs: View {
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(selectedTab == tab ? color : Color.darkerSecond)
-                                .shadow(color: selectedTab == tab ? color.opacity(0.5) : .clear, radius: 5, x: 0, y: 5)
+//                                .shadow(color: selectedTab == tab ? color.opacity(0.5) : .clear, radius: 5, x: 0, y: 5)
                         )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(selectedTab == tab ? color : .clear, lineWidth: 2)
-                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(selectedTab == tab ? color : .clear, lineWidth: 2)
+//                        )
                     }
                 }
             }

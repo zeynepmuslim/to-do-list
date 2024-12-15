@@ -31,20 +31,22 @@ struct EditView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 
-                HStack{
+                VStack(alignment: .leading, spacing: 10) {
                     Button{
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Image(systemName: "chevron.left")
+                        Image(systemName: "chevron.left.2")
                             .foregroundColor(.accentColor)
+                            .font(.headline)
                     }
-                    Text("Task Title")
-                        .font(.headline)
-                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                    
+                    HStack{
+                        Text("Task Title")
+                            .font(.headline)
+                        Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                    }
                 }
                     
-                                TextEditor(text: $mytitle)
+                TextEditor(text: $mytitle)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
                     .scrollContentBackground(.hidden)
@@ -63,24 +65,31 @@ struct EditView: View {
                     if selectedPriority == "Low" {
                         Group {
                             myIcon
-                                .foregroundColor(.green)
+                                
                         }
+                        .foregroundColor(.green)
+                        .transition(.scale)
                         Text("😌")
+                            .transition(.opacity)
                     } else if selectedPriority == "Medium" {
                         Group {
                             myIcon
                             myIcon
                         }
+                        .transition(.scale)
                         .foregroundColor(.yellow)
                         Text("😬")
+                            .transition(.opacity)
                     } else {
                         Group {
                             myIcon
                             myIcon
                             myIcon
                         }
+                        .transition(.scale)
                         .foregroundColor(.red)
                         Text("🤯")
+                            .transition(.opacity)
                     }
                 }
                 .animation(.easeInOut, value: selectedPriority)
