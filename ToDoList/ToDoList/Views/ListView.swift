@@ -131,7 +131,7 @@ struct ListView: View {
                     .padding()
                     List {
                         // To-Do Listesi
-                        if !sortedTasks.filter { !$0.isCompleted }.isEmpty {
+                        if !sortedTasks.filter({ !$0.isCompleted }).isEmpty {
                             Section(header: Text("To-Do")) {
                                 ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
                                     ListRowView(
@@ -149,7 +149,7 @@ struct ListView: View {
                         }
                         
                         // Completed Listesi
-                        if !sortedTasks.filter { $0.isCompleted }.isEmpty {
+                        if !sortedTasks.filter({ $0.isCompleted }).isEmpty {
                             Section(header: Text("Completed")) {
                                 ForEach(sortedTasks.filter { $0.isCompleted }) { item in
                                     ListRowView(
@@ -167,7 +167,7 @@ struct ListView: View {
                         }
                     }
                                 .listStyle(InsetGroupedListStyle())
-                } .animation(.easeInOut, value: items)
+                } .animation(.easeInOut(duration: 0.3), value: items)
             }
             VStack {
                 Spacer()

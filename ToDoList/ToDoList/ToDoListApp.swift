@@ -29,7 +29,6 @@ struct ToDoListApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationView {
                 if mainViewModel.isSignedIn, !mainViewModel.currentUserId.isEmpty {
                     TabView {
                         NavigationView {
@@ -54,11 +53,14 @@ struct ToDoListApp: App {
                     .accentColor(Color("AccentColor"))
 //                    .transition(.scale)
                 } else {
-                    LoginView()
+                    
+                    NavigationView {
+                        LoginView()
+                    }
+                    .navigationViewStyle(.stack)
+                    
                 }
             }
-            .navigationViewStyle(.stack)
-            .toolbar(.hidden)
         }
-    }
+    
 }

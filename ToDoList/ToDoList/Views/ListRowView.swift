@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ListRowView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @StateObject var viewModel = ListRowViewModel()
     @State private var showDetailsSheet = false
     @State var isVisible: Bool = true
@@ -32,7 +34,11 @@ struct ListRowView: View {
                         .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
                         .lineLimit(1)
                         .truncationMode(.tail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+//                color change rectangele device thema
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundColor(colorScheme == .dark ? Color.darkerSecond : Color.white)
                     
                     VStack {
                         if item.thereIsDate {
