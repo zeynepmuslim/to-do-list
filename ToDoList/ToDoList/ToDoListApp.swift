@@ -39,7 +39,7 @@ struct ToDoListApp: App {
                             Label("Tasks", systemImage: "checklist")
                         }
                         .navigationViewStyle(.stack)
-                        .toolbar(.hidden)
+//                        .toolbar(.hidden)
                         
                         // Settings Tab
                         NavigationView {
@@ -49,7 +49,7 @@ struct ToDoListApp: App {
                             Label("Profile", systemImage: "person.fill")
                         }
                         .navigationViewStyle(.stack)
-                        .toolbar(.hidden)
+//                        .toolbar(.hidden)
                     }
                     .accentColor(Color("AccentColor"))
 //                    .transition(.scale)

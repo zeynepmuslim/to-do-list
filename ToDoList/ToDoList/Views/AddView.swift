@@ -41,8 +41,17 @@ struct AddView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Task Title
-                Text("Task Title")
-                    .font(.headline)
+                HStack {
+                    Button{
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.accentColor)
+                    }
+                    Text("Task Title")
+                        .font(.headline)
+                }
+                
                 CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
                 
                 // Task Priority

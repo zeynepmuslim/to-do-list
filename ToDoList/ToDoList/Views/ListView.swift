@@ -25,10 +25,33 @@ struct ListView: View {
     @FirestoreQuery var items : [TaskModel]
     @State private var isVisible: Bool = false
     
+    @State private var sortOption: SortOption = .createdAt// Replace with your data source
+    
+    enum SortOption: String, CaseIterable {
+            case title, createdAt, dueDate, priority, category
+        }
     init(userId: String) {
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/tasks")
         self._viewModel = StateObject(wrappedValue: ListViewModel(userId: userId))
     }
+    var sortedTasks: [TaskModel] {
+           let tab = selectedTab
+           let filtered = tab == "all" ? viewModel.items : viewModel.items.filter { $0.category == tab }
+           return filtered.sorted {
+               switch sortOption {
+               case .title: return $0.title < $1.title
+               case .createdAt: return $0.createdAt > $1.createdAt
+               case .dueDate:
+                   let date1 = $0.dueDate ?? .greatestFiniteMagnitude
+                   let date2 = $1.dueDate ?? .greatestFiniteMagnitude
+                   return date1 < date2
+               case .priority:
+                   let priorityOrder: [String: Int] = ["High": 1, "Medium": 2, "Low": 3]
+                   return (priorityOrder[$0.priority] ?? 4) < (priorityOrder[$1.priority] ?? 4)
+               case .category: return $0.category < $1.category
+               }
+           }
+       }
     
     var filteredItems: [TaskModel] {
         if selectedTab == "all" {
@@ -85,6 +108,8 @@ struct ListView: View {
                     }
                     .padding(.horizontal,20)
                     .padding(.top, 15)
+                    
+                
                     CategoryTabs(
                         selectedTab: $selectedTab,
                         tabsWithIconsAndColors: [
@@ -97,21 +122,52 @@ struct ListView: View {
                     )
                     .padding(.vertical, 10)
                     
-                    
-                    List(filteredItems) { item in
-                        ListRowView(onInfoButtonTap: {
-                            selectedItem = item
-                            navigateToDetail = true
-                        }, item: item, hideCategoryIcon: false)
-                        .swipeActions {
-                            Button("Delete", role: .destructive) {
-                                viewModel.delete(id: item.id)
+                    Picker("Sort By", selection: $sortOption) {
+                        ForEach(SortOption.allCases, id: \.self) { option in
+                            Text(option.rawValue.capitalized)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    List {
+                        // To-Do Listesi
+                        if !sortedTasks.filter { !$0.isCompleted }.isEmpty {
+                            Section(header: Text("To-Do")) {
+                                ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
+                                    ListRowView(
+                                        onInfoButtonTap: {},
+                                        item: item,
+                                        hideCategoryIcon: false
+                                    )
+                                    .swipeActions {
+                                        Button("Delete", role: .destructive) {
+                                            viewModel.delete(id: item.id)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Completed Listesi
+                        if !sortedTasks.filter { $0.isCompleted }.isEmpty {
+                            Section(header: Text("Completed")) {
+                                ForEach(sortedTasks.filter { $0.isCompleted }) { item in
+                                    ListRowView(
+                                        onInfoButtonTap: {},
+                                        item: item,
+                                        hideCategoryIcon: false
+                                    )
+                                    .swipeActions {
+                                        Button("Delete", role: .destructive) {
+                                            viewModel.delete(id: item.id)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                    .listStyle(InsetGroupedListStyle())
-                    .scrollContentBackground(.hidden)
-                }
+                                .listStyle(InsetGroupedListStyle())
+                } .animation(.easeInOut, value: items)
             }
             VStack {
                 Spacer()
@@ -133,7 +189,7 @@ struct ListView: View {
                 }
                 .padding(30)
             }
-        
+            
             if let selectedItem = selectedItem {
                 NavigationLink(
                     destination: EditView(item: selectedItem, selectedPriority: selectedItem.priority, selectedCategory: selectedItem.category),
@@ -142,22 +198,16 @@ struct ListView: View {
                 )
                 
             }
-//                NavigationLink(
-//                    destination: EditView(item: ????, onDismiss: {
-//                        showOverlay = false
-//                        navigateToDetail = false
-//                    }/*, showDetailsSheet: Binding<Bool> */),
-//                    isActive: $navigateToDetail
-////                )
-//                {
-//                    EmptyView()
-//                }
-            }.toolbar(.hidden, for: .navigationBar)
+            
         }
-        
+            .onAppear{
+                print("listeler")
+            }
     }
     
-    
+}
+
+
 
 
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TaskModel: Encodable, Decodable, Identifiable {
+struct TaskModel: Encodable, Decodable, Identifiable,Equatable {
     var id: String
     var title: String
     var priority: String

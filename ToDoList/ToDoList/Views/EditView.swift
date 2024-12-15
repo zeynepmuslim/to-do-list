@@ -32,9 +32,15 @@ struct EditView: View {
             VStack(alignment: .leading, spacing: 20) {
                 
                 HStack{
-                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                    Button{
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.accentColor)
+                    }
                     Text("Task Title")
                         .font(.headline)
+                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                     
                 }
                     
