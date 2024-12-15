@@ -62,20 +62,11 @@ struct ListRowView: View {
                 Image(systemName: "info.circle")
                     .foregroundColor(.blue)
                     .onTapGesture {
-//                        withAnimation(.easeInOut(duration: 0.5)) {
                         onInfoButtonTap()
-                            showDetailsSheet.toggle()
-//                        }
+                          showDetailsSheet.toggle()
                     }
             }
             
-            // NavigationLink ile farklı bir View'e gitme
-//            if showDetailsSheet {
-//                NavigationLink(destination: DetailView(item: item, onDismiss: $showDetailsSheet)/*, isActive: $showDetailsSheet*/) {
-//                    EmptyView() // NavigationLink'in görünür kısmı olmaması için
-//                }
-//                .transition(.scale)
-//                .animation(.easeInOut(duration: 0.5), value: showDetailsSheet)
             }
         }
     }
@@ -84,14 +75,12 @@ struct ListRowView: View {
 struct DetailView: View {
     let item: TaskModel
     var onDismiss: () -> Void
-//    @Binding var showDetailsSheet: Bool // Geri dönüş için Binding
-    @State private var viewOpacity: Double = 0.0 // Başlangıç opaklığı
-    @State private var viewScale: CGFloat = 0.9 // Başlangıç ölçeği
-    @State private var backgroundOpacity: Double = 0.0 // Arka plan opaklığı
+    @State private var viewOpacity: Double = 0.0
+    @State private var viewScale: CGFloat = 0.9
+    @State private var backgroundOpacity: Double = 0.0
     
     var body: some View {
         ZStack {
-            // Arka plan rengi
             Color.white
                 .opacity(backgroundOpacity)
                 .ignoresSafeArea()
@@ -118,9 +107,7 @@ struct DetailView: View {
                 Spacer()
                 
                 Button(action: {
-                    // Geri dön
                     onDismiss()
-//                    showDetailsSheet = false
                 }) {
                     Text("Geri Dön")
                         .foregroundColor(.white)

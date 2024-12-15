@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DueDateSheet: View {
     @Binding var selectedDate: Date?
+    @Binding var dateChanged: Bool
     @Environment(\.dismiss) var dismiss // Sheet'i kapatmak için
     
     // Bugün ve yarın için dinamik kısayollar
@@ -45,6 +46,7 @@ struct DueDateSheet: View {
                 Button(action: {
                     currentDate = today
                     selectedDate = currentDate
+                    dateChanged = true
                     dismiss()
                 }) {
                     Text("Today")
@@ -60,6 +62,7 @@ struct DueDateSheet: View {
                 Button(action: {
                     currentDate = tomorrow
                     selectedDate = currentDate
+                    dateChanged = true
                     dismiss()
                 }) {
                     Text("Tomorrow")
@@ -76,6 +79,7 @@ struct DueDateSheet: View {
             // Kaydet düğmesi
             Button(action: {
                 selectedDate = currentDate
+                dateChanged = true
                 dismiss() // Sheet'i kapat
             }) {
                 Text("Save")

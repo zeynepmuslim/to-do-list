@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ListView: View {
+    
+    let theWidth = UIScreen.main.bounds.width
     @State var selectedTab: String = "all"
     @State var tabs = ["all","other", "home", "school", "job"]
     @State private var editMode: EditMode = .inactive
@@ -19,7 +21,6 @@ struct ListView: View {
     @State private var navigateToDetail = false
     @State private var selectedItem: TaskModel? = nil
     
-    let theWidth = UIScreen.main.bounds.width
     @StateObject var viewModel : ListViewModel
     @FirestoreQuery var items : [TaskModel]
     @State private var isVisible: Bool = false
@@ -96,24 +97,17 @@ struct ListView: View {
                     )
                     .padding(.vertical, 10)
                     
-                    //                    CategoryTabs(selectedTab: $selectedTab, tabs: tabs)
+                    
                     List(filteredItems) { item in
                         ListRowView(onInfoButtonTap: {
                             selectedItem = item
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                showOverlay = true
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                navigateToDetail = true
-                            }
+                            navigateToDetail = true
                         }, item: item, hideCategoryIcon: false)
                         .swipeActions {
                             Button("Delete", role: .destructive) {
                                 viewModel.delete(id: item.id)
                             }
                         }
-                        
-                        
                     }
                     .listStyle(InsetGroupedListStyle())
                     .scrollContentBackground(.hidden)
@@ -139,34 +133,32 @@ struct ListView: View {
                 }
                 .padding(30)
             }
-            //            .ignoresSafeArea()
-            if showOverlay {
-                Color.clear
-                    .ignoresSafeArea()
-//                    .offset(x: showOverlay ? 0 : UIScreen.main.bounds.width)
-//                    .transition(.move(edge: .trailing))// Sağdan sola kayma
-//                    .animation(.easeInOut(duration: 0.3), value: showOverlay)
-//                //
-            }
-            
-            //                         NavigationLink ile geçiş
+        
             if let selectedItem = selectedItem {
                 NavigationLink(
-                    destination: DetailView(item: selectedItem, onDismiss: {
-                        showOverlay = false
-                        navigateToDetail = false
-                    }/*, showDetailsSheet: Binding<Bool> */),
-                    isActive: $navigateToDetail
-                ) {
-                    EmptyView()
-                }
+                    destination: EditView(item: selectedItem, selectedPriority: selectedItem.priority, selectedCategory: selectedItem.category),
+                    isActive: $navigateToDetail,
+                    label: { EmptyView() }
+                )
+                
             }
+//                NavigationLink(
+//                    destination: EditView(item: ????, onDismiss: {
+//                        showOverlay = false
+//                        navigateToDetail = false
+//                    }/*, showDetailsSheet: Binding<Bool> */),
+//                    isActive: $navigateToDetail
+////                )
+//                {
+//                    EmptyView()
+//                }
+            }.toolbar(.hidden, for: .navigationBar)
         }
-        .toolbar(.hidden, for: .navigationBar)
+        
     }
     
     
-}
+
 
 
 #Preview {

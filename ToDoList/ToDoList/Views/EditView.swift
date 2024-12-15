@@ -1,51 +1,55 @@
-//
-//  AddView.swift
-//  ToDoList
-//
-//  Created by Zeynep Müslim on 9.12.2024.
-//
-
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
-
-struct AddView: View {
+struct EditView: View {
+    
+    
+    @StateObject var viewModel = ListRowViewModel()
     
     @Environment(\.presentationMode) var presentationMode
-    
-    @StateObject var ItemModel = ItemModelV2()
-    @State var selectedPriority: String = "Low"
-    @State var selectedCategory: String = "other"
-    @State var customCategories: Array = ["other", "home", "school", "job"]
-    @State var taskPriority: Array = ["Low", "Medium", "High"]
+    @State var item: TaskModel // Düzenlenecek öğe
+    @State var selectedPriority: String
+    @State var selectedCategory: String
     @State var selectedDate: Date? = nil
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
-    var darkerSecond = Color("DarkerSecond")
+    @State var showDateSheet: Bool = false
+    @State var dateChanged: Bool = false
+    
+    @State var mytitle = ""
+    @State var myThereIsDate = true
+    @State var myDate = Date(timeIntervalSince1970: 0)
+
+    let darkerSecond = Color("DarkerSecond")
     let myIcon = Image(systemName: "star.fill")
     
-    @State var dateChanged: Bool = false
-    @State var animate: Bool = false
+    private let characterLimit = 100
     
-    @State var showDateSheet: Bool = false // Sheet kontrolü için
-    
-    
-    
-    struct Category: Identifiable {
-        let id = UUID()
-        var name: String
-        var color: Color
-        var icon: String
-    }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Task Title
-                Text("Task Title")
-                    .font(.headline)
-                CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
                 
-                // Task Priority
+                HStack{
+                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                    Text("Task Title")
+                        .font(.headline)
+                    
+                }
+                    
+                                TextEditor(text: $mytitle)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(10)
+                    .tint(Color("AccentColor"))
+                    
+                Text("\(item.title.count)/\(characterLimit) characters")
+                                    .font(.footnote)
+                                    .foregroundColor( mytitle.count >= characterLimit ? .red : .secondary)
+
                 HStack {
                     Text("Task Priority")
                         .font(.headline)
@@ -53,21 +57,16 @@ struct AddView: View {
                     if selectedPriority == "Low" {
                         Group {
                             myIcon
-                                .transition(.scale)
+                                .foregroundColor(.green)
                         }
-                        .foregroundColor(.green)
-                        .transition(.scale)
                         Text("😌")
-                            .transition(.opacity)
                     } else if selectedPriority == "Medium" {
                         Group {
                             myIcon
                             myIcon
                         }
                         .foregroundColor(.yellow)
-                        .transition(.scale)
                         Text("😬")
-                            .transition(.opacity)
                     } else {
                         Group {
                             myIcon
@@ -75,22 +74,21 @@ struct AddView: View {
                             myIcon
                         }
                         .foregroundColor(.red)
-                        .transition(.scale)
                         Text("🤯")
-                            .transition(.opacity)
                     }
                 }
                 .animation(.easeInOut, value: selectedPriority)
                 Picker("Priority", selection: $selectedPriority) {
-                    ForEach(taskPriority, id: \.self) { priority in
+                    ForEach(["Low", "Medium", "High"], id: \.self) { priority in
                         Text(priority)
                             .tag(priority)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                
+
                 Text("Task Category")
                     .font(.headline)
+                
                 HStack(alignment: .center) {
                     CustomCategoryButton(title: "Other", action: {
                         withAnimation(.easeInOut(duration: 0.5)) {
@@ -153,124 +151,104 @@ struct AddView: View {
                         color: selectedCategory == "job" ? .blue.opacity(0.7) : .blue.opacity(0.0),
                         radius: selectedCategory == "job" ? 0 : 30)
                 }
-                //
                 
-                // Due Date Toggle
-                if let selectedDate = selectedDate {
-                    // Eğer seçilmiş bir tarih varsa, tarihi ve işlemleri gösteren bir HStack
-                    HStack {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Selected Due Date")
-                                .font(.headline)
-                            Text(selectedDate, style: .date) // Seçili tarihi gösterir
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        // Tarihi değiştir düğmesi
-                        Button {
-                            showDateSheet = true
-                        } label: {
-                            Text("Change")
-                                .padding(.horizontal, 15)
-                                .frame(height: 40)
-                                .background(.darkerSecond)
-                                .cornerRadius(10)
-                                .foregroundColor(Color("AccentColor"))
-                        }
-                        // Tarihi kaldır düğmesi
-                        Button {
-                            withAnimation {
-                                self.selectedDate = nil // Seçili tarihi kaldırır
-                            }
-                        } label: {
-                            Image(systemName: "trash")
-                                .font(.headline)
-                                .foregroundColor(.red)
-                        }
-                    }
-                    .padding(.vertical)
-                } else {
-                    // Eğer seçili bir tarih yoksa, kullanıcıdan tarih seçmesini isteyen HStack
-                    HStack {
-                        Text("Do you have a deadline?")
-                            .font(.headline)
-                        Spacer()
-                        Button {
-                            showDateSheet = true
-                        } label: {
-                            Text("Set a Due Date")
-                                .padding(.horizontal, 15)
-                                .frame(height: 40)
-                                .background(.darkerSecond)
-                                .cornerRadius(10)
-                                .foregroundColor(Color("AccentColor"))
-                            //
-                        }
-                    }
-                    .padding(.vertical)
-                }
-                //
                 Spacer()
-                
+
                 // Save Button
-                CustomButton(title: "Create Task") {
+                CustomButton(title: "Save Changes") {
                     saveButtonPressed()
                 }
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text("Cancel")
-                        .padding(.horizontal, 15)
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 55)
-                        .background(.darkerSecond)
-                        .cornerRadius(10)
-                        .foregroundColor(Color("AccentColor"))
+                HStack{
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Cancel")
+                            .padding(.horizontal, 15)
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
+                            .background(.darkerSecond)
+                            .cornerRadius(10)
+                            .foregroundColor(Color("AccentColor"))
+                    }
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            item.isCompleted.toggle()
+                        }
+                    }) {
+                        Text(item.isCompleted ? "Mark Not Completed 😔" : "Mark Completed 🥳")
+                            .padding(.horizontal, 15)
+                            .font(.headline)
+                            .frame(height: 55)
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(item.isCompleted ? Color.red : Color.green)
+                            .background(Color(UIColor.secondarySystemBackground))
+                            .cornerRadius(10)
+                            
+                        //                            .transition(.opacity)
+                            .transition(.scale)
+                    }
                 }
                 
             }
             .padding()
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .sheet(isPresented: $showDateSheet) {
-            DueDateSheet(selectedDate: $selectedDate, dateChanged: $dateChanged)
+        .onAppear{
+            loadData()
+           
         }
+        .toolbar(.hidden, for: .navigationBar)
         .alert(isPresented: $showAlert) {
             Alert(title: Text(alertTitle))
         }
     }
-    
-    func saveButtonPressed() {
-        if textIsAppropriate() {
-            ItemModel.priority = selectedPriority
-            ItemModel.category = selectedCategory
-            if let selectedDate = selectedDate {
-                ItemModel.dueDate = selectedDate
-                ItemModel.thereIsDate = true
-            }
-            
-            ItemModel.save()
-            presentationMode.wrappedValue.dismiss()
-        }
+
+    func loadData() {
+        mytitle = item.title
+        print(mytitle)
+        print("hi guys")
     }
-    
+    func saveButtonPressed() {
+            guard textIsAppropriate() else { return } // Ensure validation passes
+            
+        
+            
+            // Firestore reference
+            
+            guard let uid = Auth.auth().currentUser?.uid else {
+            return
+            }
+        
+            var itemCopy = item
+        itemCopy.title = mytitle
+        itemCopy.category = selectedCategory
+        itemCopy.priority = selectedPriority
+            
+            let db = Firestore.firestore()
+            db.collection("users")
+            .document(uid)
+            .collection("tasks")
+            .document(item.id)
+            .setData(itemCopy.asDictionary())
+        
+            print("save button pressed")
+            presentationMode.wrappedValue.dismiss()
+    }
+
+
     func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
     }
     
     func textIsAppropriate() -> Bool {
-        let trimmedText = ItemModel.title.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+        let trimmedText = item.title.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmedText.isEmpty {
             alertTitle = "Task title cannot be empty!"
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
             return false
         }
-        
         if trimmedText.count < 3 {
             alertTitle = "Task title must be at least 3 characters long!"
             showAlert.toggle()
@@ -278,22 +256,13 @@ struct AddView: View {
             return false
         }
         
-        if trimmedText.count > 100 {
-            alertTitle = "Task title cannot exceed 100 characters!"
+        if trimmedText.count >= characterLimit {
+            alertTitle = "Task title cannot exceed \(characterLimit) characters!"
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
             return false
         }
-        
-        // Başarılı doğrulama
         triggerHapticFeedback(type: .success)
         return true
     }
-}
-#Preview {
-        NavigationView {
-            AddView()
-        }
-        .preferredColorScheme(.light)
-//        .environmentObject(ListViewModel())
 }
