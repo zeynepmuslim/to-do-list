@@ -20,15 +20,16 @@ import SwiftUI
 @main
 struct ToDoListApp: App {
     
-    init() {
-        FirebaseApp.configure()
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
+ 
+    @StateObject var authController = AuthController()
     
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
-    //    @StateObject var listViewModel: ListViewModel = ListViewModel()
     
     var body: some Scene {
         WindowGroup {
+            Group{
                 if mainViewModel.isSignedIn, !mainViewModel.currentUserId.isEmpty {
                     TabView {
                         NavigationView {
@@ -54,12 +55,20 @@ struct ToDoListApp: App {
 //                    .transition(.scale)
                 } else {
                     
-                    NavigationView {
-                        LoginView()
+                    Group{
+                        NavigationView {
+                            LoginView()
+                        }
+                        .navigationViewStyle(.stack)
+                        .task {
+                            await authController.startListeningToAuthState()
+                        }
                     }
-                    .navigationViewStyle(.stack)
                     
                 }
+            }.environmentObject(authController) 
+//
+
             }
         }
     

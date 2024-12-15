@@ -37,6 +37,7 @@ struct RegisterView: View {
                 
                 CustomTextField(placeholder: "Email", text: $registerViewModel.email)
                     .autocapitalization(.none)
+                    .keyboardType(.emailAddress)
                 
                 CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: true)
                 

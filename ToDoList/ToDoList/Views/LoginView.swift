@@ -6,11 +6,20 @@
 //
 
 import SwiftUI
+import SwiftUI
+import FirebaseCore
+import GoogleSignIn
+import GoogleSignInSwift
+import FirebaseAuth
+
 
 struct LoginView: View {
     
+    @EnvironmentObject var authController: AuthController
     @StateObject var loginViewModel = LoginViewModel()
     
+    
+//    @Environment(AuthenticationState.self) private var authController
 //    @State var email: String = ""
 //    @State var password: String = ""
     
@@ -25,6 +34,7 @@ struct LoginView: View {
                
                 CustomTextField(placeholder: "Email", text: $loginViewModel.email)
                     .autocapitalization(.none)
+                    .keyboardType(.emailAddress)
                 
                 CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: true)
                 CustomButton(title: "Login") {
@@ -34,6 +44,14 @@ struct LoginView: View {
                 }
             }
             .padding(.horizontal, 40)
+            
+            //gggogle
+            VStack {
+                GoogleSignInButton {
+                    signIn()
+                }
+            }
+            
             VStack{
                 if !loginViewModel.errorMessage.isEmpty {
                     Text(loginViewModel.errorMessage)
@@ -60,8 +78,31 @@ struct LoginView: View {
                 }
                 .disabled(false)
             }
+            VStack {
+                Text("forget Password")
+                NavigationLink {
+                    PasswordResetView()
+                        .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
+                } label: {
+                    Text("forget Password 👀")
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("AccentColor"))
+                }
+                .disabled(false)
+            }
             
             Spacer()
+        }
+    }
+    
+    @MainActor
+    func signIn() {
+        Task {
+            do {
+                try await authController.signIn()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
