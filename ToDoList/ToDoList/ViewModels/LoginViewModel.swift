@@ -12,13 +12,14 @@ class LoginViewModel: ObservableObject {
     @Published var password: String = ""
     @Published var errorMessage: String = ""
     
+    
     init() {
         
     }
     
     func login() {
         guard validate() else {
-                print("Validation failed")
+            print("Validation failed")
             return
         }
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
@@ -26,10 +27,10 @@ class LoginViewModel: ObservableObject {
                 return
             }
             
-            guard error == nil else {
-                strongSelf.errorMessage = error!.localizedDescription
-                print("Login failed: \(error!.localizedDescription)")
-                return
+            if let error = error as NSError? {
+                        // Firebase Hatalarını Özelleştir
+                        strongSelf.handleAuthError(error)
+                        return
             }
             
             print("Login successful")
@@ -57,4 +58,32 @@ class LoginViewModel: ObservableObject {
         }
         return true
     }
+    
+    func handleAuthError(_ error: NSError) {
+        if let errorCode = AuthErrorCode(rawValue: error.code) {
+            switch errorCode {
+            case .wrongPassword:
+                errorMessage = "The password is incorrect. Please try again."
+            case .invalidEmail:
+                errorMessage = "The email address is not valid. Please check again."
+            case .userNotFound:
+                errorMessage = "No account found with this email. Please sign up."
+            case .networkError:
+                errorMessage = "Network error. Please check your connection."
+            case .invalidCredential:
+                errorMessage = "Your authentication credential is malformed or expired."
+                
+            default:
+                errorMessage = "Error: \(error.localizedDescription)"
+            }
+        } else {
+            errorMessage = "An unknown error occurred. Please try again."
+        }
+        print(errorMessage)
+    }
+    
+    
 }
+
+
+

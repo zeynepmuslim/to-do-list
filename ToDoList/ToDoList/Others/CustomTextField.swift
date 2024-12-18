@@ -19,6 +19,7 @@ struct CustomTextField: View {
                     .padding(.horizontal)
                     .frame(height: 55)
                     .background(Color(UIColor.secondarySystemBackground))
+                    .autocorrectionDisabled(true)
                     .cornerRadius(10)
                     .tint(Color("AccentColor"))
             } else {
@@ -26,6 +27,7 @@ struct CustomTextField: View {
                     .padding(.horizontal)
                     .frame(height: 55)
                     .background(Color(UIColor.secondarySystemBackground))
+                    .autocorrectionDisabled(true)
                     .cornerRadius(10)
                     .tint(Color("AccentColor"))
             }
