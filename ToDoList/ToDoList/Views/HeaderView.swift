@@ -24,10 +24,25 @@ struct HeaderView: View {
                         topTrailingRadius: 0
                     )
                 )
-            Image(colorScheme == .dark ? "logo-s" : "logo-b")
-                .resizable()
-                .frame(width: 150, height: 150)
-                .aspectRatio(contentMode: .fit)
+                HStack {
+                    Image("tick_middle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40)
+                        .padding(15)
+                    Text("Task")
+                        .fontWeight(.heavy)
+                        .font(.system(size: 60))
+                    Text("Hub")
+                        .fontWeight(.light)
+                        .font(.system(size: 60))
+                }
+                .foregroundColor(.white)
+            
+//            Image(colorScheme == .dark ? "logo-s" : "logo-b")
+//                .resizable()
+//                .frame(width: 150, height: 150)
+//                .aspectRatio(contentMode: .fit)
                 
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 2.5)

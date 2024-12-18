@@ -15,11 +15,11 @@ struct NoItemsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                    Text("There are no items in your list yet 😔")
+                    Text("Your hub is empty 😔")
                         .font(.title)
                         .bold()
                         .padding(.top, 50)
-                    Text("To start your list, create a new task!")
+                    Text("To start your hub, create a new task!")
                         .foregroundStyle(.secondary)
                         .padding(.bottom, 20)
                 NavigationLink {

@@ -48,7 +48,10 @@ struct RegisterView: View {
                     .offset(y: -30)
             }
             
-            VStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Create our hub of tasks now! 🚀")
+                    .font(.title)
+                    .bold()
                 CustomTextField(placeholder: "Full Name", text: $registerViewModel.name)
                     .focused($fieldFocus, equals: .name)
                     .submitLabel(.next)
@@ -138,7 +141,7 @@ struct RegisterView: View {
                 
             }
             .padding(.horizontal, 40)
-            .padding(.top, 70)
+            .padding(.top, 10)
             Spacer()
         }
         .toolbar {

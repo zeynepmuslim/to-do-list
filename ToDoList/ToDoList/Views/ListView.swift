@@ -109,10 +109,13 @@ struct ListView: View {
             }
             if items.isEmpty {
                 VStack{
-                    HStack {
-                        Text("Todo List 📝")
+                    HStack(spacing: 0) {
+                        Text("Task")
                             .font(.largeTitle)
-                            .fontWeight(.heavy)
+                            .fontWeight(.bold)
+                        Text("Hub")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
                         Spacer()
                     }
                     .padding(.horizontal,20)
@@ -123,10 +126,13 @@ struct ListView: View {
                 }
             } else {
                 VStack {
-                    HStack {
-                        Text("Todo List 📝")
+                    HStack(spacing: 0) {
+                        Text("Task")
                             .font(.largeTitle)
                             .fontWeight(.heavy)
+                        Text("Hub 📝")
+                            .font(.largeTitle)
+                            .fontWeight(.light)
                         Spacer()
                     }
                     .padding(.horizontal,20)

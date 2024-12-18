@@ -22,23 +22,20 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="32P-8y-Z5e">
-                                <rect key="frame" x="121.66666666666669" y="351.66666666666669" width="150" height="148.66666666666669"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="ImJ-DT-Ceg"/>
-                                    <constraint firstAttribute="width" constant="150" id="ikA-9e-JSF"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchscreen" translatesAutoresizingMaskIntoConstraints="NO" id="b0u-7y-247">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" name="AccentColor"/>
                         <constraints>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="b0u-7y-247" secondAttribute="trailing" id="5FS-i3-ZtZ"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
-                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="20" symbolic="YES" id="SfN-ll-jLj"/>
-                            <constraint firstItem="32P-8y-Z5e" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Ttr-LA-8lm"/>
+                            <constraint firstItem="b0u-7y-247" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="8yK-Gd-drN"/>
+                            <constraint firstAttribute="bottom" secondItem="b0u-7y-247" secondAttribute="bottom" id="9oY-Uh-xa9"/>
+                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="SfN-ll-jLj"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
-                            <constraint firstItem="32P-8y-Z5e" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="e9o-rY-kSI"/>
+                            <constraint firstItem="b0u-7y-247" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="hVU-aJ-OQ6"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -48,9 +45,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="launchscreen" width="595.280029296875" height="841.8900146484375"/>
         <namedColor name="AccentColor">
-            <color red="0.32400000095367432" green="0.10599999874830246" blue="0.57499998807907104" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.79199999570846558" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

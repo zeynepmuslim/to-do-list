@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Varlık 5.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "Varlık 6.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +25,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "Varlık 7.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
