@@ -12,6 +12,9 @@ import FirebaseFirestore
 class SettingsViewModel: ObservableObject {
     @Published var user: UserModel? = nil
     
+    @Published var selectedLanguage: String = "English"
+    let languageOptions = ["English", "Türkçe"]
+    
     init() {
         
     }

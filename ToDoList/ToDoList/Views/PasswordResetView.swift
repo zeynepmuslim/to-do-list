@@ -14,49 +14,65 @@ struct PasswordResetView: View {
     @State private var message: String = ""
     @State private var showAlert: Bool = false
     
+    let theWidth = UIScreen.main.bounds.width
+    let height = UIScreen.main.bounds.height
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Şifre Yenile")
-                .font(.largeTitle)
-                .bold()
-            
-            TextField("E-posta adresinizi girin", text: $email)
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Button(action: resetPassword) {
-                Text("Şifre Sıfırlama Bağlantısı Gönder")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+        VStack {
+            Spacer()
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Reset Password")
+                    .font(.largeTitle)
+                    .bold()
+                
+                CustomTextField(placeholder: "Enter your email address", text: $email)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                
+                CustomButton(title: "Send Password Reset Link") {
+                    resetPassword()
+                }
+                
+                Text(message)
+                    .foregroundColor(.red)
+                    .font(.footnote)
             }
+            .padding()
+            Spacer()
+            Spacer()
             
-            Text(message)
-                .foregroundColor(.red)
-                .font(.footnote)
+            HStack {
+                Spacer()
+                RoundedRectangle(cornerRadius: 0)
+                    .foregroundColor(Color("AccentColor"))
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: theWidth,
+                            bottomLeadingRadius: 0,
+                            bottomTrailingRadius: 0,
+                            topTrailingRadius: 0
+                        )
+                    )
+                    .ignoresSafeArea()
+                    .frame(width: theWidth / 2, height: theWidth / 2 )
+            }
         }
-        .padding()
         .alert(isPresented: $showAlert) {
-            Alert(title: Text("Bilgi"), message: Text(message), dismissButton: .default(Text("Tamam")))
+            Alert(title: Text("Information"), message: Text(message), dismissButton: .default(Text("Tamam")))
         }
     }
     
     func resetPassword() {
         guard !email.isEmpty else {
-            message = "E-posta adresini girin."
+            message = "Please enter your email address."
             showAlert = true
             return
         }
         
         Auth.auth().sendPasswordReset(withEmail: email) { error in
             if let error = error {
-                message = "Hata: \(error.localizedDescription)"
+                message = "Error: \(error.localizedDescription)"
             } else {
-                message = "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi."
+                message = "A password reset link has been sent to your email address."
             }
             showAlert = true
         }

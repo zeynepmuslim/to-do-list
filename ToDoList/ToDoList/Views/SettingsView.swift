@@ -12,6 +12,8 @@ struct SettingsView: View {
     @StateObject var settingsViewModel = SettingsViewModel()
     let theWidth = UIScreen.main.bounds.width
     
+    
+    
     var user: UserModel {
         settingsViewModel.user ?? UserModel(id: "", name: "", email: "", joined: 0)
     }
@@ -51,7 +53,6 @@ struct SettingsView: View {
                 .padding(.horizontal,20)
                 .padding(.top, 15)
                 Spacer()
-//                if let user = settingsViewModel.user {
                 if let user = settingsViewModel.user {
                     VStack {
                         Image(systemName: "person.fill")
@@ -74,20 +75,81 @@ struct SettingsView: View {
                                 .padding(.horizontal,30)
                         }
                         .padding(20)
+                        
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text("Advanced Settings")
+                                .font(.headline)
+
+                            Button(action: {
+                                // Şifre değiştirme işlemi
+                            }) {
+                                Text("Change Password")
+                                    .foregroundColor(.blue)
+                            }
+
+                            Button(action: {
+                                // Hesap silme işlemi
+                            }) {
+                                Text("Delete Account")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text("Language")
+                                .font(.headline)
+
+                            Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
+                                ForEach(settingsViewModel.languageOptions, id: \.self) { language in
+                                    Text(language)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        
+                        List {
+                            Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
+                                ForEach(settingsViewModel.languageOptions, id: \.self) { language in
+                                    Text(language)
+                                }
+                            }
+                            Button(action: {
+                                // Şifre değiştirme işlemi
+                            }) {
+                                Text("Change Password")
+                                    .foregroundColor(.blue)
+                            }
+                            Button(action: {
+                                // Hesap silme işlemi
+                            }) {
+                                Text("Delete Account")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        
                         VStack{
                             Button{
                                 
                             } label: {
                                 CustomButton(title: "Log Out") {
-                                    settingsViewModel.logOut()
-                                    //                        settingsViewModel.logOut()
-                                }
+                                    settingsViewModel.logOut()                                }
                             }
                         }
                         .padding(.horizontal,40)
                     }
                 } else {
-                    Text("Loading...")
+                    VStack {
+                            ProgressView() // Yükleme animasyonu
+                                .scaleEffect(2)
+                                .padding()
+                            Text("Loading...")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                        }
                 }
                 
                 Spacer()
