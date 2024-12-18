@@ -17,6 +17,7 @@ struct LoginView: View {
     
     @EnvironmentObject var authController: AuthController
     @StateObject var loginViewModel = LoginViewModel()
+    @State private var showErrorMessage = false
     
     //    @Environment(AuthenticationState.self) private var authController
     //    @State var email: String = ""
@@ -40,14 +41,6 @@ struct LoginView: View {
                     .autocapitalization(.none)
                     .keyboardType(.emailAddress)
                     .focused($fieldFocus, equals: .email)
-                //                    .toolbar {
-                //                                            ToolbarItemGroup(placement: .keyboard) {
-                //                                                Spacer()
-                //                                                Button("Close") {
-                //                                                    hideKeyboard()
-                //                                                }
-                //                                            }
-                //                                        }
                     .submitLabel(.next)
                     .onSubmit {
                         fieldFocus = .password
@@ -58,59 +51,62 @@ struct LoginView: View {
                         // Şifre görünür durumda
                         CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: false)
                             .toolbar {
-                                                                  ToolbarItemGroup(placement: .keyboard) {
-                                                                           Spacer()
-                                                                          Button("Close") {
-                                                                              hideKeyboard()
-                                                                         }
-                                                                    }
-                                                                 }
+                                ToolbarItemGroup(placement: .keyboard) {
+                                    Spacer()
+                                    Button("Close") {
+                                        hideKeyboard()
+                                    }
+                                }
+                            }
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.go)
                             .onSubmit {
                                 hideKeyboard()
-                                             validateFields()
-                                                 loginViewModel.login()
+                                validateFields()
+                                loginViewModel.login()
                             }
                             .transition(.opacity) // Opacity geçişi ekliyoruz
-                                                    .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
+                            .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     } else {
                         // Şifre gizli durumda
                         CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: true)
-                            .toolbar {
-                                                                  ToolbarItemGroup(placement: .keyboard) {
-                                                                           Spacer()
-                                                                          Button("Close") {
-                                                                              hideKeyboard()
-                                                                         }
-                                                                    }
-                                                                 }
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.done)
                             .onSubmit {
                                 hideKeyboard()
-                                                 validateFields()
-                                          loginViewModel.login()
+                                validateFields()
+                                loginViewModel.login()
                             }
                             .transition(.opacity) // Opacity geçişi ekliyoruz
-                                                    .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
+                            .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     }
                     
                     Button(action: {
                         withAnimation {
-                                               isPasswordVisible.toggle()
-                                           }
+                            isPasswordVisible.toggle()
+                        }
                     }) {
                         Image(systemName: !isPasswordVisible ? "eye.slash" : "eye")
                             .foregroundColor(.gray)
                             .padding(.trailing, 8)
-                            .transition(.opacity)
+                            .transition(.scale.combined(with: .opacity))
                             .animation(.spring(), value: isPasswordVisible)
                     }
                 }
-                HStack {
+                HStack(alignment: .center) {
+                    if !loginViewModel.errorMessage.isEmpty {
+                                       Text(loginViewModel.errorMessage)
+                                           .foregroundColor(.red)
+                                           .italic()
+                                           .padding(10)
+                                           .background(Color.red.opacity(0.1))
+                                           .cornerRadius(8)
+                                           .frame(maxWidth: .infinity, alignment: .leading)
+                                           .transition(.opacity)
+                                           .animation(.easeInOut, value: showErrorMessage)
+                                   }
                     Spacer()
                     NavigationLink(destination: PasswordResetView()) {
                         Text("Forgot Password?")
@@ -119,6 +115,8 @@ struct LoginView: View {
                     }
                 }
                 .padding(.trailing, 10)
+                
+                
                 
                 CustomButton(title: "Login") {
                     hideKeyboard()
@@ -134,25 +132,13 @@ struct LoginView: View {
             VStack {
                 
                 GoogleSignInButton(scheme: .light, style: .icon, state: .normal, action: {
-                    print("hhiii")
-                    //   signIn()
+                    signIn()
                 })
                 .cornerRadius(10)
                 .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
             }
             
-            VStack{
-                if !loginViewModel.errorMessage.isEmpty {
-                    Text(loginViewModel.errorMessage)
-                        .frame(height: 80)
-                        .foregroundColor(.red)
-                        .italic()
-                        .multilineTextAlignment(.center)
-                        .padding()
-                }
-            }
-            .frame(height: 80)
-            
+            Spacer()
             
             VStack {
                 Text("Don't have an account?")
@@ -168,6 +154,21 @@ struct LoginView: View {
             }
             
             Spacer()
+        }
+        
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                
+                Button("Close") {
+                    hideKeyboard()
+                }
+                Spacer()
+                Button("Login") {
+                    hideKeyboard()
+                    validateFields()
+                    loginViewModel.login()
+                }
+            }
         }
     }
     
