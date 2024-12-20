@@ -136,7 +136,7 @@ struct SettingsView: View {
                                         Text(language)
                                     }
                                 }
-                                NavigationLink(destination: PasswordResetView()) {
+                                NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
                                     Text("Change Password")
                                 }
                                 Button(action: {

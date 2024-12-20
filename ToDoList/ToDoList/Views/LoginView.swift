@@ -108,7 +108,7 @@ struct LoginView: View {
                                            .animation(.easeInOut, value: showErrorMessage)
                                    }
                     Spacer()
-                    NavigationLink(destination: PasswordResetView()) {
+                    NavigationLink(destination: PasswordResetView(isFromSettings: false)) {
                         Text("Forgot Password?")
                             .font(.footnote)
                             .foregroundColor(Color("AccentColor"))
