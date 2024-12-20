@@ -28,6 +28,8 @@ class ListViewModel: ObservableObject {
                 self.items = querySnapshot?.documents.compactMap { document in
                     try? document.data(as: TaskModel.self)
                 } ?? []
+                
+                WatchSessionManager.shared.sendTasksToWatch(tasks: self.items)
             }
     }
 

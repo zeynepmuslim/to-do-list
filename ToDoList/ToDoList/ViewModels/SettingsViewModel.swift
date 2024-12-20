@@ -57,4 +57,6 @@ class SettingsViewModel: ObservableObject {
             print("Error signing out: \(error.localizedDescription)")
         }
     }
+    
+    
 }

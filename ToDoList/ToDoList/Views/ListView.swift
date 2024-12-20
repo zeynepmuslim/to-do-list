@@ -165,31 +165,7 @@ struct ListView: View {
                     } else {
                         List {
                             if !sortedTasks.filter({ !$0.isCompleted }).isEmpty {
-                                Section(header: HStack{
-                                    Text("To-Do")
-                                    Spacer()
-                                    Menu {
-                                        ForEach(SortOption.allCases, id: \.self) { option in
-                                            Button(action: {
-                                                withAnimation {
-                                                    sortOption = option
-                                                }
-                                            }) {
-                                                Label(option.title, systemImage: option.icon)
-                                                    .textCase(nil)
-                                            }
-                                        }
-                                    } label: {
-                                        // Menü butonu sadece bir ikon
-                                        HStack(spacing: 5) {
-                                            Text("Sort")
-                                                .font(.caption)
-                                                .foregroundColor(Color("AccentColor"))
-                                            Image(systemName: "line.3.horizontal.decrease")
-                                                .foregroundColor(Color("AccentColor"))
-                                        }
-                                    }
-                                }) {
+                                {
                                     ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
                                         ListRowView(
                                             onInfoButtonTap: {
@@ -210,7 +186,6 @@ struct ListView: View {
                             }
                             
                             // Completed Listesi
-                            // Completed Listesi
                             if !sortedTasks.filter({ $0.isCompleted }).isEmpty {
                                 Section(header: HStack {
                                     Text("Completed")
@@ -229,6 +204,7 @@ struct ListView: View {
                                             onInfoButtonTap: {
                                                 selectedItem = item
                                                 navigateToDetail = true
+                                                triggerHapticFeedback(type: .success)
                                             },
                                             item: item,
                                             hideCategoryIcon: false
@@ -236,6 +212,7 @@ struct ListView: View {
                                         .listRowBackground(Color("darkerSecond"))
                                         .swipeActions {
                                             Button("Delete", role: .destructive) {
+                                                triggerHapticFeedback(type: .warning)
                                                 viewModel.delete(id: item.id)
                                             }
                                         }
@@ -244,6 +221,7 @@ struct ListView: View {
                                 .alert("Delete All Completed Tasks?", isPresented: $showDeleteAllAlert) {
                                     Button("Cancel", role: .cancel) { }
                                     Button("Delete", role: .destructive) {
+                                        
                                         withAnimation {
                                             for item in sortedTasks.filter({ $0.isCompleted }) {
                                                 viewModel.delete(id: item.id)
@@ -298,6 +276,11 @@ struct ListView: View {
             }
     }
     
+    
+    func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
 }
 
 

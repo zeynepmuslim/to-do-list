@@ -176,6 +176,11 @@ struct LoginView: View {
         fieldFocus = nil // Focus'u kaldır ve klavyeyi kapat
     }
     
+    func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
+    
     func validateFields() {
         if loginViewModel.email.isEmpty {
             fieldFocus = .email // Email alanına odaklan

@@ -12,7 +12,11 @@ struct SettingsView: View {
     @StateObject var settingsViewModel = SettingsViewModel()
     let theWidth = UIScreen.main.bounds.width
     
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = UITraitCollection.current.userInterfaceStyle == .dark
     
+    @State private var animateTransition: Bool = false
+    private var animationDuration: Double = 0.6
+    // State to trigger animation
     
     var user: UserModel {
         settingsViewModel.user ?? UserModel(id: "", name: "", email: "", joined: 0)
@@ -20,6 +24,11 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack{
+            
+            Color(isDarkMode ? Color.black : Color.white)
+                .edgesIgnoringSafeArea(.all)
+                .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
+            //                .ignoresSafeArea(),
             HStack{
                 
                 Spacer()
@@ -38,7 +47,7 @@ struct SettingsView: View {
                         .ignoresSafeArea()
                         .frame(width: theWidth / 2.5, height: theWidth / 2.5 )
                         .offset(y: -40)
-                        
+                    
                     Spacer()
                 }
             }
@@ -52,8 +61,9 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal,20)
                 .padding(.top, 15)
-                Spacer()
+                
                 if let user = settingsViewModel.user {
+                    
                     VStack {
                         Image(systemName: "person.fill")
                             .frame(width: 100, height: 100)
@@ -76,87 +86,127 @@ struct SettingsView: View {
                         }
                         .padding(20)
                         
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text("Advanced Settings")
+                        
+                        HStack {
+                            Text("Dark Mode")
                                 .font(.headline)
-
-                            Button(action: {
-                                // Şifre değiştirme işlemi
-                            }) {
-                                Text("Change Password")
-                                    .foregroundColor(.blue)
-                            }
-
-                            Button(action: {
-                                // Hesap silme işlemi
-                            }) {
-                                Text("Delete Account")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text("Language")
-                                .font(.headline)
-
-                            Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
-                                ForEach(settingsViewModel.languageOptions, id: \.self) { language in
-                                    Text(language)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        
-                        List {
-                            Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
-                                ForEach(settingsViewModel.languageOptions, id: \.self) { language in
-                                    Text(language)
-                                }
-                            }
-                            Button(action: {
-                                // Şifre değiştirme işlemi
-                            }) {
-                                Text("Change Password")
-                                    .foregroundColor(.blue)
-                            }
-                            Button(action: {
-                                // Hesap silme işlemi
-                            }) {
-                                Text("Delete Account")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        
-                        VStack{
-                            Button{
+                                .fontWeight(.semibold)
+                            Spacer()
+                            ZStack {
+                                // Background for the emoji
+                                Circle()
+                                    .fill(isDarkMode ? Color.black : Color.yellow.opacity(0.7))
+                                    .frame(width: 50, height: 50)
+                                    .animation(.spring(response: 0.5, dampingFraction: 0.6), value: isDarkMode)
                                 
-                            } label: {
-                                CustomButton(title: "Log Out") {
-                                    settingsViewModel.logOut()                                }
+                                // Sun and moon emojis with rotation
+                                Text(isDarkMode ? "🌙" : "☀️")
+                                    .font(.system(size: 30))
+                                    .rotationEffect(.degrees(animateTransition ? 180 : -10))
+                                    .animation(.easeInOut(duration: 0.5), value: animateTransition)
+                            }
+                            .onTapGesture {
+                                // Animate the transition
+                                withAnimation {
+                                    animateTransition.toggle()
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    isDarkMode.toggle()
+                                }
                             }
                         }
-                        .padding(.horizontal,40)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color("darkerSecond"))
+                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
+                        )
+                        .padding(.horizontal)
+                        
+                        Spacer()
+                    
+                        
+//                        HStack {
+//                            Text("Dark Mode Switch")
+//                                .font(.headline)
+//                                .fontWeight(.semibold)
+//                            Spacer()
+//                            ZStack {
+//                                Circle()
+//                                    .fill(isDarkMode ? Color.black : Color.yellow)
+//                                    .frame(width: 50, height: 50)
+//                                    .animation(.spring(), value: isDarkMode)
+//                                
+//                                Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
+//                                    .foregroundColor(isDarkMode ? .white : .orange)
+//                                    .font(.system(size: 24))
+//                                    .animation(.easeInOut, value: isDarkMode)
+//                            }
+//                            .onTapGesture {
+//                                isDarkMode.toggle()
+//                            }
+//                        }
+//                        .padding()
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 15)
+//                                .fill(Color("darkerSecond"))
+//                        )
+//                        .padding(.horizontal)
+                        // List with a Section for the title
+                        List {
+                            Section(header: Text("Settings")
+                                .fontWeight(.semibold)
+                                .padding(.top, 10)
+                            ) {
+                                Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
+                                    ForEach(settingsViewModel.languageOptions, id: \.self) { language in
+                                        Text(language)
+                                    }
+                                }
+                                NavigationLink(destination: PasswordResetView()) {
+                                    Text("Change Password")
+                                }
+                                Button(action: {
+                                    
+                                }) {
+                                    Text("Delete Account")
+                                        .foregroundColor(.red)
+                                }
+                                Button(action: {
+                                    settingsViewModel.logOut()
+                                }) {
+                                    Text("Log out")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                            .listRowBackground(Color(isDarkMode ? Color.darkerSecond : Color.darkerSecond)
+                                .edgesIgnoringSafeArea(.all)
+                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode))
+                            
+                        }
+                        .scrollContentBackground(.hidden)
+                        .listStyle(InsetGroupedListStyle())
+                        
                     }
+                    .padding(.top, 50)
+                    
                 } else {
                     VStack {
-                            ProgressView() // Yükleme animasyonu
-                                .scaleEffect(2)
-                                .padding()
-                            Text("Loading...")
-                                .font(.headline)
-                                .foregroundColor(.secondary)
-                        }
+                        ProgressView()
+                            .scaleEffect(2)
+                            .padding()
+                        Text("Loading...")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 
-                Spacer()
-                Spacer()
+                //                Spacer()
+                //                Spacer()
             }
             
         }
+        .preferredColorScheme(isDarkMode ? .dark : .light)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear{
             settingsViewModel.fetchUser()
