@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 class SettingsViewModel: ObservableObject {
     @Published var user: UserModel? = nil
-    
+//    @Published var isLoggedIn: Bool = true
     @Published var selectedLanguage: String = "English"
     let languageOptions = ["English", "Türkçe"]
     
@@ -58,5 +58,35 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
+    func deleteCurrentUser(password: String) async throws {
+        guard let user = Auth.auth().currentUser else {
+            print("Error: User is not logged in.")
+            throw URLError(.badURL)
+        }
+
+        // settingsViewModel.user.email üzerinden mevcut email'i alın
+        guard let email = self.user?.email, !email.isEmpty else {
+            print("Error: Email not found.")
+            throw URLError(.badURL)
+        }
+
+        do {
+            // Yeniden doğrulama için kimlik bilgileri
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+            try await user.reauthenticate(with: credential)
+            print("Reauthentication successful")
+
+            // Kullanıcıyı sil
+            try await user.delete()
+            print("User successfully deleted.")
+        } catch let error as NSError {
+            if error.code == AuthErrorCode.requiresRecentLogin.rawValue {
+                print("Reauthentication required.")
+            } else {
+                print("Error deleting user: \(error.localizedDescription)")
+            }
+            throw error
+        }
+    }
     
 }

@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct SettingsView: View {
-    
+    @State private var showAlert = false
+    @State private var password = ""
+    @State private var errorMessage = ""
+    @State private var navigateToLogin = false
     @StateObject var settingsViewModel = SettingsViewModel()
     let theWidth = UIScreen.main.bounds.width
     
@@ -93,20 +96,17 @@ struct SettingsView: View {
                                 .fontWeight(.semibold)
                             Spacer()
                             ZStack {
-                                // Background for the emoji
                                 Circle()
                                     .fill(isDarkMode ? Color.black : Color.yellow.opacity(0.7))
                                     .frame(width: 50, height: 50)
                                     .animation(.spring(response: 0.5, dampingFraction: 0.6), value: isDarkMode)
                                 
-                                // Sun and moon emojis with rotation
                                 Text(isDarkMode ? "🌙" : "☀️")
                                     .font(.system(size: 30))
                                     .rotationEffect(.degrees(animateTransition ? 180 : -10))
                                     .animation(.easeInOut(duration: 0.5), value: animateTransition)
                             }
                             .onTapGesture {
-                                // Animate the transition
                                 withAnimation {
                                     animateTransition.toggle()
                                 }
@@ -119,40 +119,13 @@ struct SettingsView: View {
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color("darkerSecond"))
-                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
+                            //                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
                         )
                         .padding(.horizontal)
                         
                         Spacer()
-                    
                         
-//                        HStack {
-//                            Text("Dark Mode Switch")
-//                                .font(.headline)
-//                                .fontWeight(.semibold)
-//                            Spacer()
-//                            ZStack {
-//                                Circle()
-//                                    .fill(isDarkMode ? Color.black : Color.yellow)
-//                                    .frame(width: 50, height: 50)
-//                                    .animation(.spring(), value: isDarkMode)
-//                                
-//                                Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
-//                                    .foregroundColor(isDarkMode ? .white : .orange)
-//                                    .font(.system(size: 24))
-//                                    .animation(.easeInOut, value: isDarkMode)
-//                            }
-//                            .onTapGesture {
-//                                isDarkMode.toggle()
-//                            }
-//                        }
-//                        .padding()
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 15)
-//                                .fill(Color("darkerSecond"))
-//                        )
-//                        .padding(.horizontal)
-                        // List with a Section for the title
+                        
                         List {
                             Section(header: Text("Settings")
                                 .fontWeight(.semibold)
@@ -167,11 +140,38 @@ struct SettingsView: View {
                                     Text("Change Password")
                                 }
                                 Button(action: {
-                                    
+                                    showAlert = true
                                 }) {
                                     Text("Delete Account")
                                         .foregroundColor(.red)
                                 }
+                                .alert("Confirm Delete", isPresented: $showAlert, actions: {
+                                    SecureField("Enter your password", text: $password)
+                                    
+                                    Button("Delete", role: .destructive) {
+                                        Task {
+                                            do {
+                                                try await settingsViewModel.deleteCurrentUser(password: password)
+                                                DispatchQueue.main.async {
+                                                    navigateToLogin = true // LoginView'e geçiş
+                                                }
+                                            } catch {
+                                                errorMessage = error.localizedDescription
+                                                print("Error deleting user: \(error.localizedDescription)")
+                                            }
+                                        }
+                                    }
+
+                                    Button("Cancel", role: .cancel) {
+                                        password = "" // Şifreyi temizle
+                                    }
+                                }, message: {
+                                    if !errorMessage.isEmpty {
+                                        Text(errorMessage) // Hata mesajını göster
+                                    } else {
+                                        Text("Please enter your password to confirm.")
+                                    }
+                                })
                                 Button(action: {
                                     settingsViewModel.logOut()
                                 }) {
@@ -179,10 +179,7 @@ struct SettingsView: View {
                                         .foregroundColor(.red)
                                 }
                             }
-                            .listRowBackground(Color(isDarkMode ? Color.darkerSecond : Color.darkerSecond)
-                                .edgesIgnoringSafeArea(.all)
-                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode))
-                            
+                            .listRowBackground(Color("darkerSecond"))
                         }
                         .scrollContentBackground(.hidden)
                         .listStyle(InsetGroupedListStyle())
@@ -191,6 +188,7 @@ struct SettingsView: View {
                     .padding(.top, 50)
                     
                 } else {
+                    Spacer()
                     VStack {
                         ProgressView()
                             .scaleEffect(2)
@@ -199,12 +197,19 @@ struct SettingsView: View {
                             .font(.headline)
                             .foregroundColor(.secondary)
                     }
+                    Spacer()
                 }
                 
                 //                Spacer()
                 //                Spacer()
             }
-            
+                           // LoginView'e geçiş
+                           NavigationLink(
+                               destination: LoginView(),
+                               isActive: $navigateToLogin
+                           ) {
+                               EmptyView()
+                           }
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .toolbar(.hidden, for: .navigationBar)
@@ -214,6 +219,8 @@ struct SettingsView: View {
         
         
     }
+    
+    
     
 }
 
