@@ -199,7 +199,6 @@
 		D763C8CB2D0656D700372F79 = {
 			isa = PBXGroup;
 			children = (
-				D763C8D62D0656D700372F79 /* ToDoList */,
 				D763C8E72D0656D800372F79 /* ToDoListTests */,
 				D763C8F12D0656D800372F79 /* ToDoListUITests */,
 				D711741D2D1513F000BB0447 /* TaskHubWatch Watch App */,
@@ -207,6 +206,7 @@
 				D71174382D1513F200BB0447 /* TaskHubWatch Watch AppUITests */,
 				D797926C2D0B1AAF00480495 /* Frameworks */,
 				D763C8D52D0656D700372F79 /* Products */,
+				D763C8D62D0656D700372F79 /* ToDoList */,
 			);
 			sourceTree = "<group>";
 		};

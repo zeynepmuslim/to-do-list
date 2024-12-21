@@ -90,3 +90,7 @@ class SettingsViewModel: ObservableObject {
     }
     
 }
+
+extension SettingsViewModel {
+    
+}

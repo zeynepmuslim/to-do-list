@@ -136,9 +136,14 @@ extension AuthController: ASAuthorizationControllerDelegate {
                 print("Apple Sign-In successful")
                 
                 if let user = Auth.auth().currentUser {
-                                let email = appleIDCredential.email ?? user.email
-                                let fullName = "\(appleIDCredential.fullName?.givenName ?? "") \(appleIDCredential.fullName?.familyName ?? "")"
-                                saveUserToFirestore(uid: user.uid, email: email, name: fullName)
+                    if let givenName = appleIDCredential.fullName?.givenName,
+                           let familyName = appleIDCredential.fullName?.familyName {
+                            let fullName = "\(givenName) \(familyName)"
+                            let email = appleIDCredential.email ?? user.email
+                            saveUserToFirestore(uid: user.uid, email: email, name: fullName)
+                        } else {
+                            print("Full name not available for this login session. Skipping name update.")
+                        }
                             }
             } catch {
                 print("Apple Sign-In failed: \(error)")
