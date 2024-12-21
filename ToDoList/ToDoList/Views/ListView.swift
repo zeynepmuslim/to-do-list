@@ -112,10 +112,10 @@ struct ListView: View {
                     HStack(spacing: 0) {
                         Text("Task")
                             .font(.largeTitle)
-                            .fontWeight(.bold)
-                        Text("Hub")
+                            .fontWeight(.heavy)
+                        Text("Hub 📝")
                             .font(.largeTitle)
-                            .fontWeight(.bold)
+                            .fontWeight(.light)
                         Spacer()
                     }
                     .padding(.horizontal,20)

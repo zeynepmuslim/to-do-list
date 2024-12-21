@@ -11,7 +11,21 @@ import FirebaseCore
 import GoogleSignIn
 import GoogleSignInSwift
 import FirebaseAuth
+import AuthenticationServices
 
+struct SignInWithAppleButtonViewRepressentable: UIViewRepresentable {
+    let type: ASAuthorizationAppleIDButton.ButtonType
+    let style: ASAuthorizationAppleIDButton.Style
+    
+    func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
+        ASAuthorizationAppleIDButton(type: type, style: style)
+    }
+    
+    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {
+        
+    }
+    
+}
 
 struct LoginView: View {
     
@@ -19,10 +33,9 @@ struct LoginView: View {
     @StateObject var loginViewModel = LoginViewModel()
     @State private var showErrorMessage = false
     
-    //    @Environment(AuthenticationState.self) private var authController
-    //    @State var email: String = ""
-    //    @State var password: String = ""
     @FocusState private var fieldFocus: OnboardingFields?
+    
+    
     
     enum OnboardingFields: Hashable {
         case email
@@ -129,14 +142,26 @@ struct LoginView: View {
             .padding(.horizontal, 40)
             
             //gggogle
-            VStack {
+            HStack {
                 
-                GoogleSignInButton(scheme: .light, style: .icon, state: .normal, action: {
-                    signIn()
+                GoogleSignInButton(scheme: .light, style: .wide, state: .normal, action: {
+                    signInWithGoogle()
                 })
                 .cornerRadius(10)
                 .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
+                
+                Button {
+                    signInWithApple()
+                } label: {
+                    SignInWithAppleButtonViewRepressentable(type: .signIn, style: .white)
+                        .allowsHitTesting(false)
+                        .frame(height: 40)
+                        .cornerRadius(10)
+                        .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
+
+                }
             }
+            .padding(.horizontal, 40)
             
             Spacer()
             
@@ -192,10 +217,21 @@ struct LoginView: View {
     }
     
     @MainActor
-    func signIn() {
+    func signInWithGoogle() {
         Task {
             do {
-                try await authController.signIn()
+                try await authController.signInsignInWithGoogle()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    @MainActor
+    func signInWithApple() {
+        Task {
+            do {
+                try await authController.signInsignInWithApple()
             } catch {
                 print(error.localizedDescription)
             }

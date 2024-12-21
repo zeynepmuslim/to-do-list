@@ -252,6 +252,8 @@ struct AddView: View {
     }
     
     func saveButtonPressed() {
+        
+        
         if textIsAppropriate() {
             ItemModel.priority = selectedPriority
             ItemModel.category = selectedCategory

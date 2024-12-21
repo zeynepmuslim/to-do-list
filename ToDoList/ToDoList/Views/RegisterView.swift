@@ -11,7 +11,6 @@ import GoogleSignIn
 import GoogleSignInSwift
 import FirebaseAuth
 
-
 struct RegisterView: View {
     @EnvironmentObject var authController: AuthController
     @StateObject var registerViewModel = RegisterViewModel()
@@ -129,14 +128,25 @@ struct RegisterView: View {
                     print(registerViewModel.email)
                     print(registerViewModel.password)
                 }
-                VStack {
+                HStack {
                     
-                    GoogleSignInButton(scheme: .light, style: .icon, state: .normal, action: {
-                        
+                    GoogleSignInButton(scheme: .light, style: .wide, state: .normal, action: {
                         signIn()
                     })
                     .cornerRadius(10)
                     .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
+                    
+                    Button {
+                        signInWithApple()
+                    } label: {
+                        
+                        SignInWithAppleButtonViewRepressentable(type: .signUp, style: .white)
+                            .allowsHitTesting(false)
+                            .frame(height: 40)
+                            .cornerRadius(10)
+                            .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
+                    }
+
                 }
                 
             }
@@ -177,7 +187,18 @@ struct RegisterView: View {
     func signIn() {
         Task {
             do {
-                try await authController.signIn()
+                try await authController.signInsignInWithGoogle()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    @MainActor
+    func signInWithApple() {
+        Task {
+            do {
+                try await authController.signInsignInWithApple()
             } catch {
                 print(error.localizedDescription)
             }

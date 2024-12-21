@@ -87,6 +87,7 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
                                 .padding(.horizontal,30)
                         }
+                        .multilineTextAlignment(TextAlignment.center)
                         .padding(20)
                         
                         

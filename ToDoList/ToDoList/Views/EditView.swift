@@ -53,6 +53,7 @@ struct EditView: View {
                     .background(Color(UIColor.secondarySystemBackground))
                     .cornerRadius(10)
                     .tint(Color("AccentColor"))
+                    .autocorrectionDisabled(true)
                     
                 Text("\(item.title.count)/\(characterLimit) characters")
                                     .font(.footnote)
