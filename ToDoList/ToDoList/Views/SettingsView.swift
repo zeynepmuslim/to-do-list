@@ -140,9 +140,11 @@ struct SettingsView: View {
                                 NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
                                     Text("Change Password")
                                 }
-                                Button(action: {
-                                    showAlert = true
-                                }) {
+                                Button{
+                                    Task {
+                                        await settingsViewModel.deleteAccount()
+                                    }
+                                } label: {
                                     Text("Delete Account")
                                         .foregroundColor(.red)
                                 }
