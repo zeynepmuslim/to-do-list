@@ -11,6 +11,7 @@ import SwiftUI
 struct AddView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @StateObject var settingsViewModel = SettingsViewModel()
     @StateObject var ItemModel = ItemModelV2()
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
@@ -220,6 +221,12 @@ struct AddView: View {
                 }
                 //
                 Spacer()
+                Button(action: {
+                    settingsViewModel.logOut()
+                }) {
+                    Text("Log out")
+                        .foregroundColor(.red)
+                }
                 // Save Button
                 CustomButton(title: "Create Task") {
                     saveButtonPressed()

@@ -26,15 +26,50 @@ class AuthController: NSObject, ObservableObject {
     
     @MainActor
     func signInsignInWithGoogle() async throws {
-        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else {return}
-        guard let clientID = FirebaseApp.app()?.options.clientID else {return}
-        let configuration = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = configuration
-        let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-        guard let idToken = result.user.idToken?.tokenString else {return}
-        let accessToken = result.user.accessToken.tokenString
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-        try await Auth.auth().signIn(with: credential)
+            guard let rootViewController = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow })?.rootViewController else {
+                    throw NSError(domain: "Google Sign-In Error", code: 1, userInfo: [NSLocalizedDescriptionKey: "No root view controller found."])
+                }
+
+            guard let clientID = FirebaseApp.app()?.options.clientID else {
+                throw NSError(domain: "Google Sign-In Error", code: 2, userInfo: [NSLocalizedDescriptionKey: "Missing Firebase client ID."])
+            }
+
+            let configuration = GIDConfiguration(clientID: clientID)
+            GIDSignIn.sharedInstance.configuration = configuration
+
+            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+
+            guard let idToken = result.user.idToken?.tokenString else {
+                throw NSError(domain: "Google Sign-In Error", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch Google ID token."])
+            }
+            let accessToken = result.user.accessToken.tokenString
+
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+            let authResult = try await Auth.auth().signIn(with: credential)
+
+            try await createUserDocumentIfNeeded(authResult.user)
+    }
+    
+    private func createUserDocumentIfNeeded(_ user: User) async throws {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(user.uid)
+
+        let documentSnapshot = try await userDocRef.getDocument()
+        if !documentSnapshot.exists {
+            let userData: [String: Any] = [
+                "id": user.uid,
+                "name": user.displayName ?? "Unknown Name",
+                "email": user.email ?? "No Email",
+                "joined": Date().timeIntervalSince1970
+            ]
+            try await userDocRef.setData(userData)
+            print("User document created for: \(user.email ?? "No Email")")
+        } else {
+            print("User document already exists.")
+        }
     }
     
     @MainActor

@@ -120,7 +120,6 @@ struct SettingsView: View {
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color("darkerSecond"))
-                            //                                .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
                         )
                         .padding(.horizontal)
                         
@@ -142,39 +141,32 @@ struct SettingsView: View {
                                 }
                                 Button{
                                     Task {
-                                        await settingsViewModel.deleteAccount()
-                                    }
+                                                       let success = await settingsViewModel.deleteAccount()
+                                                       if success {
+                                                           print("Account deleted successfully!")
+                                                       } else {
+                                                           print("Failed to delete account.")
+                                                       }
+                                                   }
                                 } label: {
                                     Text("Delete Account")
                                         .foregroundColor(.red)
                                 }
-                                .alert("Confirm Delete", isPresented: $showAlert, actions: {
-                                    SecureField("Enter your password", text: $password)
-                                    
-                                    Button("Delete", role: .destructive) {
-                                        Task {
-                                            do {
-                                                try await settingsViewModel.deleteCurrentUser(password: password)
-                                                DispatchQueue.main.async {
-                                                    navigateToLogin = true // LoginView'e geçiş
-                                                }
-                                            } catch {
-                                                errorMessage = error.localizedDescription
-                                                print("Error deleting user: \(error.localizedDescription)")
+                                .alert("Enter Your Password", isPresented: $settingsViewModel.showPasswordAlert, actions: {
+                                            SecureField("Password", text: $settingsViewModel.passwordInput)
+                                            Button("Confirm") {
+                                                // Resume the continuation with the entered password
+                                                settingsViewModel.passwordContinuation?.resume(returning: settingsViewModel.passwordInput)
+                                                settingsViewModel.passwordContinuation = nil // Clear the continuation
+                                                settingsViewModel.passwordInput = "" // Clear the password input
                                             }
-                                        }
-                                    }
-
-                                    Button("Cancel", role: .cancel) {
-                                        password = "" // Şifreyi temizle
-                                    }
-                                }, message: {
-                                    if !errorMessage.isEmpty {
-                                        Text(errorMessage) // Hata mesajını göster
-                                    } else {
-                                        Text("Please enter your password to confirm.")
-                                    }
-                                })
+                                            Button("Cancel", role: .cancel) {
+                                                // Resume the continuation with an empty string
+                                                settingsViewModel.passwordContinuation?.resume(returning: "")
+                                                settingsViewModel.passwordContinuation = nil // Clear the continuation
+                                                settingsViewModel.passwordInput = "" // Clear the password input
+                                            }
+                                        })
                                 Button(action: {
                                     settingsViewModel.logOut()
                                 }) {
