@@ -11,7 +11,6 @@ import SwiftUI
 struct AddView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    
     @StateObject var ItemModel = ItemModelV2()
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
@@ -221,7 +220,6 @@ struct AddView: View {
                 }
                 //
                 Spacer()
-                
                 // Save Button
                 CustomButton(title: "Create Task") {
                     saveButtonPressed()
