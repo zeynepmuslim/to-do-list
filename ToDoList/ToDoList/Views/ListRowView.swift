@@ -13,71 +13,104 @@ struct ListRowView: View {
     @State private var showDetailsSheet = false
     @State var isVisible: Bool = true
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var onInfoButtonTap: () -> Void
     let item: TaskModel
     let hideCategoryIcon: Bool
     
     var body: some View {
+        HStack {
             HStack {
-                HStack {
-                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(item.isCompleted ? .green : .gray)
-                        .font(.system(size: 24))
-                        .animation(.easeInOut(duration: 0.4), value: item.isCompleted)
-                    
-                    Text(item.title)
-                        .font(item.isCompleted ? .subheadline : .headline)
-                        .foregroundColor(item.isCompleted ? .secondary : .primary)
-                        .strikethrough(item.isCompleted, color: .secondary)
-                        .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                    
-//                color change rectangele device thema
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .foregroundColor(Color("darkerSecond"))
+                Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(item.isCompleted ? .green : .gray)
+                    .font(.system(size: 24))
+                    .animation(.easeInOut(duration: 0.4), value: item.isCompleted)
+                Text(item.title)
+                    .font(item.isCompleted ? .subheadline : .headline)
+                    .foregroundColor(item.isCompleted ? .secondary : .primary)
+                    .strikethrough(item.isCompleted, color: .secondary)
+                    .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(Color("darkerSecond"))
+                
+                if let dueDate = item.dueDate {
+                    let dueDateStatus = viewModel.getDueDateStatus(from: dueDate)
                     
                     VStack {
-                        if item.thereIsDate {
-                            Image(systemName: "calendar")
-                                .foregroundColor(.gray)
-                            Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
-                                .foregroundColor(.gray)
-                                .font(.caption)
+                        if let status = dueDateStatus {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(colorScheme == .dark ? .clear : Color(status.color.opacity(0.3)))
+                                    .frame(height: 7)
+                                    .padding(.horizontal, -4)
+                                Text(status.text)
+                                    .foregroundColor(colorScheme == .dark ? Color(status.color) : .black)
+                                    .font(.caption)
+                                    .bold()
+                                    .lineLimit(1)
+                            }
+                            HStack(alignment: .center,spacing: 2) {
+                                Image(systemName: "calendar")
+                                    .foregroundColor(.gray)
+                                    .font(.caption)
+                                Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
+                                    .foregroundColor(.gray)
+                                    .font(.caption)
+                                
+                            }
+                        } else {
+                            HStack(alignment: .bottom) {
+                                Spacer()
+                                VStack {
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(.gray)
+                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                }
+                            }
+                            
                         }
                     }
-                    if !hideCategoryIcon {
-                        Image(systemName: viewModel.categorySymbol(for: item.category))
-                            .foregroundColor(viewModel.categoryColor(for: item.category))
-                            .font(.callout)
-                    }
                     
-                    Image(systemName: viewModel.prioritySymbol(for: item.priority))
-                        .foregroundColor(viewModel.priorityColor(for: item.priority))
-                        .font(.callout)
-                }
-                .onTapGesture {
-                    print("1")
-                    viewModel.toggleIsDone(item: item)
+                    .frame(maxWidth: 70)
                 }
                 
-                Image(systemName: "info.circle")
-                    .foregroundColor(.blue)
-                    .onTapGesture {
-                        onInfoButtonTap()
-                          showDetailsSheet.toggle()
-                    }
+                if !hideCategoryIcon {
+                    Image(systemName: viewModel.categorySymbol(for: item.category))
+                        .foregroundColor(viewModel.categoryColor(for: item.category))
+                        .font(.callout)
+                }
+                
+                Image(systemName: viewModel.prioritySymbol(for: item.priority))
+                    .foregroundColor(viewModel.priorityColor(for: item.priority))
+                    .font(.callout)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                viewModel.toggleIsDone(item: item)
             }
             
+            Image(systemName: "info.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    onInfoButtonTap()
+                    showDetailsSheet.toggle()
+                }
         }
+        
     }
+}
 
 
-
+//
 //#Preview {
 //    NavigationStack {
-//        ListRowView(item: .init(
+//        ListRowView(onInfoButtonTap: {print("info")}, item: .init(
 //            id: "123",
 //            title: "Test Title",
 //            priority: "Medium",
@@ -86,6 +119,15 @@ struct ListRowView: View {
 //            thereIsDate: true,
 //            createdAt: Date().timeIntervalSince1970,
 //            isCompleted: false
-//        ), hideCategoryIcon: false, onInfoButtonTap: {})
+//        ), hideCategoryIcon: falseonInfoButtonTap: {print("info")}, item: .init(
+//            id: "123",
+//            title: "Test Title",
+//            priority: "Medium",
+//            category: "job",
+//            dueDate: Date().timeIntervalSince1970,
+//            thereIsDate: true,
+//            createdAt: Date().timeIntervalSince1970,
+//            isCompleted: false
+//        ), hideCategoryIcon: false)
 //    }
 //}

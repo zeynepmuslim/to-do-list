@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D711743F2D1513F200BB0447 /* TaskHubWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D711741C2D1513F000BB0447 /* TaskHubWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D711744F2D15165A00BB0447 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D711744E2D15165A00BB0447 /* WatchConnectivity.framework */; };
 		D763C9162D06793A00372F79 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D763C9152D06793A00372F79 /* ConfettiSwiftUI */; };
 		D771E81C2D0A60240063C687 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D771E81B2D0A60240063C687 /* FirebaseAnalytics */; };
 		D771E81E2D0A60240063C687 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = D771E81D2D0A60240063C687 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -23,27 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D711742C2D1513F200BB0447 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D763C8CC2D0656D700372F79 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D711741B2D1513F000BB0447;
-			remoteInfo = "TaskHubWatch Watch App";
-		};
-		D71174362D1513F200BB0447 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D763C8CC2D0656D700372F79 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D711741B2D1513F000BB0447;
-			remoteInfo = "TaskHubWatch Watch App";
-		};
-		D711743D2D1513F200BB0447 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D763C8CC2D0656D700372F79 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D711741B2D1513F000BB0447;
-			remoteInfo = "TaskHubWatch Watch App";
-		};
 		D763C8E52D0656D800372F79 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D763C8CC2D0656D700372F79 /* Project object */;
@@ -67,7 +44,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				D711743F2D1513F200BB0447 /* TaskHubWatch Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,9 +51,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D711741C2D1513F000BB0447 /* TaskHubWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TaskHubWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D711742B2D1513F200BB0447 /* TaskHubWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaskHubWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D71174352D1513F200BB0447 /* TaskHubWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaskHubWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D711744E2D15165A00BB0447 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		D763C8D42D0656D700372F79 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D763C8E42D0656D800372F79 /* ToDoListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,13 +58,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D71174592D151CE100BB0447 /* Exceptions for "ToDoList" folder in "TaskHubWatch Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Models/TaskModel.swift,
-			);
-			target = D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */;
-		};
 		D78047052D0F74CD0063555E /* Exceptions for "ToDoList" folder in "ToDoList" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -102,26 +68,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D711741D2D1513F000BB0447 /* TaskHubWatch Watch App */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "TaskHubWatch Watch App";
-			sourceTree = "<group>";
-		};
-		D711742E2D1513F200BB0447 /* TaskHubWatch Watch AppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "TaskHubWatch Watch AppTests";
-			sourceTree = "<group>";
-		};
-		D71174382D1513F200BB0447 /* TaskHubWatch Watch AppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "TaskHubWatch Watch AppUITests";
-			sourceTree = "<group>";
-		};
 		D763C8D62D0656D700372F79 /* ToDoList */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D78047052D0F74CD0063555E /* Exceptions for "ToDoList" folder in "ToDoList" target */,
-				D71174592D151CE100BB0447 /* Exceptions for "ToDoList" folder in "TaskHubWatch Watch App" target */,
 			);
 			path = ToDoList;
 			sourceTree = "<group>";
@@ -139,27 +89,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D71174192D1513F000BB0447 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174282D1513F200BB0447 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174322D1513F200BB0447 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D763C8D12D0656D700372F79 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -169,7 +98,6 @@
 				D763C9162D06793A00372F79 /* ConfettiSwiftUI in Frameworks */,
 				D771E8222D0A60240063C687 /* FirebaseAppCheck in Frameworks */,
 				D771E8202D0A60240063C687 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				D711744F2D15165A00BB0447 /* WatchConnectivity.framework in Frameworks */,
 				D78046FF2D0F70A70063555E /* GoogleSignIn in Frameworks */,
 				D79792782D0B1D0600480495 /* FirebaseFirestore in Frameworks */,
 				D797926E2D0B1AAF00480495 /* FirebaseAuth in Frameworks */,
@@ -201,9 +129,6 @@
 			children = (
 				D763C8E72D0656D800372F79 /* ToDoListTests */,
 				D763C8F12D0656D800372F79 /* ToDoListUITests */,
-				D711741D2D1513F000BB0447 /* TaskHubWatch Watch App */,
-				D711742E2D1513F200BB0447 /* TaskHubWatch Watch AppTests */,
-				D71174382D1513F200BB0447 /* TaskHubWatch Watch AppUITests */,
 				D797926C2D0B1AAF00480495 /* Frameworks */,
 				D763C8D52D0656D700372F79 /* Products */,
 				D763C8D62D0656D700372F79 /* ToDoList */,
@@ -216,9 +141,6 @@
 				D763C8D42D0656D700372F79 /* ToDoList.app */,
 				D763C8E42D0656D800372F79 /* ToDoListTests.xctest */,
 				D763C8EE2D0656D800372F79 /* ToDoListUITests.xctest */,
-				D711741C2D1513F000BB0447 /* TaskHubWatch Watch App.app */,
-				D711742B2D1513F200BB0447 /* TaskHubWatch Watch AppTests.xctest */,
-				D71174352D1513F200BB0447 /* TaskHubWatch Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -234,74 +156,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D71174472D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch App" */;
-			buildPhases = (
-				D71174182D1513F000BB0447 /* Sources */,
-				D71174192D1513F000BB0447 /* Frameworks */,
-				D711741A2D1513F000BB0447 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				D711741D2D1513F000BB0447 /* TaskHubWatch Watch App */,
-			);
-			name = "TaskHubWatch Watch App";
-			packageProductDependencies = (
-			);
-			productName = "TaskHubWatch Watch App";
-			productReference = D711741C2D1513F000BB0447 /* TaskHubWatch Watch App.app */;
-			productType = "com.apple.product-type.application";
-		};
-		D711742A2D1513F200BB0447 /* TaskHubWatch Watch AppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D71174482D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch AppTests" */;
-			buildPhases = (
-				D71174272D1513F200BB0447 /* Sources */,
-				D71174282D1513F200BB0447 /* Frameworks */,
-				D71174292D1513F200BB0447 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D711742D2D1513F200BB0447 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D711742E2D1513F200BB0447 /* TaskHubWatch Watch AppTests */,
-			);
-			name = "TaskHubWatch Watch AppTests";
-			packageProductDependencies = (
-			);
-			productName = "TaskHubWatch Watch AppTests";
-			productReference = D711742B2D1513F200BB0447 /* TaskHubWatch Watch AppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		D71174342D1513F200BB0447 /* TaskHubWatch Watch AppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D71174492D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch AppUITests" */;
-			buildPhases = (
-				D71174312D1513F200BB0447 /* Sources */,
-				D71174322D1513F200BB0447 /* Frameworks */,
-				D71174332D1513F200BB0447 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D71174372D1513F200BB0447 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D71174382D1513F200BB0447 /* TaskHubWatch Watch AppUITests */,
-			);
-			name = "TaskHubWatch Watch AppUITests";
-			packageProductDependencies = (
-			);
-			productName = "TaskHubWatch Watch AppUITests";
-			productReference = D71174352D1513F200BB0447 /* TaskHubWatch Watch AppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		D763C8D32D0656D700372F79 /* ToDoList */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D763C8F82D0656D800372F79 /* Build configuration list for PBXNativeTarget "ToDoList" */;
@@ -314,7 +168,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D711743E2D1513F200BB0447 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D763C8D62D0656D700372F79 /* ToDoList */,
@@ -393,17 +246,6 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
-					D711741B2D1513F000BB0447 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					D711742A2D1513F200BB0447 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D711741B2D1513F000BB0447;
-					};
-					D71174342D1513F200BB0447 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D711741B2D1513F000BB0447;
-					};
 					D763C8D32D0656D700372F79 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -439,35 +281,11 @@
 				D763C8D32D0656D700372F79 /* ToDoList */,
 				D763C8E32D0656D800372F79 /* ToDoListTests */,
 				D763C8ED2D0656D800372F79 /* ToDoListUITests */,
-				D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */,
-				D711742A2D1513F200BB0447 /* TaskHubWatch Watch AppTests */,
-				D71174342D1513F200BB0447 /* TaskHubWatch Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D711741A2D1513F000BB0447 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174292D1513F200BB0447 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174332D1513F200BB0447 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D763C8D22D0656D700372F79 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -492,27 +310,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D71174182D1513F000BB0447 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174272D1513F200BB0447 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D71174312D1513F200BB0447 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D763C8D02D0656D700372F79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -537,21 +334,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D711742D2D1513F200BB0447 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */;
-			targetProxy = D711742C2D1513F200BB0447 /* PBXContainerItemProxy */;
-		};
-		D71174372D1513F200BB0447 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */;
-			targetProxy = D71174362D1513F200BB0447 /* PBXContainerItemProxy */;
-		};
-		D711743E2D1513F200BB0447 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D711741B2D1513F000BB0447 /* TaskHubWatch Watch App */;
-			targetProxy = D711743D2D1513F200BB0447 /* PBXContainerItemProxy */;
-		};
 		D763C8E62D0656D800372F79 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D763C8D32D0656D700372F79 /* ToDoList */;
@@ -565,144 +347,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D71174412D1513F200BB0447 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskHubWatch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = TaskHubWatch;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.zeynepmuslim.ToDoList;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zeynepmuslim.ToDoList.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		D71174422D1513F200BB0447 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskHubWatch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = TaskHubWatch;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.zeynepmuslim.ToDoList;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zeynepmuslim.ToDoList.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		D71174432D1513F200BB0447 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.zeynepmuslim.TaskHubWatch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskHubWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TaskHubWatch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		D71174442D1513F200BB0447 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.zeynepmuslim.TaskHubWatch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskHubWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TaskHubWatch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		D71174452D1513F200BB0447 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.zeynepmuslim.TaskHubWatch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "TaskHubWatch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		D71174462D1513F200BB0447 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9N5WN36F7P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.zeynepmuslim.TaskHubWatch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "TaskHubWatch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
 		D763C8F62D0656D800372F79 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -971,33 +615,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D71174472D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D71174412D1513F200BB0447 /* Debug */,
-				D71174422D1513F200BB0447 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D71174482D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch AppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D71174432D1513F200BB0447 /* Debug */,
-				D71174442D1513F200BB0447 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D71174492D1513F200BB0447 /* Build configuration list for PBXNativeTarget "TaskHubWatch Watch AppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D71174452D1513F200BB0447 /* Debug */,
-				D71174462D1513F200BB0447 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		D763C8CF2D0656D700372F79 /* Build configuration list for PBXProject "ToDoList" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

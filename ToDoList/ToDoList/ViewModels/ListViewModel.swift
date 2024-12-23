@@ -29,7 +29,6 @@ class ListViewModel: ObservableObject {
                     try? document.data(as: TaskModel.self)
                 } ?? []
                 
-                WatchSessionManager.shared.sendTasksToWatch(tasks: self.items)
             }
     }
 
@@ -44,6 +43,23 @@ class ListViewModel: ObservableObject {
                     print("Error deleting document: \(error.localizedDescription)")
                 }
             }
+    }
+    
+    func getDueStatusPriority(for task: TaskModel) -> Int {
+        guard let dueDate = task.dueDate else { return 4 } // No due date = Lowest priority
+        let now = Date()
+        let date = Date(timeIntervalSince1970: dueDate)
+        let calendar = Calendar.current
+
+        if date < now, !calendar.isDateInToday(date) {
+            return 1 // Overdue
+        } else if calendar.isDateInToday(date) {
+            return 2 // Today
+        } else if calendar.isDateInTomorrow(date) {
+            return 3 // Tomorrow
+        } else {
+            return 4 // Future date
+        }
     }
 
     deinit {

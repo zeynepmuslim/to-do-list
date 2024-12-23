@@ -31,6 +31,21 @@ class ListRowViewModel: ObservableObject {
         
     }
     
+    func getDueDateStatus(from dueDate: TimeInterval) -> (text: String, color: Color)? {
+            let now = Date()
+            let dueDate = Date(timeIntervalSince1970: dueDate)
+            let calendar = Calendar.current
+
+            if dueDate < now, !calendar.isDateInToday(dueDate) {
+                return ("Overdue", .red)
+            } else if calendar.isDateInToday(dueDate) {
+                return ("Today", .blue)
+            } else if calendar.isDateInTomorrow(dueDate) {
+                return ("Tomorrow", .yellow)
+            } else {
+                return nil
+            }
+        }
     // Helper to format the date into "dd MMM" (e.g., "13 Dec")
     func formattedDate(from timestamp: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: timestamp)

@@ -27,6 +27,7 @@ struct ToDoListApp: App {
     
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
     
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = UITraitCollection.current.userInterfaceStyle == .dark
     var body: some Scene {
         WindowGroup {
             Group{
@@ -66,7 +67,8 @@ struct ToDoListApp: App {
                     }
                     
                 }
-            }.environmentObject(authController) 
+            }.environmentObject(authController)
+                .preferredColorScheme(isDarkMode ? .dark : .light)
 //
 
             }

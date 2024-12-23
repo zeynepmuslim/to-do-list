@@ -143,13 +143,14 @@ struct LoginView: View {
             
             //gggogle
             HStack {
-                
-                GoogleSignInButton(scheme: .light, style: .wide, state: .normal, action: {
+//                Spacer()
+                GoogleSignInButton(scheme: .light, style: .standard, state: .normal, action: {
                     signInWithGoogle()
                 })
+                .frame(height: 40)
                 .cornerRadius(10)
                 .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
-                
+                Spacer()
                 Button {
                     signInWithApple()
                 } label: {
@@ -160,6 +161,7 @@ struct LoginView: View {
                         .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
 
                 }
+//                Spacer()
             }
             .padding(.horizontal, 40)
             

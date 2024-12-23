@@ -65,9 +65,29 @@ struct ListView: View {
                case .title: return $0.title < $1.title
                case .createdAt: return $0.createdAt > $1.createdAt
                case .dueDate:
-                   let date1 = $0.dueDate ?? .greatestFiniteMagnitude
-                   let date2 = $1.dueDate ?? .greatestFiniteMagnitude
-                   return date1 < date2
+                   let priority1 = viewModel.getDueStatusPriority(for: $0)
+                    let priority2 = viewModel.getDueStatusPriority(for: $1)
+
+                    // Compare Due Status Priority first
+                    if priority1 != priority2 {
+                        return priority1 < priority2 // Higher priority comes first
+                    }
+
+                    // Fallback: Compare by due date
+                    let date1 = $0.dueDate ?? .greatestFiniteMagnitude
+                    let date2 = $1.dueDate ?? .greatestFiniteMagnitude
+                    if date1 != date2 {
+                        return date1 < date2 // Earlier due date comes first
+                    }
+
+                    // Fallback: Compare by task priority
+                    let priorityOrder: [String: Int] = ["High": 1, "Medium": 2, "Low": 3]
+                    if let p1 = priorityOrder[$0.priority], let p2 = priorityOrder[$1.priority], p1 != p2 {
+                        return p1 < p2 // Higher task priority comes first
+                    }
+
+                    // Final Fallback: Compare by creation time
+                    return $0.createdAt < $1.createdAt
                case .priority:
                    let priorityOrder: [String: Int] = ["High": 1, "Medium": 2, "Low": 3]
                    return (priorityOrder[$0.priority] ?? 4) < (priorityOrder[$1.priority] ?? 4)
@@ -310,7 +330,7 @@ struct ListView: View {
 
 #Preview {
     NavigationView {
-        ListView(userId: "2aOR21qVrORzA82MORSOAtLgyx13")
+        ListView(userId: "grPKdiOzI1hfATayLiHG1au3uC52")
     }
     //    .environmentObject(ListViewModel())
 }
