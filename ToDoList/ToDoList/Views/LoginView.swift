@@ -21,10 +21,7 @@ struct SignInWithAppleButtonViewRepressentable: UIViewRepresentable {
         ASAuthorizationAppleIDButton(type: type, style: style)
     }
     
-    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {
-        
-    }
-    
+    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {}
 }
 
 struct LoginView: View {
@@ -34,8 +31,6 @@ struct LoginView: View {
     @State private var showErrorMessage = false
     
     @FocusState private var fieldFocus: OnboardingFields?
-    
-    
     
     enum OnboardingFields: Hashable {
         case email
@@ -61,38 +56,28 @@ struct LoginView: View {
                 
                 ZStack(alignment: .trailing) {
                     if isPasswordVisible {
-                        // Şifre görünür durumda
+                        
                         CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: false)
-                            .toolbar {
-                                ToolbarItemGroup(placement: .keyboard) {
-                                    Spacer()
-                                    Button("Close") {
-                                        hideKeyboard()
-                                    }
-                                }
-                            }
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.go)
                             .onSubmit {
-                                hideKeyboard()
                                 validateFields()
                                 loginViewModel.login()
                             }
-                            .transition(.opacity) // Opacity geçişi ekliyoruz
+                            .transition(.opacity)
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     } else {
-                        // Şifre gizli durumda
+                        
                         CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: true)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.done)
                             .onSubmit {
-                                hideKeyboard()
                                 validateFields()
                                 loginViewModel.login()
                             }
-                            .transition(.opacity) // Opacity geçişi ekliyoruz
+                            .transition(.opacity)
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     }
                     
@@ -110,16 +95,16 @@ struct LoginView: View {
                 }
                 HStack(alignment: .center) {
                     if !loginViewModel.errorMessage.isEmpty {
-                                       Text(loginViewModel.errorMessage)
-                                           .foregroundColor(.red)
-                                           .italic()
-                                           .padding(10)
-                                           .background(Color.red.opacity(0.1))
-                                           .cornerRadius(8)
-                                           .frame(maxWidth: .infinity, alignment: .leading)
-                                           .transition(.opacity)
-                                           .animation(.easeInOut, value: showErrorMessage)
-                                   }
+                        Text(loginViewModel.errorMessage)
+                            .foregroundColor(.red)
+                            .italic()
+                            .padding(10)
+                            .background(Color.red.opacity(0.1))
+                            .cornerRadius(8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .transition(.opacity)
+                            .animation(.easeInOut, value: showErrorMessage)
+                    }
                     Spacer()
                     NavigationLink(destination: PasswordResetView(isFromSettings: false)) {
                         Text("Forgot Password?")
@@ -132,7 +117,7 @@ struct LoginView: View {
                 
                 
                 CustomButton(title: "Login") {
-                    hideKeyboard()
+                    //                    hideKeyboard()
                     validateFields()
                     loginViewModel.login()
                     print(loginViewModel.email)
@@ -143,7 +128,7 @@ struct LoginView: View {
             
             //gggogle
             HStack {
-//                Spacer()
+                //                Spacer()
                 GoogleSignInButton(scheme: .light, style: .standard, state: .normal, action: {
                     signInWithGoogle()
                 })
@@ -159,9 +144,8 @@ struct LoginView: View {
                         .frame(height: 40)
                         .cornerRadius(10)
                         .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
-
+                    
                 }
-//                Spacer()
             }
             .padding(.horizontal, 40)
             
@@ -182,25 +166,19 @@ struct LoginView: View {
             
             Spacer()
         }
-        
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                
+                Spacer()
                 Button("Close") {
                     hideKeyboard()
                 }
-                Spacer()
-                Button("Login") {
-                    hideKeyboard()
-                    validateFields()
-                    loginViewModel.login()
-                }
+                .foregroundColor(Color("AccentColor"))
             }
         }
     }
     
     func hideKeyboard() {
-        fieldFocus = nil // Focus'u kaldır ve klavyeyi kapat
+        fieldFocus = nil
     }
     
     func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
@@ -210,11 +188,11 @@ struct LoginView: View {
     
     func validateFields() {
         if loginViewModel.email.isEmpty {
-            fieldFocus = .email // Email alanına odaklan
+            fieldFocus = .email
         } else if loginViewModel.password.isEmpty {
-            fieldFocus = .password // Password alanına odaklan
+            fieldFocus = .password
         } else {
-            fieldFocus = nil // Her iki alan da dolu
+            fieldFocus = nil
         }
     }
     
@@ -239,7 +217,6 @@ struct LoginView: View {
             }
         }
     }
-    
 }
 
 #Preview {

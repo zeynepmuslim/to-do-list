@@ -11,7 +11,6 @@ import SwiftUI
 struct AddView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var settingsViewModel = SettingsViewModel()
     @StateObject var ItemModel = ItemModelV2()
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
@@ -20,15 +19,14 @@ struct AddView: View {
     @State var selectedDate: Date? = nil
     @State var showAlert: Bool = false
     @State var alertTitle: String = ""
+    @State var dateChanged: Bool = false
+    @State var animate: Bool = false
+    @State var showDateSheet: Bool = false
+    
     var darkerSecond = Color("DarkerSecond")
     let myIcon = Image(systemName: "star.fill")
     
-    @State var dateChanged: Bool = false
-    @State var animate: Bool = false
-    
-    @State var showDateSheet: Bool = false // Sheet kontrolü için
-    
-    
+    private let characterLimit = 100
     
     struct Category: Identifiable {
         let id = UUID()
@@ -39,24 +37,26 @@ struct AddView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Task Title
-                VStack(alignment: .leading, spacing: 10) {
-                        Button{
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left.2")
-                                .foregroundColor(.accentColor)
-                                .font(.headline)
-                        }
-                            Text("Task Title")
-                                .font(.headline)
-                       
-                }
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Task Title")
+                    .font(.headline)
                 
                 CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
+                    .submitLabel(.continue)
+                    .onSubmit {
+                        hideKeyboard()
+                    }
                 
-                // Task Priority
+                    .onChange(of: ItemModel.title) { newValue in
+                        if newValue.count > characterLimit {
+                            ItemModel.title = String(newValue.prefix(characterLimit))
+                        }
+                    }
+                
+                Text("\(ItemModel.title.count)/\(characterLimit) characters")
+                    .font(.footnote)
+                    .foregroundColor(ItemModel.title.count >= characterLimit ? .red : .secondary)
+                
                 HStack {
                     Text("Task Priority")
                         .font(.headline)
@@ -89,6 +89,7 @@ struct AddView: View {
                             .transition(.opacity)
                     }
                 }
+                .padding(.top,10)
                 .animation(.easeInOut, value: selectedPriority)
                 Picker("Priority", selection: $selectedPriority) {
                     ForEach(taskPriority, id: \.self) { priority in
@@ -100,6 +101,8 @@ struct AddView: View {
                 
                 Text("Task Category")
                     .font(.headline)
+                    .padding(.top,10)
+                
                 HStack(alignment: .center) {
                     CustomCategoryButton(title: "Other", action: {
                         withAnimation(.easeInOut(duration: 0.5)) {
@@ -162,21 +165,18 @@ struct AddView: View {
                         color: selectedCategory == "job" ? .blue.opacity(0.7) : .blue.opacity(0.0),
                         radius: selectedCategory == "job" ? 0 : 30)
                 }
-                //
                 
-                // Due Date Toggle
+                
                 if let selectedDate = selectedDate {
-                    // Eğer seçilmiş bir tarih varsa, tarihi ve işlemleri gösteren bir HStack
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Selected Due Date")
                                 .font(.headline)
-                            Text(selectedDate, style: .date) // Seçili tarihi gösterir
+                            Text(selectedDate, style: .date)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
-                        // Tarihi değiştir düğmesi
                         Button {
                             showDateSheet = true
                         } label: {
@@ -187,10 +187,9 @@ struct AddView: View {
                                 .cornerRadius(10)
                                 .foregroundColor(Color("AccentColor"))
                         }
-                        // Tarihi kaldır düğmesi
                         Button {
                             withAnimation {
-                                self.selectedDate = nil // Seçili tarihi kaldırır
+                                self.selectedDate = nil
                             }
                         } label: {
                             Image(systemName: "trash")
@@ -200,7 +199,7 @@ struct AddView: View {
                     }
                     .padding(.vertical)
                 } else {
-                    // Eğer seçili bir tarih yoksa, kullanıcıdan tarih seçmesini isteyen HStack
+                    
                     HStack {
                         Text("Do you have a deadline?")
                             .font(.headline)
@@ -214,20 +213,14 @@ struct AddView: View {
                                 .background(.darkerSecond)
                                 .cornerRadius(10)
                                 .foregroundColor(Color("AccentColor"))
-                            //
+                            
                         }
                     }
                     .padding(.vertical)
                 }
-                //
+                
                 Spacer()
-                Button(action: {
-                    settingsViewModel.logOut()
-                }) {
-                    Text("Log out")
-                        .foregroundColor(.red)
-                }
-                // Save Button
+                
                 CustomButton(title: "Create Task") {
                     saveButtonPressed()
                 }
@@ -247,7 +240,15 @@ struct AddView: View {
             }
             .padding()
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Close") {
+                    hideKeyboard()
+                }
+                .foregroundColor(Color("AccentColor"))
+            }
+        }
         .sheet(isPresented: $showDateSheet) {
             DueDateSheet(selectedDate: $selectedDate, dateChanged: $dateChanged)
         }
@@ -256,9 +257,11 @@ struct AddView: View {
         }
     }
     
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
     func saveButtonPressed() {
-        
-        
         if textIsAppropriate() {
             ItemModel.priority = selectedPriority
             ItemModel.category = selectedCategory
@@ -294,22 +297,13 @@ struct AddView: View {
             return false
         }
         
-        if trimmedText.count > 100 {
-            alertTitle = "Task title cannot exceed 100 characters!"
-            showAlert.toggle()
-            triggerHapticFeedback(type: .error)
-            return false
-        }
-        
-        // Başarılı doğrulama
         triggerHapticFeedback(type: .success)
         return true
     }
 }
 #Preview {
-        NavigationView {
-            AddView()
-        }
-        .preferredColorScheme(.light)
-//        .environmentObject(ListViewModel())
+    NavigationView {
+        AddView()
+    }
+    .preferredColorScheme(.light)
 }

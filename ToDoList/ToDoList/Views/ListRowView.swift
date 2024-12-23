@@ -33,7 +33,6 @@ struct ListRowView: View {
                     .animation(.easeInOut(duration: 0.5), value: item.isCompleted)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(Color("darkerSecond"))
                 
@@ -42,25 +41,27 @@ struct ListRowView: View {
                     
                     VStack {
                         if let status = dueDateStatus {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(colorScheme == .dark ? .clear : Color(status.color.opacity(0.3)))
-                                    .frame(height: 7)
-                                    .padding(.horizontal, -4)
-                                Text(status.text)
-                                    .foregroundColor(colorScheme == .dark ? Color(status.color) : .black)
-                                    .font(.caption)
-                                    .bold()
-                                    .lineLimit(1)
-                            }
-                            HStack(alignment: .center,spacing: 2) {
-                                Image(systemName: "calendar")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                
+                            if !(status.text == "Overdue" && item.isCompleted) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(colorScheme == .dark ? .clear : Color(status.color.opacity(0.3)))
+                                        .frame(height: 7)
+                                        .padding(.horizontal, -4)
+                                    Text(status.text)
+                                        .foregroundColor(colorScheme == .dark ? Color(status.color) : .black)
+                                        .font(.caption)
+                                        .bold()
+                                        .lineLimit(1)
+                                }
+                                HStack(alignment: .center,spacing: 2) {
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                    
+                                }
                             }
                         } else {
                             HStack(alignment: .bottom) {
@@ -73,10 +74,8 @@ struct ListRowView: View {
                                         .font(.caption)
                                 }
                             }
-                            
                         }
                     }
-                    
                     .frame(maxWidth: 70)
                 }
                 
@@ -106,28 +105,3 @@ struct ListRowView: View {
     }
 }
 
-
-//
-//#Preview {
-//    NavigationStack {
-//        ListRowView(onInfoButtonTap: {print("info")}, item: .init(
-//            id: "123",
-//            title: "Test Title",
-//            priority: "Medium",
-//            category: "job",
-//            dueDate: Date().timeIntervalSince1970,
-//            thereIsDate: true,
-//            createdAt: Date().timeIntervalSince1970,
-//            isCompleted: false
-//        ), hideCategoryIcon: falseonInfoButtonTap: {print("info")}, item: .init(
-//            id: "123",
-//            title: "Test Title",
-//            priority: "Medium",
-//            category: "job",
-//            dueDate: Date().timeIntervalSince1970,
-//            thereIsDate: true,
-//            createdAt: Date().timeIntervalSince1970,
-//            isCompleted: false
-//        ), hideCategoryIcon: false)
-//    }
-//}

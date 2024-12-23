@@ -4,11 +4,10 @@ import FirebaseFirestore
 
 struct EditView: View {
     
-    
     @StateObject var viewModel = ListRowViewModel()
-    
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
-    @State var item: TaskModel // Düzenlenecek öğe
+    @State var item: TaskModel
     @State var selectedPriority: String
     @State var selectedCategory: String
     @State var selectedDate: Date? = nil
@@ -20,32 +19,21 @@ struct EditView: View {
     @State var mytitle = ""
     @State var myThereIsDate = true
     @State var myDate = Date(timeIntervalSince1970: 0)
-
+    
     let darkerSecond = Color("DarkerSecond")
     let myIcon = Image(systemName: "star.fill")
     
     private let characterLimit = 100
     
-
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    Button{
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left.2")
-                            .foregroundColor(.accentColor)
-                            .font(.headline)
-                    }
-                    HStack{
-                        Text("Task Title")
-                            .font(.headline)
-                        Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                    }
+            VStack(alignment: .leading, spacing: 10) {
+                HStack{
+                    Text("Task Title")
+                        .font(.headline)
+                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                 }
-                    
+                
                 TextEditor(text: $mytitle)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
@@ -54,11 +42,16 @@ struct EditView: View {
                     .cornerRadius(10)
                     .tint(Color("AccentColor"))
                     .autocorrectionDisabled(true)
-                    
-                Text("\(item.title.count)/\(characterLimit) characters")
-                                    .font(.footnote)
-                                    .foregroundColor( mytitle.count >= characterLimit ? .red : .secondary)
-
+                    .onChange(of: mytitle) { newValue in
+                        if newValue.count > characterLimit {
+                            mytitle = String(newValue.prefix(characterLimit))
+                        }
+                    }
+                
+                Text("\(mytitle.count)/\(characterLimit) characters")
+                    .font(.footnote)
+                    .foregroundColor( mytitle.count >= characterLimit ? .red : .secondary)
+                
                 HStack {
                     Text("Task Priority")
                         .font(.headline)
@@ -66,7 +59,7 @@ struct EditView: View {
                     if selectedPriority == "Low" {
                         Group {
                             myIcon
-                                
+                            
                         }
                         .foregroundColor(.green)
                         .transition(.scale)
@@ -93,7 +86,9 @@ struct EditView: View {
                             .transition(.opacity)
                     }
                 }
+                .padding(.top,10)
                 .animation(.easeInOut, value: selectedPriority)
+                
                 Picker("Priority", selection: $selectedPriority) {
                     ForEach(["Low", "Medium", "High"], id: \.self) { priority in
                         Text(priority)
@@ -101,9 +96,10 @@ struct EditView: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-
+                
                 Text("Task Category")
                     .font(.headline)
+                    .padding(.top,10)
                 
                 HStack(alignment: .center) {
                     CustomCategoryButton(title: "Other", action: {
@@ -156,7 +152,6 @@ struct EditView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "job"
                         }
-                        print("job button tapped")
                     }, iconName: "briefcase.fill",
                                          theColor: selectedCategory == "job" ? .blue : .darkerSecond,
                                          theHeight: selectedCategory == "job" ? 55 : 40,
@@ -168,9 +163,36 @@ struct EditView: View {
                         radius: selectedCategory == "job" ? 0 : 30)
                 }
                 
+                if let dueDate = item.dueDate {
+                    HStack {
+                        Text("Due Date:")
+                            .font(.headline)
+                        Text(viewModel.formattedDateLong(from: dueDate))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        if let dueDateStatus = viewModel.getDueDateStatus(from: dueDate) {
+                            if !(dueDateStatus.text == "Overdue" && item.isCompleted) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(colorScheme == .dark ? .clear : Color(dueDateStatus.color.opacity(0.3)))
+                                        .frame(height: 7)
+                                    Text(dueDateStatus.text)
+                                        .foregroundColor(colorScheme == .dark ? Color(dueDateStatus.color) : .black)
+                                        .font(.caption)
+                                        .bold()
+                                        .lineLimit(1)
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                    .padding(.top,10)
+                }
+                
+                
                 Spacer()
-
-                // Save Button
+                
                 CustomButton(title: "Save Changes") {
                     saveButtonPressed()
                 }
@@ -200,58 +222,62 @@ struct EditView: View {
                             .foregroundColor(item.isCompleted ? Color.red : Color.green)
                             .background(Color(UIColor.secondarySystemBackground))
                             .cornerRadius(10)
-                            
-                        //                            .transition(.opacity)
                             .transition(.scale)
                     }
                 }
-                
             }
             .padding()
         }
         .onAppear{
             loadData()
-           
+            
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Close") {
+                    hideKeyboard()
+                }
+                .foregroundColor(Color("AccentColor"))
+            }
+        }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(alertTitle))
         }
     }
-
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
     func loadData() {
         mytitle = item.title
         print(mytitle)
         print("hi guys")
     }
     func saveButtonPressed() {
-            guard textIsAppropriate() else { return } // Ensure validation passes
-            
+        guard textIsAppropriate() else { return }
         
-            
-            // Firestore reference
-            
-            guard let uid = Auth.auth().currentUser?.uid else {
+        guard let uid = Auth.auth().currentUser?.uid else {
             return
-            }
+        }
         
-            var itemCopy = item
+        var itemCopy = item
         itemCopy.title = mytitle
         itemCopy.category = selectedCategory
         itemCopy.priority = selectedPriority
-            
-            let db = Firestore.firestore()
-            db.collection("users")
+        
+        let db = Firestore.firestore()
+        db.collection("users")
             .document(uid)
             .collection("tasks")
             .document(item.id)
             .setData(itemCopy.asDictionary())
         
-            print("save button pressed")
-            presentationMode.wrappedValue.dismiss()
+        print("save button pressed")
+        presentationMode.wrappedValue.dismiss()
     }
-
-
+    
     func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
@@ -267,13 +293,6 @@ struct EditView: View {
         }
         if trimmedText.count < 3 {
             alertTitle = "Task title must be at least 3 characters long!"
-            showAlert.toggle()
-            triggerHapticFeedback(type: .error)
-            return false
-        }
-        
-        if trimmedText.count >= characterLimit {
-            alertTitle = "Task title cannot exceed \(characterLimit) characters!"
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
             return false

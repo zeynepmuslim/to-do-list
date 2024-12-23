@@ -46,7 +46,7 @@ class ListRowViewModel: ObservableObject {
                 return nil
             }
         }
-    // Helper to format the date into "dd MMM" (e.g., "13 Dec")
+    // "dd MMM" (e.g., "13 Dec")
     func formattedDate(from timestamp: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: timestamp)
         let formatter = DateFormatter()
@@ -54,14 +54,14 @@ class ListRowViewModel: ObservableObject {
         return formatter.string(from: date)
     }
     
+    //"dd MMM" (e.g., "13 Dec 2023")
     func formattedDateLong(from timestamp: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: timestamp)
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMMM yyyy" // Format for "10 July 2010"
+        formatter.dateFormat = "dd MMMM yyyy"
         return formatter.string(from: date)
     }
     
-    // Helper functions for category and priority symbols/colors
     func categorySymbol(for category: String) -> String {
         switch category {
         case "other": return "diamond.fill"
