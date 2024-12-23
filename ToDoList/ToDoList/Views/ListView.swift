@@ -30,11 +30,11 @@ struct ListView: View {
         case title, createdAt, dueDate, priority, category
         var title: String {
             switch self {
-            case .title: return "Title"
-            case .createdAt: return "Created Date"
-            case .dueDate: return "Due Date"
-            case .priority: return "Priority"
-            case .category: return "Category"
+            case .title: return "title".localized()
+            case .createdAt: return "created_date".localized()
+            case .dueDate: return "due_date".localized()
+            case .priority: return "priority".localized()
+            case .category: return "category".localized()
             }
         }
         
@@ -159,13 +159,13 @@ struct ListView: View {
                         ]
                     )
                     .padding(.vertical, 10)
-                    
+                     
                     if sortedTasks.isEmpty {
                         VStack(spacing: 20) {
                             Image(systemName: "tray")
                                 .font(.system(size: 50))
                                 .foregroundColor(.gray)
-                            Text("No items in this category")
+                            Text("no_items_in_category".localized())
                                 .font(.headline)
                                 .foregroundColor(.gray)
                         }
@@ -175,7 +175,7 @@ struct ListView: View {
                         List {
                             if !sortedTasks.filter({ !$0.isCompleted }).isEmpty {
                                 Section(header: HStack{
-                                    Text("Tasks")
+                                    Text("tasks".localized())
                                     Spacer()
                                     Menu {
                                         ForEach(SortOption.allCases, id: \.self) { option in
@@ -190,7 +190,7 @@ struct ListView: View {
                                         }
                                     } label: {
                                         HStack(spacing: 5) {
-                                            Text("Sort")
+                                            Text("sort".localized())
                                                 .font(.caption)
                                                 .foregroundColor(Color("AccentColor"))
                                             Image(systemName: "line.3.horizontal.decrease")
@@ -209,7 +209,7 @@ struct ListView: View {
                                         )
                                         .listRowBackground(Color("darkerSecond"))
                                         .swipeActions {
-                                            Button("Delete", role: .destructive) {
+                                            Button("delete".localized(), role: .destructive) {
                                                 viewModel.delete(id: item.id)
                                             }
                                         }
@@ -219,12 +219,12 @@ struct ListView: View {
                             
                             if !sortedTasks.filter({ $0.isCompleted }).isEmpty {
                                 Section(header: HStack {
-                                    Text("Completed")
+                                    Text("completed".localized())
                                     Spacer()
                                     Button(action: {
                                         showDeleteAllAlert = true
                                     }) {
-                                        Text("Delete All")
+                                        Text("delete_all".localized())
                                             .font(.caption)
                                             .foregroundColor(.red)
                                     }
@@ -248,7 +248,7 @@ struct ListView: View {
                                         }
                                     }
                                 }
-                                .alert("Delete All Completed Tasks?", isPresented: $showDeleteAllAlert) {
+                                .alert("delete_all_completed_title".localized(), isPresented: $showDeleteAllAlert) {
                                     Button("Cancel", role: .cancel) { }
                                     Button("Delete", role: .destructive) {
                                         withAnimation {
@@ -258,7 +258,7 @@ struct ListView: View {
                                         }
                                     }
                                 } message: {
-                                    Text("This action cannot be undone. Are you sure you want to delete all completed tasks?")
+                                    Text("delete_all_completed_message".localized())
                                 }
                             }
                         }

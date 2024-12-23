@@ -16,7 +16,7 @@ struct CustomButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title.uppercased())
+            Text(title)
                 .foregroundColor(textColor)
                 .font(.headline)
                 .frame(maxWidth: .infinity)

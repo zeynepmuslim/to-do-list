@@ -17,9 +17,10 @@ struct SettingsView: View {
     
     @AppStorage("isDarkMode") private var isDarkMode: Bool = UITraitCollection.current.userInterfaceStyle == .dark
     
+    @State private var reloadView = false
     @State private var animateTransition: Bool = false
+    @State private var showAccountDeletionAlert = false
     private var animationDuration: Double = 0.6
-    // State to trigger animation
     
     var user: UserModel {
         settingsViewModel.user ?? UserModel(id: "", name: "", email: "", joined: 0)
@@ -31,7 +32,7 @@ struct SettingsView: View {
             Color(isDarkMode ? Color.black : Color.white)
                 .edgesIgnoringSafeArea(.all)
                 .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
-            //                .ignoresSafeArea(),
+            
             HStack{
                 
                 Spacer()
@@ -57,7 +58,7 @@ struct SettingsView: View {
             
             VStack {
                 HStack {
-                    Text("Profile 🔎")
+                    Text("profile".localized() + " 🔎")
                         .font(.largeTitle)
                         .fontWeight(.heavy)
                     Spacer()
@@ -92,7 +93,7 @@ struct SettingsView: View {
                         
                         
                         HStack {
-                            Text("Dark Mode")
+                            Text("dark_mode".localized())
                                 .font(.headline)
                                 .fontWeight(.semibold)
                             Spacer()
@@ -125,60 +126,68 @@ struct SettingsView: View {
                         
                         Spacer()
                         
-                        
                         List {
-                            Section(header: Text("Settings")
+                            Section(header: Text("settings".localized())
                                 .fontWeight(.semibold)
                                 .padding(.top, 10)
                             ) {
-                                Picker("Select Language", selection: $settingsViewModel.selectedLanguage) {
+                                Picker("selected_language".localized(), selection: $settingsViewModel.selectedLanguage) {
                                     ForEach(settingsViewModel.languageOptions, id: \.self) { language in
-                                        Text(language)
+                                        Text(language.localized())
                                     }
                                 }
                                 NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
-                                    Text("Change Password")
+                                    Text("change_password".localized())
                                 }
                                 Button{
-                                    Task {
-                                                       let success = await settingsViewModel.deleteAccount()
-                                                       if success {
-                                                           print("Account deleted successfully!")
-                                                       } else {
-                                                           print("Failed to delete account.")
-                                                       }
-                                                   }
+                                    showAccountDeletionAlert.toggle()
                                 } label: {
-                                    Text("Delete Account")
+                                    Text("delete_account".localized())
                                         .foregroundColor(.red)
                                 }
-                                .alert("Enter Your Password", isPresented: $settingsViewModel.showPasswordAlert, actions: {
-                                            SecureField("Password", text: $settingsViewModel.passwordInput)
-                                            Button("Confirm") {
-                                                // Resume the continuation with the entered password
-                                                settingsViewModel.passwordContinuation?.resume(returning: settingsViewModel.passwordInput)
-                                                settingsViewModel.passwordContinuation = nil // Clear the continuation
-                                                settingsViewModel.passwordInput = "" // Clear the password input
+                                .alert("we're_sorry_to_see_you_go".localized(), isPresented: $showAccountDeletionAlert, actions: {
+                                    Button("yes_delete_my_account".localized(), role: .destructive) {
+                                        showAccountDeletionAlert = false
+                                        Task {
+                                            let success = await settingsViewModel.deleteAccount()
+                                            if success {
+                                                print("Account deleted successfully!")
+                                            } else {
+                                                print("Failed to delete account.")
                                             }
-                                            Button("Cancel", role: .cancel) {
-                                                // Resume the continuation with an empty string
-                                                settingsViewModel.passwordContinuation?.resume(returning: "")
-                                                settingsViewModel.passwordContinuation = nil // Clear the continuation
-                                                settingsViewModel.passwordInput = "" // Clear the password input
-                                            }
-                                        })
+                                        }
+                                    }
+                                    Button("no_keep_my_account".localized(), role: .cancel) {
+                                        showAccountDeletionAlert = false
+                                    }
+                                }, message: {
+                                    Text("we're_sad_to_see_you_go".localized())
+                                })
+                                
                                 Button(action: {
                                     settingsViewModel.logOut()
                                 }) {
-                                    Text("Log out")
+                                    Text("log_out".localized())
                                         .foregroundColor(.red)
                                 }
                             }
+                            .alert("enter_your_password".localized(), isPresented: $settingsViewModel.showPasswordAlert, actions: {
+                                SecureField("please_confirm_your_password".localized(), text: $settingsViewModel.passwordInput)
+                                Button("confirm_deletion".localized()) {
+                                    settingsViewModel.passwordContinuation?.resume(returning: settingsViewModel.passwordInput)
+                                    settingsViewModel.passwordContinuation = nil
+                                    settingsViewModel.passwordInput = ""
+                                }
+                                Button("cancel".localized(), role: .cancel) {
+                                    settingsViewModel.passwordContinuation?.resume(returning: "")
+                                    settingsViewModel.passwordContinuation = nil
+                                    settingsViewModel.passwordInput = ""
+                                }
+                            })
                             .listRowBackground(Color("darkerSecond"))
                         }
                         .scrollContentBackground(.hidden)
                         .listStyle(InsetGroupedListStyle())
-                        
                     }
                     .padding(.top, 50)
                     
@@ -194,29 +203,23 @@ struct SettingsView: View {
                     }
                     Spacer()
                 }
-                
-                //                Spacer()
-                //                Spacer()
             }
-                           // LoginView'e geçiş
-                           NavigationLink(
-                               destination: LoginView(),
-                               isActive: $navigateToLogin
-                           ) {
-                               EmptyView()
-                           }
+            NavigationLink(
+                destination: LoginView(),
+                isActive: $navigateToLogin
+            ) {
+                EmptyView()
+            }
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear{
             settingsViewModel.fetchUser()
         }
-        
-        
+        .onReceive(NotificationCenter.default.publisher(for: .languageChanged)) { _ in
+            reloadView.toggle()
+        }
     }
-    
-    
-    
 }
 
 #Preview {

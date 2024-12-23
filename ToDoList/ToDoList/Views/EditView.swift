@@ -29,7 +29,7 @@ struct EditView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
                 HStack{
-                    Text("Task Title")
+                    Text("task_title".localized())
                         .font(.headline)
                     Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                 }
@@ -48,18 +48,17 @@ struct EditView: View {
                         }
                     }
                 
-                Text("\(mytitle.count)/\(characterLimit) characters")
+                Text("\(mytitle.count)/\(characterLimit) " + "characters".localized())
                     .font(.footnote)
                     .foregroundColor( mytitle.count >= characterLimit ? .red : .secondary)
                 
                 HStack {
-                    Text("Task Priority")
+                    Text("priority".localized())
                         .font(.headline)
                     Spacer()
                     if selectedPriority == "Low" {
                         Group {
                             myIcon
-                            
                         }
                         .foregroundColor(.green)
                         .transition(.scale)
@@ -89,15 +88,23 @@ struct EditView: View {
                 .padding(.top,10)
                 .animation(.easeInOut, value: selectedPriority)
                 
-                Picker("Priority", selection: $selectedPriority) {
+                Picker("priority".localized(), selection: $selectedPriority) {
                     ForEach(["Low", "Medium", "High"], id: \.self) { priority in
-                        Text(priority)
-                            .tag(priority)
+                        if priority == "Low" {
+                            Text("low".localized())
+                                .tag("Low")
+                        } else if priority == "Medium" {
+                            Text("medium".localized())
+                                .tag("Medium")
+                        } else {
+                            Text("high".localized())
+                                .tag("High")
+                        }
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 
-                Text("Task Category")
+                Text("category".localized())
                     .font(.headline)
                     .padding(.top,10)
                 
@@ -106,8 +113,6 @@ struct EditView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "other"
                         }
-                        
-                        print("Other button tapped")
                     }, iconName: "diamond.fill",
                                          theColor: selectedCategory == "other" ? .red : .darkerSecond,
                                          theHeight: selectedCategory == "other" ? 55 : 40,
@@ -122,7 +127,6 @@ struct EditView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "home"
                         }
-                        print("home button tapped")
                     }, iconName: "house.fill",
                                          theColor: selectedCategory == "home" ? .orange : .darkerSecond,
                                          theHeight: selectedCategory == "home" ? 55 : 40,
@@ -137,7 +141,6 @@ struct EditView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "school"
                         }
-                        print("school button tapped")
                     }, iconName: "book.fill",
                                          theColor: selectedCategory == "school" ? .green : .darkerSecond,
                                          theHeight: selectedCategory == "school" ? 55 : 40,
@@ -165,14 +168,14 @@ struct EditView: View {
                 
                 if let dueDate = item.dueDate {
                     HStack {
-                        Text("Due Date:")
+                        Text("due_date".localized())
                             .font(.headline)
                         Text(viewModel.formattedDateLong(from: dueDate))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         Spacer()
                         if let dueDateStatus = viewModel.getDueDateStatus(from: dueDate) {
-                            if !(dueDateStatus.text == "Overdue" && item.isCompleted) {
+                            if !(dueDateStatus.text == "overdue".localized() && item.isCompleted) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(colorScheme == .dark ? .clear : Color(dueDateStatus.color.opacity(0.3)))
@@ -190,17 +193,16 @@ struct EditView: View {
                     .padding(.top,10)
                 }
                 
-                
                 Spacer()
                 
-                CustomButton(title: "Save Changes") {
+                CustomButton(title: "save_changes".localized()) {
                     saveButtonPressed()
                 }
                 HStack{
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text("cancel".localized())
                             .padding(.horizontal, 15)
                             .font(.headline)
                             .frame(maxWidth: .infinity)
@@ -214,7 +216,7 @@ struct EditView: View {
                             item.isCompleted.toggle()
                         }
                     }) {
-                        Text(item.isCompleted ? "Mark Not Completed 😔" : "Mark Completed 🥳")
+                        Text(item.isCompleted ? "mark_not_completed".localized() : "mark_completed".localized())
                             .padding(.horizontal, 15)
                             .font(.headline)
                             .frame(height: 55)
@@ -228,15 +230,19 @@ struct EditView: View {
             }
             .padding()
         }
+        .onDisappear {
+            presentationMode.wrappedValue.dismiss()
+        }
         .onAppear{
             loadData()
-            
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Close") {
+                Button {
                     hideKeyboard()
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
                 .foregroundColor(Color("AccentColor"))
             }
@@ -252,8 +258,6 @@ struct EditView: View {
     
     func loadData() {
         mytitle = item.title
-        print(mytitle)
-        print("hi guys")
     }
     func saveButtonPressed() {
         guard textIsAppropriate() else { return }
@@ -273,8 +277,6 @@ struct EditView: View {
             .collection("tasks")
             .document(item.id)
             .setData(itemCopy.asDictionary())
-        
-        print("save button pressed")
         presentationMode.wrappedValue.dismiss()
     }
     
@@ -284,15 +286,15 @@ struct EditView: View {
     }
     
     func textIsAppropriate() -> Bool {
-        let trimmedText = item.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedText = mytitle.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmedText.isEmpty {
-            alertTitle = "Task title cannot be empty!"
+            alertTitle = "task_title_cannot_be_empty".localized()
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
             return false
         }
         if trimmedText.count < 3 {
-            alertTitle = "Task title must be at least 3 characters long!"
+            alertTitle = "task_title_minimum_length".localized()
             showAlert.toggle()
             triggerHapticFeedback(type: .error)
             return false

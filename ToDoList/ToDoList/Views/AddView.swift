@@ -38,27 +38,26 @@ struct AddView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Task Title")
+                Text("task_title".localized())
                     .font(.headline)
                 
-                CustomTextField(placeholder: "Type something here...", text: $ItemModel.title, isSecure: false)
+                CustomTextField(placeholder: "type_something_here".localized(), text: $ItemModel.title, isSecure: false)
                     .submitLabel(.continue)
                     .onSubmit {
                         hideKeyboard()
                     }
-                
                     .onChange(of: ItemModel.title) { newValue in
                         if newValue.count > characterLimit {
                             ItemModel.title = String(newValue.prefix(characterLimit))
                         }
                     }
                 
-                Text("\(ItemModel.title.count)/\(characterLimit) characters")
+                Text("\(ItemModel.title.count)/\(characterLimit) " + "characters".localized())
                     .font(.footnote)
                     .foregroundColor(ItemModel.title.count >= characterLimit ? .red : .secondary)
                 
                 HStack {
-                    Text("Task Priority")
+                    Text("priority".localized())
                         .font(.headline)
                     Spacer()
                     if selectedPriority == "Low" {
@@ -91,15 +90,23 @@ struct AddView: View {
                 }
                 .padding(.top,10)
                 .animation(.easeInOut, value: selectedPriority)
-                Picker("Priority", selection: $selectedPriority) {
+                Picker("priority".localized(), selection: $selectedPriority) {
                     ForEach(taskPriority, id: \.self) { priority in
-                        Text(priority)
-                            .tag(priority)
+                        if priority == "Low" {
+                            Text("low".localized())
+                                .tag("Low")
+                        } else if priority == "Medium" {
+                            Text("medium".localized())
+                                .tag("Medium")
+                        } else {
+                            Text("high".localized())
+                                .tag("High")
+                        }
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 
-                Text("Task Category")
+                Text("category".localized())
                     .font(.headline)
                     .padding(.top,10)
                 
@@ -108,8 +115,6 @@ struct AddView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "other"
                         }
-                        
-                        print("Other button tapped")
                     }, iconName: "diamond.fill",
                                          theColor: selectedCategory == "other" ? .red : .darkerSecond,
                                          theHeight: selectedCategory == "other" ? 55 : 40,
@@ -124,7 +129,6 @@ struct AddView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "home"
                         }
-                        print("home button tapped")
                     }, iconName: "house.fill",
                                          theColor: selectedCategory == "home" ? .orange : .darkerSecond,
                                          theHeight: selectedCategory == "home" ? 55 : 40,
@@ -139,7 +143,6 @@ struct AddView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "school"
                         }
-                        print("school button tapped")
                     }, iconName: "book.fill",
                                          theColor: selectedCategory == "school" ? .green : .darkerSecond,
                                          theHeight: selectedCategory == "school" ? 55 : 40,
@@ -154,7 +157,6 @@ struct AddView: View {
                         withAnimation(.easeInOut(duration: 0.5)) {
                             selectedCategory = "job"
                         }
-                        print("job button tapped")
                     }, iconName: "briefcase.fill",
                                          theColor: selectedCategory == "job" ? .blue : .darkerSecond,
                                          theHeight: selectedCategory == "job" ? 55 : 40,
@@ -170,7 +172,7 @@ struct AddView: View {
                 if let selectedDate = selectedDate {
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {
-                            Text("Selected Due Date")
+                            Text("selected_due_date".localized())
                                 .font(.headline)
                             Text(selectedDate, style: .date)
                                 .font(.subheadline)
@@ -180,7 +182,7 @@ struct AddView: View {
                         Button {
                             showDateSheet = true
                         } label: {
-                            Text("Change")
+                            Text("change".localized())
                                 .padding(.horizontal, 15)
                                 .frame(height: 40)
                                 .background(.darkerSecond)
@@ -199,15 +201,14 @@ struct AddView: View {
                     }
                     .padding(.vertical)
                 } else {
-                    
                     HStack {
-                        Text("Do you have a deadline?")
+                        Text("do_you_have_a_deadline".localized())
                             .font(.headline)
                         Spacer()
                         Button {
                             showDateSheet = true
                         } label: {
-                            Text("Set a Due Date")
+                            Text("set_a_due_date".localized())
                                 .padding(.horizontal, 15)
                                 .frame(height: 40)
                                 .background(.darkerSecond)
@@ -221,13 +222,13 @@ struct AddView: View {
                 
                 Spacer()
                 
-                CustomButton(title: "Create Task") {
+                CustomButton(title: "create_task".localized()) {
                     saveButtonPressed()
                 }
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("cancel".localized())
                         .padding(.horizontal, 15)
                         .font(.headline)
                         .frame(maxWidth: .infinity)
@@ -240,11 +241,16 @@ struct AddView: View {
             }
             .padding()
         }
+        .onDisappear {
+            presentationMode.wrappedValue.dismiss()
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Close") {
+                Button {
                     hideKeyboard()
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
                 .foregroundColor(Color("AccentColor"))
             }
@@ -262,7 +268,9 @@ struct AddView: View {
     }
     
     func saveButtonPressed() {
-        if textIsAppropriate() {
+        
+        guard textIsAppropriate() else { return }
+        
             ItemModel.priority = selectedPriority
             ItemModel.category = selectedCategory
             if let selectedDate = selectedDate {
@@ -272,7 +280,6 @@ struct AddView: View {
             
             ItemModel.save()
             presentationMode.wrappedValue.dismiss()
-        }
     }
     
     func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {

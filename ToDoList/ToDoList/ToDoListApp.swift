@@ -22,12 +22,13 @@ struct ToDoListApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
- 
     @StateObject var authController = AuthController()
-    
+    @StateObject var settingsViewModel = SettingsViewModel()
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
     
     @AppStorage("isDarkMode") private var isDarkMode: Bool = UITraitCollection.current.userInterfaceStyle == .dark
+    @AppStorage("AppLanguage") private var selectedLanguage: String = "en"
+    
     var body: some Scene {
         WindowGroup {
             Group{
@@ -37,29 +38,25 @@ struct ToDoListApp: App {
                             ListView(userId: mainViewModel.currentUserId)
                         }
                         .tabItem {
-                            Label("Tasks", systemImage: "checklist")
+                            Label("tasks".localized(), systemImage: "checklist")
                         }
                         .navigationViewStyle(.stack)
-//                        .toolbar(.hidden)
-                        
-                        // Settings Tab
                         NavigationView {
                             SettingsView()
                         }
                         .tabItem {
-                            Label("Profile", systemImage: "person.fill")
+                            Label("profile".localized(), systemImage: "person.fill")
                         }
                         .navigationViewStyle(.stack)
-//                        .toolbar(.hidden)
                     }
                     .accentColor(Color("AccentColor"))
-//                    .transition(.scale)
                 } else {
                     
                     Group{
                         NavigationView {
                             LoginView()
                         }
+                        .tint(Color("AccentColor"))
                         .navigationViewStyle(.stack)
                         .task {
                             await authController.startListeningToAuthState()
@@ -67,11 +64,14 @@ struct ToDoListApp: App {
                     }
                     
                 }
-            }.environmentObject(authController)
-                .preferredColorScheme(isDarkMode ? .dark : .light)
-//
-
             }
+            .environmentObject(authController)
+                .preferredColorScheme(isDarkMode ? .dark : .light)
+                .environmentObject(settingsViewModel)
+                .onReceive(NotificationCenter.default.publisher(for: .languageChanged)) { _ in
+                    settingsViewModel.objectWillChange.send()
+                }
         }
+    }
     
 }

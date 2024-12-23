@@ -41,7 +41,7 @@ struct ListRowView: View {
                     
                     VStack {
                         if let status = dueDateStatus {
-                            if !(status.text == "Overdue" && item.isCompleted) {
+                            if !(status.text == "Overdue".localized() && item.isCompleted) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(colorScheme == .dark ? .clear : Color(status.color.opacity(0.3)))

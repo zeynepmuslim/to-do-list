@@ -15,17 +15,37 @@ import GoogleSignIn
 
 class SettingsViewModel: ObservableObject {
     @Published var user: UserModel? = nil
-    //    @Published var isLoggedIn: Bool = true
-    @Published var selectedLanguage: String = "English"
     
     @Published var showPasswordAlert: Bool = false
     @Published var passwordInput: String = ""
-    var passwordContinuation: CheckedContinuation<String, Never>?
     
-    let languageOptions = ["English", "Türkçe"]
+    @Published var selectedLanguage: String {
+        didSet {
+            UserDefaults.standard.set(selectedLanguage, forKey: "AppLanguage")
+            Bundle.setLanguage(selectedLanguage)
+            NotificationCenter.default.post(name: .languageChanged, object: nil) 
+        }
+    }
+    
+    var passwordContinuation: CheckedContinuation<String, Never>?
+    let languageOptions = ["en", "tr"]
     
     init() {
+        if let savedLanguage = UserDefaults.standard.string(forKey: "AppLanguage") {
+            selectedLanguage = savedLanguage
+        } else {
+            let preferredLanguage = Locale.preferredLanguages.first ?? "en"
+            
+            if preferredLanguage.starts(with: "tr") {
+                selectedLanguage = "tr"
+            } else {
+                selectedLanguage = "en"
+            }
+            
+            UserDefaults.standard.set(selectedLanguage, forKey: "AppLanguage")
+        }
         
+        Bundle.setLanguage(selectedLanguage)
     }
     
     func fetchUser() {
@@ -69,7 +89,6 @@ class SettingsViewModel: ObservableObject {
     
 }
 
-// for apple
 extension SettingsViewModel {
     func deleteAccount() async -> Bool {
         guard let user = Auth.auth().currentUser else { return false }
@@ -77,22 +96,16 @@ extension SettingsViewModel {
         let needsReauth = !lastSignInDate.isWithinPast(minutes: 5)
         
         do {
-            
-            // Check the provider used by the user
             if let providerID = user.providerData.first?.providerID {
                 if providerID == "apple.com" {
-                    // Reauthenticate for Sign in with Apple
                     try await reauthenticateWithApple(user: user, needsReauth: needsReauth)
                 } else if providerID == "password" {
-                    // Reauthenticate for Email/Password
                     try await reauthenticateWithEmail(user: user)
                 } else if providerID == "google.com" {
-                    // Reauthenticate for Google
                     try await reauthenticateWithGoogle(user: user)
                 }
             }
             try await deleteUserData(userId: user.uid)
-            // Delete user authentication
             try await user.delete()
             print("User successfully deleted.")
             return true
@@ -103,7 +116,6 @@ extension SettingsViewModel {
         return false
     }
     
-    // Reauthenticate for Apple Sign-In
     private func reauthenticateWithApple(user: User, needsReauth: Bool) async throws {
         
         
@@ -148,27 +160,21 @@ extension SettingsViewModel {
         throw NSError(domain: "Google Reauth Error", code: 4, userInfo: [NSLocalizedDescriptionKey: "No root view controller found."])
     }
         
-        // Step 2: Trigger Google Sign-In
         let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         
-        // Step 3: Extract tokens from the Google Sign-In result
         guard let idToken = result.user.idToken?.tokenString else {
             throw NSError(domain: "Google Reauth Error", code: 5, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch Google ID token."])
         }
         
         let accessToken = result.user.accessToken.tokenString
         
-        // Step 4: Create Firebase credential and reauthenticate
         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         try await user.reauthenticate(with: credential)
         
         print("Reauthenticated with Google successfully.")
     }
     
-    
-    // Reauthenticate for Email/Password
       private func reauthenticateWithEmail(user: User) async throws {
-          // Show an alert to the user to input their password
           let password = await getPasswordFromAlert()
 
           guard !password.isEmpty else {
@@ -180,7 +186,6 @@ extension SettingsViewModel {
                  throw NSError(domain: "Reauth Error", code: 400, userInfo: [NSLocalizedDescriptionKey: "Email is unavailable."])
              }
 
-             // Create a credential for reauthentication
              let credential = EmailAuthProvider.credential(withEmail: email, password: password)
              try await user.reauthenticate(with: credential)
              print("Reauthenticated successfully with Email/Password.")
@@ -189,8 +194,8 @@ extension SettingsViewModel {
     private func getPasswordFromAlert() async -> String {
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async {
-                self.showPasswordAlert = true // Trigger the alert
-                self.passwordContinuation = continuation // Save continuation for later resumption
+                self.showPasswordAlert = true
+                self.passwordContinuation = continuation
             }
         }
     }
@@ -199,13 +204,11 @@ extension SettingsViewModel {
         let db = Firestore.firestore()
         let userDocRef = db.collection("users").document(userId)
         
-        // Step 1: Delete all tasks in the `tasks` subcollection
         let taskDocs = try await userDocRef.collection("tasks").getDocuments()
         for task in taskDocs.documents {
             try await task.reference.delete()
         }
         
-        // Step 2: Delete the user document itself
         try await userDocRef.delete()
     }
     
@@ -244,14 +247,7 @@ extension SettingsViewModel {
     }
     
 }
-extension Date {
-    func isWithinPast(minutes: Int) -> Bool {
-        let now = Date.now
-        let timeAgo = Date.now.addingTimeInterval(-1 * TimeInterval(60 * minutes))
-        let range = timeAgo...now
-        return range.contains(self)
-    }
-}
+
 
 // MARK: - Sign in with Apple
 
@@ -282,4 +278,3 @@ class SignInWithApple: NSObject, ASAuthorizationControllerDelegate {
         continuation?.resume(throwing: error)
     }
 }
-

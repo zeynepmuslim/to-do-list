@@ -29,22 +29,25 @@ struct RegisterView: View {
     let theWidth = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                RoundedRectangle(cornerRadius: 0)
-                    .foregroundColor(Color("AccentColor"))
-                    .clipShape(
-                        .rect(
-                            topLeadingRadius: 0,
-                            bottomLeadingRadius: theWidth,
-                            bottomTrailingRadius: 0,
-                            topTrailingRadius: 0
+        ZStack {
+            VStack {
+                HStack {
+                    Spacer()
+                    RoundedRectangle(cornerRadius: 0)
+                        .foregroundColor(Color("AccentColor"))
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 0,
+                                bottomLeadingRadius: theWidth,
+                                bottomTrailingRadius: 0,
+                                topTrailingRadius: 0
+                            )
                         )
-                    )
-                    .ignoresSafeArea()
-                    .frame(width: theWidth / 2, height: theWidth / 2 )
-                    .offset(y: -30)
+                        .ignoresSafeArea()
+                        .frame(width: theWidth / 2, height: theWidth / 2 )
+                        .offset(y: -40)
+                }
+                Spacer()
             }
             
             VStack(alignment: .leading, spacing: 10) {
@@ -68,30 +71,25 @@ struct RegisterView: View {
                     }
                 ZStack(alignment: .trailing) {
                     if isPasswordVisible {
-                        // Şifre görünür durumda
                         CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: false)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.go)
-                            .onSubmit {
-                                hideKeyboard()
-                                validateFields()
+                            .onSubmit {                                validateFields()
                                 registerViewModel.register()
                             }
-                            .transition(.opacity) // Opacity geçişi ekliyoruz
+                            .transition(.opacity)
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     } else {
-                        // Şifre gizli durumda
                         CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: true)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.done)
                             .onSubmit {
-                                hideKeyboard()
                                 validateFields()
                                 registerViewModel.register()
                             }
-                            .transition(.opacity) // Opacity geçişi ekliyoruz
+                            .transition(.opacity)
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     }
                     
@@ -119,7 +117,6 @@ struct RegisterView: View {
                                        .transition(.opacity)
                                        .animation(.easeInOut, value: showErrorMessage)
                                }
-
                 
                 CustomButton(title: "Register") {
                     validateFields()
@@ -128,9 +125,9 @@ struct RegisterView: View {
                     print(registerViewModel.email)
                     print(registerViewModel.password)
                 }
+                
                 HStack {
-                    
-                    GoogleSignInButton(scheme: .light, style: .wide, state: .normal, action: {
+                    GoogleSignInButton(scheme: .light, style: .standard, state: .normal, action: {
                         signIn()
                     })
                     .cornerRadius(10)
@@ -156,30 +153,27 @@ struct RegisterView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Button("Close") {
-                    hideKeyboard()
-                }
                 Spacer()
-                Button("Register") {
+                Button {
                     hideKeyboard()
-                    validateFields()
-                    registerViewModel.register()
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
             }
         }
     }
     
     func hideKeyboard() {
-        fieldFocus = nil // Focus'u kaldır ve klavyeyi kapat
+        fieldFocus = nil
     }
     
     func validateFields() {
         if registerViewModel.email.isEmpty {
-            fieldFocus = .email // Email alanına odaklan
+            fieldFocus = .email
         } else if registerViewModel.password.isEmpty {
-            fieldFocus = .password // Password alanına odaklan
+            fieldFocus = .password
         } else {
-            fieldFocus = nil // Her iki alan da dolu
+            fieldFocus = nil
         }
     }
     

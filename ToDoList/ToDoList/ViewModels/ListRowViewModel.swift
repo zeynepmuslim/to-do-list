@@ -37,11 +37,11 @@ class ListRowViewModel: ObservableObject {
             let calendar = Calendar.current
 
             if dueDate < now, !calendar.isDateInToday(dueDate) {
-                return ("Overdue", .red)
+                return ("overdue".localized(), .red)
             } else if calendar.isDateInToday(dueDate) {
-                return ("Today", .blue)
+                return ("today".localized(), .blue)
             } else if calendar.isDateInTomorrow(dueDate) {
-                return ("Tomorrow", .yellow)
+                return ("tomorrow".localized(), .yellow)
             } else {
                 return nil
             }

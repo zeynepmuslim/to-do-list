@@ -15,17 +15,17 @@ struct NoItemsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                    Text("Your hub is empty 😔")
-                        .font(.title)
-                        .bold()
-                        .padding(.top, 50)
-                    Text("To start your hub, create a new task!")
-                        .foregroundStyle(.secondary)
-                        .padding(.bottom, 20)
+                Text("hub_is_empty".localized())
+                    .font(.title)
+                    .bold()
+                    .padding(.top, 50)
+                Text("start_hub".localized())
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 20)
                 NavigationLink {
                     AddView()
                 } label: {
-                    Text("✨ New Task ✨")
+                    Text("new_tas".localized())
                         .foregroundColor(.white)
                         .font(.headline)
                         .frame(height: 55)
@@ -41,14 +41,11 @@ struct NoItemsView: View {
                     y: animate ? 50 : 30)
                 .scaleEffect(animate ? 1.1 : 1.0)
                 .offset(y: animate ? -7 : 0)
-
-                
             }
             .frame(maxWidth: 400)
             .padding(50)
             .multilineTextAlignment(.center)
             .onAppear(perform: addAnimation)
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

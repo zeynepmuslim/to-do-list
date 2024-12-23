@@ -57,7 +57,7 @@ struct LoginView: View {
                 ZStack(alignment: .trailing) {
                     if isPasswordVisible {
                         
-                        CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: false)
+                        CustomTextField(placeholder: "password".localized(), text: $loginViewModel.password, isSecure: false)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.go)
@@ -69,7 +69,7 @@ struct LoginView: View {
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     } else {
                         
-                        CustomTextField(placeholder: "Password", text: $loginViewModel.password, isSecure: true)
+                        CustomTextField(placeholder: "password".localized(), text: $loginViewModel.password, isSecure: true)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.done)
@@ -107,17 +107,14 @@ struct LoginView: View {
                     }
                     Spacer()
                     NavigationLink(destination: PasswordResetView(isFromSettings: false)) {
-                        Text("Forgot Password?")
+                        Text("forget_password".localized())
                             .font(.footnote)
                             .foregroundColor(Color("AccentColor"))
                     }
                 }
                 .padding(.trailing, 10)
                 
-                
-                
-                CustomButton(title: "Login") {
-                    //                    hideKeyboard()
+                CustomButton(title: "login".localized()) {
                     validateFields()
                     loginViewModel.login()
                     print(loginViewModel.email)
@@ -126,9 +123,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 40)
             
-            //gggogle
             HStack {
-                //                Spacer()
                 GoogleSignInButton(scheme: .light, style: .standard, state: .normal, action: {
                     signInWithGoogle()
                 })
@@ -152,12 +147,12 @@ struct LoginView: View {
             Spacer()
             
             VStack {
-                Text("Don't have an account?")
+                Text("dont_have_account".localized())
                 NavigationLink {
                     RegisterView()
                         .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
                 } label: {
-                    Text("Create An Account 👀")
+                    Text("create_one".localized())
                         .fontWeight(.bold)
                         .foregroundColor(Color("AccentColor"))
                 }
@@ -169,8 +164,10 @@ struct LoginView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Close") {
+                Button {
                     hideKeyboard()
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
                 .foregroundColor(Color("AccentColor"))
             }

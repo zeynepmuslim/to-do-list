@@ -9,14 +9,14 @@ import FirebaseAuth
 import Foundation
 
 class ItemModelV2: ObservableObject {
-    @Published var id: String = UUID().uuidString // Benzersiz kimlik
-    @Published var title: String = "" // Görev başlığı
-    @Published var priority: String = "Low" // Görev önceliği ("Low", "Medium", "High")
-    @Published var category: String = "other" // Görev kategorisi ("other", "home", "school", "job")
-    @Published var dueDate: Date? = nil // Teslim tarihi (opsiyonel)
-    @Published var thereIsDate: Bool = false // Tarih olup olmadığını belirten bayrak
+    @Published var id: String = UUID().uuidString
+    @Published var title: String = ""
+    @Published var priority: String = "Low"
+    @Published var category: String = "other"
+    @Published var dueDate: Date? = nil
+    @Published var thereIsDate: Bool = false
     @Published var createdAt: TimeInterval = Date().timeIntervalSince1970
-    @Published var isCompleted: Bool = false // Görev tamamlanma durumu
+    @Published var isCompleted: Bool = false
     
     init() {}
     
@@ -30,7 +30,6 @@ class ItemModelV2: ObservableObject {
         
         let db = Firestore.firestore()
         
-        // `TaskModel` nesnesini oluştur
         let task = TaskModel(
             id: id,
             title: title,
@@ -43,7 +42,6 @@ class ItemModelV2: ObservableObject {
         )
         
         do {
-            // `task` modelini JSON formatına çevir ve Firestore'a kaydet
             try db.collection("users")
                 .document(uId)
                 .collection("tasks")
@@ -53,15 +51,4 @@ class ItemModelV2: ObservableObject {
             print("Error saving task: \(error)")
         }
     }
-//    init (id: String = UUID().uuidString, title: String, isCompleted: Bool, dueDate: Date) {
-//        self.id = id
-//        self.title = title
-//        self.isCompleted = isCompleted
-//        self.dueDate = dueDate
-//    }
-//    
-    
-//    func updateCompletion() -> ItemModelV2 {
-//        return ItemModelV2(id: id, title: title, isCompleted: !isCompleted, dueDate: dueDate)
-//    }
 }
