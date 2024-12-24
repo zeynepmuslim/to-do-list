@@ -41,7 +41,12 @@ struct AddView: View {
         Category(key: "school", iconName: "book.fill", color: .green),
         Category(key: "job", iconName: "briefcase.fill", color: .blue)
     ]
-    
+
+    let taskPriorities: [(key: String, localizedKey: String, iconCount: Int, color: Color, emoji: String)] = [
+        (key: "Low", localizedKey: "low", iconCount: 1, color: .green, emoji: "😌"),
+        (key: "Medium", localizedKey: "medium", iconCount: 2, color: .yellow, emoji: "😬"),
+        (key: "High", localizedKey: "high", iconCount: 3, color: .red, emoji: "🤯")
+    ]
     
     var body: some View {
         ScrollView {
@@ -64,55 +69,7 @@ struct AddView: View {
                     .font(.footnote)
                     .foregroundColor(ItemModel.title.count >= characterLimit ? .red : .secondary)
                 
-                HStack {
-                    Text("priority".localized())
-                        .font(.headline)
-                    Spacer()
-                    if selectedPriority == "Low" {
-                        Group {
-                            myIcon                        }
-                        .foregroundColor(.green)
-                        .transition(.scale)
-                        Text("😌")
-                            .transition(.opacity)
-                    } else if selectedPriority == "Medium" {
-                        Group {
-                            myIcon
-                            myIcon
-                        }
-                        .foregroundColor(.yellow)
-                        .transition(.scale)
-                        Text("😬")
-                            .transition(.opacity)
-                    } else {
-                        Group {
-                            myIcon
-                            myIcon
-                            myIcon
-                        }
-                        .foregroundColor(.red)
-                        .transition(.scale)
-                        Text("🤯")
-                            .transition(.opacity)
-                    }
-                }
-                .padding(.top,10)
-                .animation(.easeInOut, value: selectedPriority)
-                Picker("priority".localized(), selection: $selectedPriority) {
-                    ForEach(taskPriority, id: \.self) { priority in
-                        if priority == "Low" {
-                            Text("low".localized())
-                                .tag("Low")
-                        } else if priority == "Medium" {
-                            Text("medium".localized())
-                                .tag("Medium")
-                        } else {
-                            Text("high".localized())
-                                .tag("High")
-                        }
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
+                PriorityView(selectedPriority: $selectedPriority, priorities: taskPriorities)
                 
                 Text("category".localized())
                     .font(.headline)

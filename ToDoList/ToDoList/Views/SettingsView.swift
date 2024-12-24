@@ -52,14 +52,7 @@ struct SettingsView: View {
             }
             
             VStack {
-                HStack {
-                    Text("profile".localized() + " 🔎")
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                    Spacer()
-                }
-                .padding(.horizontal,20)
-                .padding(.top, 15)
+                TitleView(title: "profile".localized(), subtitle: nil, symbol: "🔍")
                 
                 if let user = settingsViewModel.user {
                     

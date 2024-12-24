@@ -120,35 +120,13 @@ struct ListView: View {
             }
             if items.isEmpty {
                 VStack{
-                    HStack(spacing: 0) {
-                        Text("Task")
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
-                        Text("Hub 📝")
-                            .font(.largeTitle)
-                            .fontWeight(.light)
-                        Spacer()
-                    }
-                    .padding(.horizontal,20)
-                    .padding(.top, 15)
+                    TitleView(title: "Task", subtitle: "Hub 📝", symbol: nil)
                     NoItemsView()
                         .transition(AnyTransition.opacity.combined(with: .slide).animation(.easeInOut))
                 }
             } else {
                 VStack {
-                    HStack(spacing: 0) {
-                        Text("Task")
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
-                        Text("Hub 📝")
-                            .font(.largeTitle)
-                            .fontWeight(.light)
-                        Spacer()
-                    }
-                    .padding(.horizontal,20)
-                    .padding(.top, 15)
-                    
-                    
+                    TitleView(title: "Task", subtitle: "Hub 📝", symbol: nil)                   
                     CategoryTabs(
                         selectedTab: $selectedTab,
                         tabsWithIconsAndColors: [
@@ -304,9 +282,6 @@ struct ListView: View {
                     label: { EmptyView() }
                 )
             }
-        }
-        .onAppear{
-            print("listeler")
         }
     }
     func triggerHapticFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {

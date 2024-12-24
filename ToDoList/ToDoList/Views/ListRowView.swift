@@ -37,7 +37,7 @@ struct ListRowView: View {
                     .foregroundColor(Color("darkerSecond"))
                 
                 if let dueDate = item.dueDate {
-                    let dueDateStatus = viewModel.getDueDateStatus(from: dueDate)
+                    let dueDateStatus = viewModel.getDueDateStatus(from: dueDate, isCompleted: item.isCompleted)
                     
                     VStack {
                         if let status = dueDateStatus {
@@ -78,13 +78,13 @@ struct ListRowView: View {
                 }
                 
                 if !hideCategoryIcon {
-                    Image(systemName: viewModel.categorySymbol(for: item.category))
-                        .foregroundColor(viewModel.categoryColor(for: item.category))
+                    Image(systemName: viewModel.categorySymbol(for: item.category, isCompleted: item.isCompleted))
+                        .foregroundColor(viewModel.categoryColor(for: item.category, isCompleted: item.isCompleted))
                         .font(.callout)
                 }
                 
-                Image(systemName: viewModel.prioritySymbol(for: item.priority))
-                    .foregroundColor(viewModel.priorityColor(for: item.priority))
+                Image(systemName: viewModel.prioritySymbol(for: item.priority, isCompleted: item.isCompleted))
+                    .foregroundColor(viewModel.priorityColor(for: item.priority, isCompleted: item.isCompleted))
                     .font(.callout)
             }
             .contentShape(Rectangle())
@@ -93,7 +93,7 @@ struct ListRowView: View {
             }
             
             Image(systemName: "info.circle")
-                .foregroundColor(.blue)
+                .foregroundColor(item.isCompleted ? .gray : .blue)
                 .onTapGesture {
                     onInfoButtonTap()
                     showDetailsSheet.toggle()
