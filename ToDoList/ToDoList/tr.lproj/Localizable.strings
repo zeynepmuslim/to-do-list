@@ -14,7 +14,7 @@
 "we're_sorry_to_see_you_go" = "Sizi kaybettiğimiz için üzgünüz 🥺";
 "yes_delete_my_account" = "Evet, Hesabımı Sil 😢";
 "no_keep_my_account" = "Hayır, Hesabımı Tut ❤️";
-"we're_sad_to_see_you_go" = "Sizi kaybettiğimiz için üzgünüz! 😢\nDeneyiminizi daha iyi hale getirmek için yapabileceğimiz bir şey varsa, lütfen bize bildirin! 💌\n\nTopluluğumuzun bir parçası olduğunuz için teşekkür ederiz! 🙏";
+"we're_sad_to_see_you_go" = "Sizi kaybettiğimiz için üzgünüz! \nDeneyiminizi daha iyi hale getirmek için yapabileceğimiz bir şey varsa, lütfen bize bildirin! 💌\n\nTopluluğumuzun bir parçası olduğunuz için teşekkür ederiz! 🙏";
 "enter_your_password" = "Şifrenizi girin 🛡️";
 "please_confirm_your_password" = "Lütfen devam etmek için şifrenizi onaylayın.";
 "confirm_deletion" = "Silme İşlemini Onayla";
@@ -35,6 +35,7 @@
 "medium" = "Orta";
 "high" = "Yüksek";
 "due_date" = "Son tarih:";
+"due_date_for_sort" = "Son Tarih:";
 "overdue" = "Geçmiş";
 "today" = "Bugün";
 "tomorrow" = "Yarın";
@@ -79,5 +80,12 @@
 "ok" = "Tamam";
 "hub_is_empty" = "Görev merkezin bomboş 😔";
 "start_hub" = "Yeni bir merkez için hemen bir görev oluştur!";
-"new_tas" = "✨ Yeni Görev ✨";
+"new_task" = "✨ Yeni Görev ✨";
 "save" = "Kaydet";
+"create_hub_register" = "Yeni görev merkezini şimdi oluştur! 🚀";
+"full_name" = "İsim ve Soyisim";
+"register" = "Kayıt Ol";
+"sign_in_error" = "Maalesef işler yolunda gitmedi 😖";
+"sign_in_error_message" = "Lütfen tekrar deneyin";
+"back_button" = "Geri";
+

@@ -33,7 +33,7 @@ struct ListView: View {
             switch self {
             case .title: return "title".localized()
             case .createdAt: return "created_date".localized()
-            case .dueDate: return "due_date".localized()
+            case .dueDate: return "due_date_for_sort".localized()
             case .priority: return "priority".localized()
             case .category: return "category".localized()
             }

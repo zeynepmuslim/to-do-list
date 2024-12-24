@@ -28,8 +28,8 @@ struct LoginView: View {
     
     @EnvironmentObject var authController: AuthController
     @StateObject var loginViewModel = LoginViewModel()
-    @State private var showErrorMessage = false
-    
+    @State private var showErrorMessage = false // text fields
+    @State private var showSignInError = false // trigger for google & apple sign in catch error
     @FocusState private var fieldFocus: OnboardingFields?
     
     enum OnboardingFields: Hashable {
@@ -142,6 +142,9 @@ struct LoginView: View {
                     
                 }
             }
+            .alert(isPresented: $showSignInError) {
+                Alert(title: Text("sign_in_error".localized()), message: Text("sign_in_error_message".localized()), dismissButton: .default(Text("ok".localized())))
+            }
             .padding(.horizontal, 40)
             
             Spacer()
@@ -200,6 +203,7 @@ struct LoginView: View {
                 try await authController.signInsignInWithGoogle()
             } catch {
                 print(error.localizedDescription)
+                showSignInError = true
             }
         }
     }
@@ -211,6 +215,7 @@ struct LoginView: View {
                 try await authController.signInsignInWithApple()
             } catch {
                 print(error.localizedDescription)
+                showSignInError = true
             }
         }
     }

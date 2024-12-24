@@ -41,7 +41,7 @@ struct ListRowView: View {
                     
                     VStack {
                         if let status = dueDateStatus {
-                            if !(status.text == "Overdue".localized() && item.isCompleted) {
+                            if !(status.text == "overdue".localized() && item.isCompleted) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(colorScheme == .dark ? .clear : Color(status.color.opacity(0.3)))
@@ -59,9 +59,7 @@ struct ListRowView: View {
                                         .font(.caption)
                                     Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
                                         .foregroundColor(.gray)
-                                        .font(.caption)
-                                    
-                                }
+                                        .font(.caption)                                }
                             }
                         } else {
                             HStack(alignment: .bottom) {

@@ -16,7 +16,8 @@ struct RegisterView: View {
     @StateObject var registerViewModel = RegisterViewModel()
     
     @FocusState private var fieldFocus: OnboardingFields?
-    @State private var showErrorMessage = false
+    @State private var showErrorMessage = false // text fields
+    @State private var showSignInError = false // trigger for google & apple sign in catch error
     
     enum OnboardingFields: Hashable {
         case name
@@ -51,10 +52,10 @@ struct RegisterView: View {
             }
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Create our hub of tasks now! 🚀")
+                Text("create_hub_register".localized())
                     .font(.title)
                     .bold()
-                CustomTextField(placeholder: "Full Name", text: $registerViewModel.name)
+                CustomTextField(placeholder: "full_name".localized(), text: $registerViewModel.name)
                     .focused($fieldFocus, equals: .name)
                     .submitLabel(.next)
                     .onSubmit {
@@ -71,7 +72,7 @@ struct RegisterView: View {
                     }
                 ZStack(alignment: .trailing) {
                     if isPasswordVisible {
-                        CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: false)
+                        CustomTextField(placeholder: "password".localized(), text: $registerViewModel.password, isSecure: false)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.go)
@@ -81,7 +82,7 @@ struct RegisterView: View {
                             .transition(.opacity)
                             .animation(.easeInOut(duration: 0.3), value: isPasswordVisible)
                     } else {
-                        CustomTextField(placeholder: "Password", text: $registerViewModel.password, isSecure: true)
+                        CustomTextField(placeholder: "password".localized(), text: $registerViewModel.password, isSecure: true)
                             .textContentType(.password)
                             .focused($fieldFocus, equals: .password)
                             .submitLabel(.done)
@@ -118,7 +119,7 @@ struct RegisterView: View {
                                        .animation(.easeInOut, value: showErrorMessage)
                                }
                 
-                CustomButton(title: "Register") {
+                CustomButton(title: "register".localized()) {
                     validateFields()
                     registerViewModel.register()
                     print(registerViewModel.name)
@@ -136,21 +137,22 @@ struct RegisterView: View {
                     Button {
                         signInWithApple()
                     } label: {
-                        
                         SignInWithAppleButtonViewRepressentable(type: .signUp, style: .white)
                             .allowsHitTesting(false)
                             .frame(height: 40)
                             .cornerRadius(10)
                             .shadow(color: .secondary.opacity(0.4), radius: 7, x: 0, y: 10)
                     }
-
                 }
-                
+                .alert(isPresented: $showSignInError) {
+                    Alert(title: Text("sign_in_error".localized()), message: Text("sign_in_error_message".localized()), dismissButton: .default(Text("ok".localized())))
+                }
             }
             .padding(.horizontal, 40)
             .padding(.top, 10)
             Spacer()
         }
+        .customNavigation()
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -184,6 +186,7 @@ struct RegisterView: View {
                 try await authController.signInsignInWithGoogle()
             } catch {
                 print(error.localizedDescription)
+                showSignInError = true
             }
         }
     }
@@ -195,6 +198,7 @@ struct RegisterView: View {
                 try await authController.signInsignInWithApple()
             } catch {
                 print(error.localizedDescription)
+                showSignInError = true
             }
         }
     }

@@ -76,6 +76,7 @@ struct PasswordResetView: View {
             .onDisappear {
                 presentationMode.wrappedValue.dismiss()
             }
+            .customNavigation()
             .alert(isPresented: $showAlert) {
                 if message.contains("error".localized()) {
                     return Alert(

@@ -62,7 +62,6 @@ struct ToDoListApp: App {
                             await authController.startListeningToAuthState()
                         }
                     }
-                    
                 }
             }
             .environmentObject(authController)

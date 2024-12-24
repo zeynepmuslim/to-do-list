@@ -25,6 +25,19 @@ struct EditView: View {
     
     private let characterLimit = 100
     
+    struct Category {
+        let key: String
+        let iconName: String
+        let color: Color
+    }
+    
+    let categories: [Category] = [
+        Category(key: "other", iconName: "diamond.fill", color: .red),
+        Category(key: "home", iconName: "house.fill", color: .orange),
+        Category(key: "school", iconName: "book.fill", color: .green),
+        Category(key: "job", iconName: "briefcase.fill", color: .blue)
+    ]
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
@@ -109,61 +122,25 @@ struct EditView: View {
                     .padding(.top,10)
                 
                 HStack(alignment: .center) {
-                    CustomCategoryButton(title: "Other", action: {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            selectedCategory = "other"
-                        }
-                    }, iconName: "diamond.fill",
-                                         theColor: selectedCategory == "other" ? .red : .darkerSecond,
-                                         theHeight: selectedCategory == "other" ? 55 : 40,
-                                         iconFont: selectedCategory == "other" ? .title : .callout,
-                                         fontColor: selectedCategory == "other" ? .white : .gray
-                    )
-                    .shadow(
-                        color: selectedCategory == "other" ? .red.opacity(0.7) : .gray.opacity(0.0),
-                        radius: selectedCategory == "other" ? 0 : 30)
-                    
-                    CustomCategoryButton(title: "Home", action: {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            selectedCategory = "home"
-                        }
-                    }, iconName: "house.fill",
-                                         theColor: selectedCategory == "home" ? .orange : .darkerSecond,
-                                         theHeight: selectedCategory == "home" ? 55 : 40,
-                                         iconFont: selectedCategory == "home" ? .title : .callout,
-                                         fontColor: selectedCategory == "home" ? .white : .gray
-                    )
-                    .shadow(
-                        color: selectedCategory == "home" ? .orange.opacity(0.7) : .orange.opacity(0.0),
-                        radius: selectedCategory == "home" ? 0 : 30)
-                    
-                    CustomCategoryButton(title: "School", action: {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            selectedCategory = "school"
-                        }
-                    }, iconName: "book.fill",
-                                         theColor: selectedCategory == "school" ? .green : .darkerSecond,
-                                         theHeight: selectedCategory == "school" ? 55 : 40,
-                                         iconFont: selectedCategory == "school" ? .title : .callout,
-                                         fontColor: selectedCategory == "school" ? .white : .gray
-                    )
-                    .shadow(
-                        color: selectedCategory == "school" ? .green.opacity(0.7) : .green.opacity(0.0),
-                        radius: selectedCategory == "school" ? 0 : 30)
-                    
-                    CustomCategoryButton(title: "Job", action: {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            selectedCategory = "job"
-                        }
-                    }, iconName: "briefcase.fill",
-                                         theColor: selectedCategory == "job" ? .blue : .darkerSecond,
-                                         theHeight: selectedCategory == "job" ? 55 : 40,
-                                         iconFont: selectedCategory == "job" ? .title : .callout,
-                                         fontColor: selectedCategory == "job" ? .white : .gray
-                    )
-                    .shadow(
-                        color: selectedCategory == "job" ? .blue.opacity(0.7) : .blue.opacity(0.0),
-                        radius: selectedCategory == "job" ? 0 : 30)
+                    ForEach(categories, id: \.key) { category in
+                        CustomCategoryButton(
+                            title: category.key.localized(),
+                            action: {
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    selectedCategory = category.key
+                                }
+                            },
+                            iconName: category.iconName,
+                            theColor: selectedCategory == category.key ? category.color : .darkerSecond,
+                            theHeight: selectedCategory == category.key ? 55 : 40,
+                            iconFont: selectedCategory == category.key ? .title : .callout,
+                            fontColor: selectedCategory == category.key ? .white : .gray
+                        )
+                        .shadow(
+                            color: selectedCategory == category.key ? category.color.opacity(0.5) : category.color.opacity(0.0),
+                            radius: selectedCategory == category.key ? 15 : 0
+                        )
+                    }
                 }
                 
                 if let dueDate = item.dueDate {
@@ -236,6 +213,7 @@ struct EditView: View {
         .onAppear{
             loadData()
         }
+        .customNavigation()
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

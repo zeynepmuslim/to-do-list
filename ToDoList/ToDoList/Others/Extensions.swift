@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 extension Encodable {
     func asDictionary() -> [String: Any] {
@@ -62,5 +63,11 @@ extension String {
             return self
         }
         return NSLocalizedString(self, bundle: bundle, comment: "")
+    }
+}
+
+extension View {
+    func customNavigation() -> some View {
+        self.modifier(CustomNavigationModifier())
     }
 }

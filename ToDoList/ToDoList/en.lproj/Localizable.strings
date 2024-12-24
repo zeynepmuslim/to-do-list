@@ -35,6 +35,7 @@
 "medium" = "Medium";
 "high" = "High";
 "due_date" = "Due Date:";
+"due_date_for_sort" = "Due Date";
 "overdue" = "Overdue";
 "today" = "Today";
 "tomorrow" = "Tomorrow";
@@ -79,4 +80,11 @@
 "ok" = "OK";
 "hub_is_empty" = "Your hub is empty 😔";
 "start_hub" = "To start your hub, create a new task!";
-"new_tas" = "✨ New Task ✨";
+"new_task" = "✨ New Task ✨";
+"save" = "Kaydet";
+"create_hub_register" = "Create your hub of tasks now! 🚀";
+"full_name" = "Full Name";
+"register" = "Register";
+"sign_in_error" = "Unfortunately, things didn't go as planned 😖";
+"sign_in_error_message" = "Please try again";
+"back_button" = "Back";

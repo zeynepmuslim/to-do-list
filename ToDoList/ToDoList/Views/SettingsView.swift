@@ -28,16 +28,12 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack{
-            
             Color(isDarkMode ? Color.black : Color.white)
                 .edgesIgnoringSafeArea(.all)
                 .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
-            
             HStack{
-                
                 Spacer()
                 VStack{
-                    
                     RoundedRectangle(cornerRadius: 0)
                         .foregroundColor(Color("AccentColor"))
                         .clipShape(
@@ -51,7 +47,6 @@ struct SettingsView: View {
                         .ignoresSafeArea()
                         .frame(width: theWidth / 2.5, height: theWidth / 2.5 )
                         .offset(y: -40)
-                    
                     Spacer()
                 }
             }
@@ -111,8 +106,6 @@ struct SettingsView: View {
                             .onTapGesture {
                                 withAnimation {
                                     animateTransition.toggle()
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                     isDarkMode.toggle()
                                 }
                             }
@@ -139,6 +132,12 @@ struct SettingsView: View {
                                 NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
                                     Text("change_password".localized())
                                 }
+                                Button(action: {
+                                    settingsViewModel.logOut()
+                                }) {
+                                    Text("log_out".localized())
+                                        .foregroundColor(.red)
+                                }
                                 Button{
                                     showAccountDeletionAlert.toggle()
                                 } label: {
@@ -163,13 +162,6 @@ struct SettingsView: View {
                                 }, message: {
                                     Text("we're_sad_to_see_you_go".localized())
                                 })
-                                
-                                Button(action: {
-                                    settingsViewModel.logOut()
-                                }) {
-                                    Text("log_out".localized())
-                                        .foregroundColor(.red)
-                                }
                             }
                             .alert("enter_your_password".localized(), isPresented: $settingsViewModel.showPasswordAlert, actions: {
                                 SecureField("please_confirm_your_password".localized(), text: $settingsViewModel.passwordInput)

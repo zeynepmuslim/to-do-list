@@ -25,7 +25,7 @@ struct NoItemsView: View {
                 NavigationLink {
                     AddView()
                 } label: {
-                    Text("new_tas".localized())
+                    Text("new_task".localized())
                         .foregroundColor(.white)
                         .font(.headline)
                         .frame(height: 55)
