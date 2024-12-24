@@ -11,6 +11,7 @@ import FirebaseFirestore
 struct ListView: View {
     @StateObject var viewModel : ListViewModel
     @FirestoreQuery var items : [TaskModel]
+    @Environment(\.colorScheme) var colorScheme
     
     @State var selectedTab: String = "all"
     @State var tabs = ["all","other", "home", "school", "job"]
@@ -196,6 +197,10 @@ struct ListView: View {
                                             Image(systemName: "line.3.horizontal.decrease")
                                                 .foregroundColor(Color("AccentColor"))
                                         }
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 3)
+                                        .background(Color(colorScheme == .dark ? .black : .white))
+                                        .cornerRadius(20)
                                     }
                                 }) {
                                     ForEach(sortedTasks.filter { !$0.isCompleted }) { item in
@@ -227,6 +232,10 @@ struct ListView: View {
                                         Text("delete_all".localized())
                                             .font(.caption)
                                             .foregroundColor(.red)
+                                            .padding(.horizontal, 15)
+                                            .padding(.vertical, 5)
+                                            .background(Color(colorScheme == .dark ? .black : .white))
+                                            .cornerRadius(20)
                                     }
                                 }) {
                                     ForEach(sortedTasks.filter { $0.isCompleted }) { item in
@@ -309,5 +318,5 @@ struct ListView: View {
 #Preview {
     NavigationView {
         ListView(userId: "grPKdiOzI1hfATayLiHG1au3uC52")
-    }
+    }.navigationViewStyle(.stack)
 }
