@@ -12,6 +12,8 @@ struct NoItemsView: View {
     @State var animate: Bool = false
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
+    @State private var viewID = UUID() // trigger relode for language change 
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
@@ -48,6 +50,10 @@ struct NoItemsView: View {
             .onAppear(perform: addAnimation)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onDisappear {
+            print("ChildView kapandı!")
+            viewID = UUID()
+        }
     }
     
     func addAnimation() {

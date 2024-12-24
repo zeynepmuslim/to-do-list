@@ -210,8 +210,8 @@ struct ListView: View {
                                         Text("delete_all".localized())
                                             .font(.caption)
                                             .foregroundColor(.red)
-                                            .padding(.horizontal, 15)
-                                            .padding(.vertical, 5)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 3)
                                             .background(Color(colorScheme == .dark ? .black : .white))
                                             .cornerRadius(20)
                                     }
