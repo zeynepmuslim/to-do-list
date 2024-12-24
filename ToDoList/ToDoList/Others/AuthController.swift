@@ -148,7 +148,6 @@ class AuthController: NSObject, ObservableObject {
 
 extension AuthController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        // Uygulamanızın ana pencere referansını döndürün
         return UIApplication.shared.windows.first { $0.isKeyWindow } ?? UIWindow()
     }
 }
@@ -221,7 +220,6 @@ extension AuthController: ASAuthorizationControllerDelegate {
    
 }
 func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-    // Handle error.
     print("Sign in with Apple errored: \(error)")
 }
 

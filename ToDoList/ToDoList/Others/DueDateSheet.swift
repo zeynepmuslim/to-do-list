@@ -11,9 +11,8 @@ import SwiftUI
 struct DueDateSheet: View {
     @Binding var selectedDate: Date?
     @Binding var dateChanged: Bool
-    @Environment(\.dismiss) var dismiss // Sheet'i kapatmak için
+    @Environment(\.dismiss) var dismiss
     
-    // Bugün ve yarın için dinamik kısayollar
     private var today: Date {
         Calendar.current.startOfDay(for: Date())
     }
@@ -21,17 +20,14 @@ struct DueDateSheet: View {
         Calendar.current.date(byAdding: .day, value: 1, to: today)!
     }
     
-    // Seçilen tarihi kontrol etmek için geçerli tarih
     @State private var currentDate: Date = Date()
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("Set Due Date")
+            Text("set_a_due_date".localized())
                 .font(.headline)
                 .padding(.top)
-            
-            // Tarih seçici (Date Picker Wheel)
-            DatePicker(
+                        DatePicker(
                 "Select a date",
                 selection: $currentDate,
                 in: today...,
@@ -39,9 +35,8 @@ struct DueDateSheet: View {
             )
             .datePickerStyle(WheelDatePickerStyle())
             .labelsHidden()
-            .tint(Color("AccentColor")) // Tint rengini uygulama
+            .tint(Color("AccentColor"))
             
-            // Bugün ve Yarın kısayol düğmeleri
             HStack(spacing: 20) {
                 Button(action: {
                     currentDate = today
@@ -49,7 +44,7 @@ struct DueDateSheet: View {
                     dateChanged = true
                     dismiss()
                 }) {
-                    Text("Today")
+                    Text("today".localized())
                         .font(.headline)
                         .font(.headline)
                          .frame(maxWidth: .infinity)
@@ -65,7 +60,7 @@ struct DueDateSheet: View {
                     dateChanged = true
                     dismiss()
                 }) {
-                    Text("Tomorrow")
+                    Text("tomorrow".localized())
                         .font(.headline)
                          .frame(maxWidth: .infinity)
                          .padding()
@@ -76,13 +71,13 @@ struct DueDateSheet: View {
             }
             .padding(.horizontal)
             
-            // Kaydet düğmesi
+      
             Button(action: {
                 selectedDate = currentDate
                 dateChanged = true
-                dismiss() // Sheet'i kapat
+                dismiss()
             }) {
-                Text("Save")
+                Text("save".localized())
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -95,12 +90,6 @@ struct DueDateSheet: View {
             Spacer()
         }
         .padding()
-        .presentationDetents([.fraction(0.8)]) // Alttan çıkan, sayfayı kaplamayan bir Sheet
+        .presentationDetents([.fraction(0.8)])
     }
 }
-
-//#Preview {
-//    DueDateSheet(selectedDate: Date?) {
-//        
-//    }
-//}

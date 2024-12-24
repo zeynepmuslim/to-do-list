@@ -11,8 +11,8 @@ import SwiftUI
 struct CustomButton: View {
     var title: String
     var action: () -> Void
-    var backgroundColor: Color = Color("AccentColor") // Varsayılan renk
-    var textColor: Color = .white // Varsayılan metin rengi
+    var backgroundColor: Color = Color("AccentColor")
+    var textColor: Color = .white
 
     var body: some View {
         Button(action: action) {

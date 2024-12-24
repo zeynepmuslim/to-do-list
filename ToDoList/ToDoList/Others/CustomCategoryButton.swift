@@ -33,7 +33,6 @@ struct CustomCategoryButton: View {
             .foregroundColor(fontColor)
             .background(theColor)
             .cornerRadius(10)
-          //  .frame(height: 55)
         }
     }
 }

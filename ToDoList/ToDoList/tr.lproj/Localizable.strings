@@ -26,7 +26,7 @@
 "selected_due_date" = "Seçilen Son Tarih";
 "change" = "Değiştir";
 "do_you_have_a_deadline" = "Zaman sınırı var mı?";
-"set_a_due_date" = "Son Tarih Belirleyin";
+"set_a_due_date" = "Son Tarihi Belirleyin";
 "create_task" = "Görev Oluştur";
 "close" = "Kapat";
 "task_title_cannot_be_empty" = "Görev başlığı boş olamaz!";
@@ -80,3 +80,4 @@
 "hub_is_empty" = "Görev merkezin bomboş 😔";
 "start_hub" = "Yeni bir merkez için hemen bir görev oluştur!";
 "new_tas" = "✨ Yeni Görev ✨";
+"save" = "Kaydet";
