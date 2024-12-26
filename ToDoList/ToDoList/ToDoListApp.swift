@@ -27,7 +27,10 @@ struct ToDoListApp: App {
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
     
     @AppStorage("isDarkMode") private var isDarkMode: Bool = UITraitCollection.current.userInterfaceStyle == .dark
-    @AppStorage("AppLanguage") private var selectedLanguage: String = "en"
+    @AppStorage("AppLanguage") private var selectedLanguage: String = {
+        let deviceLanguage = Locale.preferredLanguages.first ?? "en"
+        return deviceLanguage.starts(with: "tr") ? "tr" : "en"
+    }()
     
     var body: some Scene {
         WindowGroup {

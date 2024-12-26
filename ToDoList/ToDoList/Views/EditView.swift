@@ -20,6 +20,8 @@ struct EditView: View {
     @State var myThereIsDate = true
     @State var myDate = Date(timeIntervalSince1970: 0)
     
+    
+    let selectedLanguage = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     let darkerSecond = Color("DarkerSecond")
     let myIcon = Image(systemName: "star.fill")
     
@@ -103,7 +105,7 @@ struct EditView: View {
                     HStack {
                         Text("due_date".localized())
                             .font(.headline)
-                        Text(viewModel.formattedDateLong(from: dueDate))
+                        Text(viewModel.formattedDateLong(from: dueDate, localeIdentifier: selectedLanguage))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         Spacer()
@@ -134,6 +136,7 @@ struct EditView: View {
                 HStack{
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        triggerHapticFeedback(type: .warning)
                     } label: {
                         Text("cancel".localized())
                             .padding(.horizontal, 15)
@@ -147,6 +150,7 @@ struct EditView: View {
                     Button(action: {
                         withAnimation(.easeInOut) {
                             item.isCompleted.toggle()
+                            triggerHapticFeedback(type: .warning)
                         }
                     }) {
                         Text(item.isCompleted ? "mark_not_completed".localized() : "mark_completed".localized())

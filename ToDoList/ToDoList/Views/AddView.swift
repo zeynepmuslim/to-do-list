@@ -154,6 +154,7 @@ struct AddView: View {
                 }
                 Button {
                     presentationMode.wrappedValue.dismiss()
+                    triggerHapticFeedback(type: .warning)
                 } label: {
                     Text("cancel".localized())
                         .padding(.horizontal, 15)

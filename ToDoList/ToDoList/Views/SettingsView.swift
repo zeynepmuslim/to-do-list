@@ -96,11 +96,12 @@ struct SettingsView: View {
                                     .rotationEffect(.degrees(animateTransition ? 180 : -10))
                                     .animation(.easeInOut(duration: 0.5), value: animateTransition)
                             }
-                            .onTapGesture {
-                                withAnimation {
-                                    animateTransition.toggle()
-                                    isDarkMode.toggle()
-                                }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                animateTransition.toggle()
+                                isDarkMode.toggle()
                             }
                         }
                         .padding()
@@ -122,8 +123,10 @@ struct SettingsView: View {
                                         Text(language.localized())
                                     }
                                 }
-                                NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
-                                    Text("change_password".localized())
+                                if settingsViewModel.isPasswordLogin() {
+                                    NavigationLink(destination: PasswordResetView(isFromSettings: true)) {
+                                        Text("change_password".localized())
+                                    }
                                 }
                                 Button(action: {
                                     settingsViewModel.logOut()

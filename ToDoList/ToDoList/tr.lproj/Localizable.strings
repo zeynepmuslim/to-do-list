@@ -35,7 +35,7 @@
 "medium" = "Orta";
 "high" = "Yüksek";
 "due_date" = "Son tarih:";
-"due_date_for_sort" = "Son Tarih:";
+"due_date_for_sort" = "Son Tarih";
 "overdue" = "Geçmiş";
 "today" = "Bugün";
 "tomorrow" = "Yarın";

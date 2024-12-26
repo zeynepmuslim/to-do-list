@@ -48,6 +48,16 @@ class SettingsViewModel: ObservableObject {
         Bundle.setLanguage(selectedLanguage)
     }
     
+    func isPasswordLogin() -> Bool {
+        guard let user = Auth.auth().currentUser else { return false }
+        for info in user.providerData {
+            if info.providerID == "password" {
+                return true
+            }
+        }
+        return false
+    }
+    
     func fetchUser() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("Error: User is not logged in.")

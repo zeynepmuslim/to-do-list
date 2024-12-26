@@ -99,6 +99,7 @@ struct ListView: View {
     
     var body: some View {
         ZStack {
+            Color(colorScheme == .dark ? .black : .white).ignoresSafeArea()
             HStack{
                 Spacer()
                 VStack{
@@ -159,6 +160,7 @@ struct ListView: View {
                                     Menu {
                                         ForEach(SortOption.allCases, id: \.self) { option in
                                             Button(action: {
+                                                triggerHapticFeedback(type: .success)
                                                 withAnimation {
                                                     sortOption = option
                                                 }

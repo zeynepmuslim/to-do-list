@@ -48,24 +48,37 @@ class ListRowViewModel: ObservableObject {
 }
 
 // "dd MMM" (e.g., "13 Dec")
-func formattedDate(from timestamp: TimeInterval) -> String {
+func formattedDate(from timestamp: TimeInterval, localeIdentifier: String? = nil) -> String {
     let date = Date(timeIntervalSince1970: timestamp)
     let formatter = DateFormatter()
     formatter.dateFormat = "dd MMM"
+
+    if let localeIdentifier = localeIdentifier {
+        formatter.locale = Locale(identifier: localeIdentifier)
+    } else {
+        formatter.locale = Locale.current
+    }
+
     return formatter.string(from: date)
 }
 
 //"dd MMM" (e.g., "13 Dec 2023")
-func formattedDateLong(from timestamp: TimeInterval) -> String {
-    let date = Date(timeIntervalSince1970: timestamp)
-    let formatter = DateFormatter()
-    formatter.dateFormat = "dd MMMM yyyy"
-    return formatter.string(from: date)
-}
+    func formattedDateLong(from timestamp: TimeInterval, localeIdentifier: String? = nil) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMMM yyyy"
+
+        if let localeIdentifier = localeIdentifier {
+            formatter.locale = Locale(identifier: localeIdentifier)
+        } else {
+            formatter.locale = Locale.current
+        }
+
+        return formatter.string(from: date)
+    }
 
 func categorySymbol(for category: String, isCompleted: Bool) -> String {
     if isCompleted {
-        // Tamamlanmış görevlerde içi boş ikonlar
         switch category {
         case "other": return "diamond"
         case "home": return "house"
@@ -74,7 +87,6 @@ func categorySymbol(for category: String, isCompleted: Bool) -> String {
         default: return "tag"
         }
     } else {
-        // Normal dolu ikonlar
         switch category {
         case "other": return "diamond.fill"
         case "home": return "house.fill"

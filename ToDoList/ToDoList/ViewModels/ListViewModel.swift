@@ -3,7 +3,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 class ListViewModel: ObservableObject {
-    @Published var items: [TaskModel] = [] // Görevleri tutan dizi
+    @Published var items: [TaskModel] = [] 
     @Published var showingNewTaskItem: Bool = false
 
     private let userId: String
@@ -15,7 +15,6 @@ class ListViewModel: ObservableObject {
         fetchData()
     }
     
-    // Firestore'dan veri çekme
     func fetchData() {
         listenerRegistration = db.collection("users").document(userId).collection("tasks")
             .addSnapshotListener { querySnapshot, error in
@@ -24,7 +23,6 @@ class ListViewModel: ObservableObject {
                     return
                 }
                 
-                // Veriyi TaskModel'e dönüştür
                 self.items = querySnapshot?.documents.compactMap { document in
                     try? document.data(as: TaskModel.self)
                 } ?? []
@@ -32,7 +30,6 @@ class ListViewModel: ObservableObject {
             }
     }
 
-    // Görevi silme
     func delete(id: String) {
         db.collection("users")
             .document(userId)
@@ -46,19 +43,19 @@ class ListViewModel: ObservableObject {
     }
     
     func getDueStatusPriority(for task: TaskModel) -> Int {
-        guard let dueDate = task.dueDate else { return 4 } // No due date = Lowest priority
+        guard let dueDate = task.dueDate else { return 4 }
         let now = Date()
         let date = Date(timeIntervalSince1970: dueDate)
         let calendar = Calendar.current
 
         if date < now, !calendar.isDateInToday(date) {
-            return 1 // Overdue
+            return 1
         } else if calendar.isDateInToday(date) {
-            return 2 // Today
+            return 2
         } else if calendar.isDateInTomorrow(date) {
-            return 3 // Tomorrow
+            return 3
         } else {
-            return 4 // Future date
+            return 4
         }
     }
 

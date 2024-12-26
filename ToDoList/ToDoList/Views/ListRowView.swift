@@ -12,6 +12,7 @@ struct ListRowView: View {
     @StateObject var viewModel = ListRowViewModel()
     @State private var showDetailsSheet = false
     @State var isVisible: Bool = true
+    let selectedLanguage = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -57,9 +58,10 @@ struct ListRowView: View {
                                     Image(systemName: "calendar")
                                         .foregroundColor(.gray)
                                         .font(.caption)
-                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
+                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0, localeIdentifier: selectedLanguage))")
                                         .foregroundColor(.gray)
-                                        .font(.caption)                                }
+                                        .font(.caption)
+                                }
                             }
                         } else {
                             HStack(alignment: .bottom) {
@@ -67,7 +69,7 @@ struct ListRowView: View {
                                 VStack {
                                     Image(systemName: "calendar")
                                         .foregroundColor(.gray)
-                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0))")
+                                    Text("\(viewModel.formattedDate(from: item.dueDate ?? 0, localeIdentifier: selectedLanguage))")
                                         .foregroundColor(.gray)
                                         .font(.caption)
                                 }
@@ -99,7 +101,6 @@ struct ListRowView: View {
                     showDetailsSheet.toggle()
                 }
         }
-        
     }
 }
 
