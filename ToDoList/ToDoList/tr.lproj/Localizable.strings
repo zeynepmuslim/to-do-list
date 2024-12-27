@@ -18,7 +18,7 @@
 "enter_your_password" = "Şifrenizi girin 🛡️";
 "please_confirm_your_password" = "Lütfen devam etmek için şifrenizi onaylayın.";
 "confirm_deletion" = "Silme İşlemini Onayla";
-"task_title" = "Görev Başlığı";s
+"task_title" = "Görev Başlığı";
 "type_something_here" = "Buraya bir şey yazın...";
 "characters" = "karakter";
 "priority" = "Öncelik";
@@ -92,3 +92,4 @@
 "logout_confirmation_message" = "Seni özleyeceğiz! Çıkış yapmak istediğinize emin misiniz?";
 "logout_confirmation_primary" = "Evet, çıkış yap 😔";
 "logout_confirmation_secondary" = "Hayır, oturum açık kalsın 😊";
+

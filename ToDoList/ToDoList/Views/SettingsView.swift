@@ -58,7 +58,6 @@ struct SettingsView: View {
                 if let user = settingsViewModel.user {
                     
                     VStack {
-                        
                         VStack {
                             Image(systemName: "person.fill")
                                 .frame(width: 100, height: 100)
@@ -69,7 +68,7 @@ struct SettingsView: View {
                                     color: Color("AccentColor").opacity(0.5),
                                     radius: 15,
                                     x: 0,
-                                    y: 10)
+                                    y: 15)
                             Text(user.name)
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -86,6 +85,7 @@ struct SettingsView: View {
                         )
                         .cornerRadius(20)
                         .multilineTextAlignment(TextAlignment.center)
+                        .padding(.horizontal,20)
                         
                         
                         HStack {
