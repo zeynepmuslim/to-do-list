@@ -21,6 +21,7 @@ struct SettingsView: View {
     @State private var animateTransition: Bool = false
     @State private var showAccountDeletionAlert = false
     private var animationDuration: Double = 0.6
+    @State private var showLogOutAlert = false
     
     var user: UserModel {
         settingsViewModel.user ?? UserModel(id: "", name: "", email: "", joined: 0)
@@ -57,17 +58,18 @@ struct SettingsView: View {
                 if let user = settingsViewModel.user {
                     
                     VStack {
-                        Image(systemName: "person.fill")
-                            .frame(width: 100, height: 100)
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
-                            .background(Circle().fill(Color("AccentColor")))
-                            .shadow(
-                                color: Color("AccentColor").opacity(0.5),
-                                radius: 20,
-                                x: 0,
-                                y: 10)
+                        
                         VStack {
+                            Image(systemName: "person.fill")
+                                .frame(width: 100, height: 100)
+                                .font(.largeTitle)
+                                .foregroundColor(.white)
+                                .background(Circle().fill(Color("AccentColor")))
+                                .shadow(
+                                    color: Color("AccentColor").opacity(0.5),
+                                    radius: 15,
+                                    x: 0,
+                                    y: 10)
                             Text(user.name)
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -76,8 +78,14 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
                                 .padding(.horizontal,30)
                         }
-                        .multilineTextAlignment(TextAlignment.center)
                         .padding(20)
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                   .fill(isDarkMode ? Color.black : Color.white)
+                                   .animation(.easeInOut(duration: animationDuration), value: isDarkMode)
+                        )
+                        .cornerRadius(20)
+                        .multilineTextAlignment(TextAlignment.center)
                         
                         
                         HStack {
@@ -129,10 +137,20 @@ struct SettingsView: View {
                                     }
                                 }
                                 Button(action: {
-                                    settingsViewModel.logOut()
+                                    showLogOutAlert = true
                                 }) {
                                     Text("log_out".localized())
                                         .foregroundColor(.red)
+                                }
+                                .alert(isPresented: $showLogOutAlert) {
+                                    Alert(
+                                        title: Text("logout_confirmation_title".localized()),
+                                        message: Text("logout_confirmation_message".localized()),
+                                        primaryButton: .destructive(Text("logout_confirmation_primary".localized())) {
+                                            settingsViewModel.logOut()
+                                        },
+                                        secondaryButton: .cancel(Text("logout_confirmation_secondary".localized()))
+                                    )
                                 }
                                 Button{
                                     showAccountDeletionAlert.toggle()

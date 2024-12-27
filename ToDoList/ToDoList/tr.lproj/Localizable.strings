@@ -11,14 +11,14 @@
 "log_out" = "Çıkış Yap";
 "settings" = "Ayarlar";
 "cancel" = "İptal";
-"we're_sorry_to_see_you_go" = "Sizi kaybettiğimiz için üzgünüz 🥺";
+"we're_sorry_to_see_you_go" = "Seni kaybettiğimiz için üzgünüz 🥺";
 "yes_delete_my_account" = "Evet, Hesabımı Sil 😢";
 "no_keep_my_account" = "Hayır, Hesabımı Tut ❤️";
-"we're_sad_to_see_you_go" = "Sizi kaybettiğimiz için üzgünüz! \nDeneyiminizi daha iyi hale getirmek için yapabileceğimiz bir şey varsa, lütfen bize bildirin! 💌\n\nTopluluğumuzun bir parçası olduğunuz için teşekkür ederiz! 🙏";
+"we're_sad_to_see_you_go" = "Seni kaybettiğimiz için üzgünüz! \nDeneyiminizi daha iyi hale getirmek için yapabileceğimiz bir şey varsa, lütfen bize bildirin! 💌\n\nTopluluğumuzun bir parçası olduğunuz için teşekkür ederiz! 🙏";
 "enter_your_password" = "Şifrenizi girin 🛡️";
 "please_confirm_your_password" = "Lütfen devam etmek için şifrenizi onaylayın.";
 "confirm_deletion" = "Silme İşlemini Onayla";
-"task_title" = "Görev Başlığı";
+"task_title" = "Görev Başlığı";s
 "type_something_here" = "Buraya bir şey yazın...";
 "characters" = "karakter";
 "priority" = "Öncelik";
@@ -88,4 +88,7 @@
 "sign_in_error" = "Maalesef işler yolunda gitmedi 😖";
 "sign_in_error_message" = "Lütfen tekrar deneyin";
 "back_button" = "Geri";
- 
+"logout_confirmation_title" = "Emin misin? 😢";
+"logout_confirmation_message" = "Seni özleyeceğiz! Çıkış yapmak istediğinize emin misiniz?";
+"logout_confirmation_primary" = "Evet, çıkış yap 😔";
+"logout_confirmation_secondary" = "Hayır, oturum açık kalsın 😊";

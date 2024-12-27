@@ -8,7 +8,7 @@
 import FirebaseCore
 import SwiftUI
 
-/*
+/*#imageLiteral(resourceName: "Simulator Screenshot - iPhone SE (3rd generation) - 2024-12-26 at 16.28.26.png")
  
  MVVM Architecture
  Model - Data

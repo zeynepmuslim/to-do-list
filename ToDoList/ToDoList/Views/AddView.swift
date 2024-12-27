@@ -12,6 +12,7 @@ struct AddView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @StateObject var ItemModel = ItemModelV2()
+    @Environment(\.colorScheme) var colorScheme
     @State var selectedPriority: String = "Low"
     @State var selectedCategory: String = "other"
     @State var customCategories: Array = ["other", "home", "school", "job"]
@@ -50,124 +51,126 @@ struct AddView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("task_title".localized())
-                    .font(.headline)
-                
-                CustomTextField(placeholder: "type_something_here".localized(), text: $ItemModel.title, isSecure: false)
-                    .submitLabel(.continue)
-                    .onSubmit {
-                        hideKeyboard()
-                    }
-                    .onChange(of: ItemModel.title) { newValue in
-                        if newValue.count > characterLimit {
-                            ItemModel.title = String(newValue.prefix(characterLimit))
-                        }
-                    }
-                
-                Text("\(ItemModel.title.count)/\(characterLimit) " + "characters".localized())
-                    .font(.footnote)
-                    .foregroundColor(ItemModel.title.count >= characterLimit ? .red : .secondary)
-                
-                PriorityView(selectedPriority: $selectedPriority, priorities: taskPriorities)
-                
-                Text("category".localized())
-                    .font(.headline)
-                    .padding(.top,10)
-                
-                HStack(alignment: .center) {
-                    ForEach(categories, id: \.key) { category in
-                        CustomCategoryButton(
-                            title: category.key.localized(),
-                            action: {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    selectedCategory = category.key
-                                }
-                            },
-                            iconName: category.iconName,
-                            theColor: selectedCategory == category.key ? category.color : .darkerSecond,
-                            theHeight: selectedCategory == category.key ? 55 : 40,
-                            iconFont: selectedCategory == category.key ? .title : .callout,
-                            fontColor: selectedCategory == category.key ? .white : .gray
-                        )
-                        .shadow(
-                            color: selectedCategory == category.key ? category.color.opacity(0.5) : category.color.opacity(0.0),
-                            radius: selectedCategory == category.key ? 15 : 0
-                        )
-                    }
-                }
-                if let selectedDate = selectedDate {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("selected_due_date".localized())
-                                .font(.headline)
-                            Text(selectedDate, style: .date)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        Button {
-                            showDateSheet = true
-                        } label: {
-                            Text("change".localized())
-                                .padding(.horizontal, 15)
-                                .frame(height: 40)
-                                .background(.darkerSecond)
-                                .cornerRadius(10)
-                                .foregroundColor(Color("AccentColor"))
-                        }
-                        Button {
-                            withAnimation {
-                                self.selectedDate = nil
-                            }
-                        } label: {
-                            Image(systemName: "trash")
-                                .font(.headline)
-                                .foregroundColor(.red)
-                        }
-                    }
-                    .padding(.vertical)
-                } else {
-                    HStack {
-                        Text("do_you_have_a_deadline".localized())
-                            .font(.headline)
-                        Spacer()
-                        Button {
-                            showDateSheet = true
-                        } label: {
-                            Text("set_a_due_date".localized())
-                                .padding(.horizontal, 15)
-                                .frame(height: 40)
-                                .background(.darkerSecond)
-                                .cornerRadius(10)
-                                .foregroundColor(Color("AccentColor"))
-                            
-                        }
-                    }
-                    .padding(.vertical)
-                }
-                
-                Spacer()
-                
-                CustomButton(title: "create_task".localized()) {
-                    saveButtonPressed()
-                }
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                    triggerHapticFeedback(type: .warning)
-                } label: {
-                    Text("cancel".localized())
-                        .padding(.horizontal, 15)
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("task_title".localized())
                         .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 55)
-                        .background(.darkerSecond)
-                        .cornerRadius(10)
-                        .foregroundColor(Color("AccentColor"))
+                    
+                    CustomTextField(placeholder: "type_something_here".localized(), text: $ItemModel.title, isSecure: false)
+                        .submitLabel(.continue)
+                        .onSubmit {
+                            hideKeyboard()
+                        }
+                        .onChange(of: ItemModel.title) { newValue in
+                            if newValue.count > characterLimit {
+                                ItemModel.title = String(newValue.prefix(characterLimit))
+                            }
+                        }
+                    
+                    Text("\(ItemModel.title.count)/\(characterLimit) " + "characters".localized())
+                        .font(.footnote)
+                        .foregroundColor(ItemModel.title.count >= characterLimit ? .red : .secondary)
+                    
+                    PriorityView(selectedPriority: $selectedPriority, priorities: taskPriorities)
+                    
+                    Text("category".localized())
+                        .font(.headline)
+                        .padding(.top,10)
+                    
+                    HStack(alignment: .center) {
+                        ForEach(categories, id: \.key) { category in
+                            CustomCategoryButton(
+                                title: category.key.localized(),
+                                action: {
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        selectedCategory = category.key
+                                    }
+                                },
+                                iconName: category.iconName,
+                                theColor: selectedCategory == category.key ? category.color : .darkerSecond,
+                                theHeight: selectedCategory == category.key ? 55 : 40,
+                                iconFont: selectedCategory == category.key ? .title : .callout,
+                                fontColor: selectedCategory == category.key ? .white : .gray
+                            )
+                            .shadow(
+                                color: selectedCategory == category.key ? category.color.opacity(0.5) : category.color.opacity(0.0),
+                                radius: selectedCategory == category.key ? 15 : 0
+                            )
+                        }
+                    }
+                    if let selectedDate = selectedDate {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("selected_due_date".localized())
+                                    .font(.headline)
+                                Text(selectedDate, style: .date)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Button {
+                                showDateSheet = true
+                            } label: {
+                                Text("change".localized())
+                                    .padding(.horizontal, 15)
+                                    .frame(height: 40)
+                                    .background(.darkerSecond)
+                                    .cornerRadius(10)
+                                    .foregroundColor(Color("AccentColor"))
+                            }
+                            Button {
+                                withAnimation {
+                                    self.selectedDate = nil
+                                }
+                            } label: {
+                                Image(systemName: "trash")
+                                    .font(.headline)
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        .padding(.vertical)
+                    } else {
+                        HStack {
+                            Text("do_you_have_a_deadline".localized())
+                                .font(.headline)
+                            Spacer()
+                            Button {
+                                showDateSheet = true
+                            } label: {
+                                Text("set_a_due_date".localized())
+                                    .padding(.horizontal, 15)
+                                    .frame(height: 40)
+                                    .background(.darkerSecond)
+                                    .cornerRadius(10)
+                                    .foregroundColor(Color("AccentColor"))
+                                
+                            }
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    Spacer()
+                    
+                    CustomButton(title: "create_task".localized()) {
+                        saveButtonPressed()
+                    }
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                        triggerHapticFeedback(type: .warning)
+                    } label: {
+                        Text("cancel".localized())
+                            .padding(.horizontal, 15)
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
+                            .background(.darkerSecond)
+                            .cornerRadius(10)
+                            .foregroundColor(Color("AccentColor"))
+                    }
                 }
-            }
-            .padding()
+                .padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(colorScheme == .dark ? .black : .white))
         .onDisappear {
             presentationMode.wrappedValue.dismiss()
         }

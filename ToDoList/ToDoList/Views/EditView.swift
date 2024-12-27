@@ -167,6 +167,8 @@ struct EditView: View {
             }
             .padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(colorScheme == .dark ? .black : .white))
         .onDisappear {
             presentationMode.wrappedValue.dismiss()
         }

@@ -20,6 +20,7 @@ struct PasswordResetView: View {
     let height = UIScreen.main.bounds.height
     var isFromSettings: Bool = false
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
     @State private var navigateToLogin = false
     
     var body: some View {
@@ -73,6 +74,7 @@ struct PasswordResetView: View {
 
                 }
             }
+            .background(Color(colorScheme == .dark ? .black : .white))
             .onDisappear {
                 presentationMode.wrappedValue.dismiss()
             }

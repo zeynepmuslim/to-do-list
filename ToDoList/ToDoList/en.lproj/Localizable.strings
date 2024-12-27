@@ -88,3 +88,7 @@
 "sign_in_error" = "Unfortunately, things didn't go as planned 😖";
 "sign_in_error_message" = "Please try again";
 "back_button" = "Back";
+"logout_confirmation_title" = "Are you sure? 😢";
+"logout_confirmation_message" = "We’ll miss you! Are you sure you want to log out?";
+"logout_confirmation_primary" = "Yes, log me out 😔";
+"logout_confirmation_secondary" = "No, stay logged in 😊";

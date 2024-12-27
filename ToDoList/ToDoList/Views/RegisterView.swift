@@ -14,7 +14,7 @@ import FirebaseAuth
 struct RegisterView: View {
     @EnvironmentObject var authController: AuthController
     @StateObject var registerViewModel = RegisterViewModel()
-    
+    @Environment(\.colorScheme) var colorScheme
     @FocusState private var fieldFocus: OnboardingFields?
     @State private var showErrorMessage = false // text fields
     @State private var showSignInError = false // trigger for google & apple sign in catch error
@@ -31,6 +31,7 @@ struct RegisterView: View {
     let height = UIScreen.main.bounds.height
     var body: some View {
         ZStack {
+            Color(colorScheme == .dark ? .black : .white).ignoresSafeArea()
             VStack {
                 HStack {
                     Spacer()
